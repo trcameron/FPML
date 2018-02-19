@@ -1,10 +1,10 @@
-!>\author Thomas R. CAmeron, Davidson College
+!>\author Thomas R. Cameron, Davidson College
 !>\date February, 2018
 !>\brief <b> module rand_poly: subroutines and variables associated with creating a random polynomial. </b>
 !************************************************
 module rand_poly
 	implicit none
-	integer, parameter	:: dp = selected_real_kind(15, 60)
+	integer, parameter	:: dp = KIND(0.0D0)
 contains
 	subroutine init_random_seed()
 		implicit none
