@@ -12,8 +12,7 @@ gfortran -O3 test_modules.f90 -L/Users/thcameron/Documents/FPML/tests/src -lmodu
 ./test_modules
 
 # compile test_modules.tex
-pdflatex test_modules.tex
-mogrify -format png *.pdf
+pdflatex -shell-escape test_modules.tex
 cp *.png figures/
 
 #clean up
