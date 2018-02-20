@@ -6,7 +6,8 @@ Fourth order Parallelizable Modified Laguerre method. This is a Fortran library 
 Davidson College, NC
 
 ## Tests
-![alt text](tests/figures/test_modules.png?raw=true "Title")
+### Initial Estimate Test
+![alt text](tests/figures/test_start.png?raw=true "Title")
 
 ## Related Articles
 This software is based on the following articles:

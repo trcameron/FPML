@@ -1,6 +1,10 @@
-!>\author Thomas R. Cameron, Davidson College
-!>\date February, 2018
-!>\brief <b> module rand_poly: subroutines and variables associated with creating a random polynomial. </b>
+!************************************************
+!	Thomas R. Cameron, Davidson College
+!	Last Modified: 19 February 2018
+!************************************************
+!	Module: rand_poly contains double precision
+!	kind parameter and subroutines associated 
+!	with creating a random polynomial.
 !************************************************
 module rand_poly
 	implicit none
@@ -25,7 +29,7 @@ contains
 		deallocate(seed)
 	end subroutine init_random_seed
 	
-	subroutine double_rand_poly(n,x)
+	subroutine real_rand_poly(n,x)
 		implicit none
 		! argument variables
 		integer, intent(in)			:: n
@@ -41,5 +45,5 @@ contains
 			call random_number(r)
 			x(k) = -1 + 2 * r
 		end do
-	end subroutine double_rand_poly
+	end subroutine real_rand_poly
 end module rand_poly

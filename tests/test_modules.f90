@@ -1,9 +1,14 @@
 program test_modules
-	use rand_poly
+	use initial_estimates
+	use poly_zeroes
 	implicit none
 	! test variables
-	integer										:: it, j, deg, startDegree, endDegree, itmax, flag
-	real(kind=dp), dimension(:), allocatable	:: p
+	integer										:: clock, clock_rate, clock_start, clock_stop,&
+												&it, j, deg, startDegree, endDegree, itmax, flag, nz
+	logical, dimension(:), allocatable			:: h
+	real(kind=dp), dimension(:), allocatable	:: alpha, p, radius
+	real(kind=dp), dimension(:,:), allocatable	:: time
+	complex(kind=dp), dimension(:), allocatable	:: roots
 	character(len=32)							:: arg
 	
 	call init_random_seed()
@@ -28,19 +33,39 @@ program test_modules
 		itmax=10
 	end if
 	
-	! rand_poly test
-	open(unit=1,file="data_files/rand_poly.dat")
+	! test start
+	open(unit=1,file="data_files/start.dat")
+	write(1,'(A)') 'Degree, CST, BST'
+	allocate(time(itmax,2))
 	deg=startDegree
 	do while(deg<=endDegree)
-		allocate(p(deg+1))
+		write(1,'(I10)', advance='no') deg
+		write(1,'(A)', advance='no') ','
+		allocate(alpha(deg+1), p(deg+1), roots(deg), radius(deg), h(deg+1))
 		do it=1,itmax
-			call double_rand_poly(deg+1,p)
+			call real_rand_poly(deg+1,p)
 			do j=1,deg+1
-				write(1,'(ES15.2)') p(j)
+				alpha(j)=abs(p(j))
 			end do
+			! cam start
+			call system_clock(count_rate=clock_rate)
+			call system_clock(count=clock_start)
+			call estimates(alpha, deg, roots)
+			call system_clock(count=clock_stop)
+			time(it,1)=(dble(clock_stop-clock_start)/dble(clock_rate))
+			! bin start
+			call system_clock(count_rate=clock_rate)
+			call system_clock(count=clock_start)
+			call start(deg, alpha, roots, radius, nz, tiny(1.0D0), huge(1.0D0), h)
+			call system_clock(count=clock_stop)
+			time(it,2)=(dble(clock_stop-clock_start)/dble(clock_rate))
 		end do
+		write(1,'(ES15.2)', advance='no') sum(time(:,1))/itmax
+		write(1,'(A)', advance='no') ','
+		write(1,'(ES15.2)') sum(time(:,2))/itmax
 		deg=2*deg
-		deallocate(p)
+		deallocate(alpha, p, roots, radius, h)
 	end do
+	deallocate(time)
 	close(1)
 end program test_modules
