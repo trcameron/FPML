@@ -8,8 +8,9 @@ program test_modules
 	logical, dimension(:), allocatable			:: h
 	real(kind=dp), dimension(:), allocatable	:: alpha, p, radius
 	real(kind=dp), dimension(:,:), allocatable	:: time
-	complex(kind=dp), dimension(:), allocatable	:: roots
+	complex(kind=dp), dimension(:), allocatable	:: root, roots
 	character(len=32)							:: arg
+	real(kind=dp), parameter					:: small=tiny(1.0D0), large=huge(1.0D0)
 	
 	call init_random_seed()
 	
@@ -33,7 +34,31 @@ program test_modules
 		itmax=10
 	end if
 	
-	! test start
+	! test start accuracy
+	open(unit=1,file="data_files/start_accuracy.dat")
+	write(1,'(A)') 'CST values, BST values'
+	deg=10
+	allocate(p(deg+1), root(deg), roots(deg), radius(deg), h(deg+1))
+	p(1)=1
+	p(2)=3000
+	p(3)=3000000
+	p(4)=1000000000
+	p(5)=0
+	p(6)=0
+	p(7)=0
+	p(8)=0
+	p(9)=0
+	p(10)=0
+	p(11)=1
+	call estimates(p, deg, roots)
+	call start(deg, p, root, radius, nz, small, large, h)
+	do j=1,deg
+		write(1,'(ES15.2)', advance='no') abs(roots(j))
+		write(1,'(A)', advance='no') ','
+		write(1,'(ES15.2)') abs(root(j))
+	end do
+	deallocate(p, root, roots, radius, h)
+	! test start timing
 	open(unit=1,file="data_files/start.dat")
 	write(1,'(A)') 'Degree, CST, BST'
 	allocate(time(itmax,2))
@@ -56,7 +81,7 @@ program test_modules
 			! bin start
 			call system_clock(count_rate=clock_rate)
 			call system_clock(count=clock_start)
-			call start(deg, alpha, roots, radius, nz, tiny(1.0D0), huge(1.0D0), h)
+			call start(deg, alpha, roots, radius, nz, small, large, h)
 			call system_clock(count=clock_stop)
 			time(it,2)=(dble(clock_stop-clock_start)/dble(clock_rate))
 		end do

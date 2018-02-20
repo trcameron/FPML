@@ -45,7 +45,7 @@ CONTAINS
 !   This version, which is compatible with Lahey's free ELF90 compiler
 !   by Alan Miller, CSIRO Mathematical & Information Sciences,
 !   Private Bag 10, Clayton South MDC, Victoria, Australia 3169.
-!   Alan.Miller @ mel.dms.csiro.au    http://www.mel.dms.csiro.au/~alan
+!   amiller @ bigpond.net.au     http://users.bigpond.net.au/amiller
 !   Latest revision of ELF90 version - 5 May 1997
 !
 !************************************************************************
