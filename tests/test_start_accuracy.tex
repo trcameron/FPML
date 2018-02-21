@@ -4,17 +4,14 @@
 \begin{document}
 	
 \begin{tikzpicture}[scale=0.5]
-\begin{semilogyaxis}[
-	title = Elapsed Time Comparison,
-	xlabel = {Degree},
-	ylabel = {Seconds},
-	legend pos = north west,
+\begin{axis}[
+	title = Initial Estimates,
+	xlabel = {Real},
+	ylabel = {Imaginary},
 ]
-\addplot table [x=Degree, y=CST, col sep=comma] {data_files/start_timing.dat};
-\addlegendentry{FPML}
-\addplot table [x=Degree, y=BST, col sep=comma] {data_files/start_timing.dat};
-\addlegendentry{Polzeros}
-\end{semilogyaxis}
+\addplot[only marks, mark=*] table [x=CST_real, y=CST_imag, col sep=comma] {data_files/start_accuracy.dat};
+%\addplot[only marks, scatter] table [x=BST_real, y=BST_imag, col sep=comma] {data_files/start_accuracy.dat};
+\end{axis}
 \end{tikzpicture}
 
 \end{document}

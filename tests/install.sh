@@ -15,6 +15,7 @@ gfortran -O3 test_modules.f90 -L/Users/thcameron/Documents/FPML/tests/src -lmodu
 
 # compile test_modules.tex
 pdflatex -shell-escape test_start_timing.tex
+pdflatex -shell-escape test_start_accuracy.tex
 cp *.png figures/
 
 #clean up

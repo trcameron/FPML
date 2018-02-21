@@ -36,7 +36,7 @@ program test_modules
 	
 	! test start accuracy
 	open(unit=1,file="data_files/start_accuracy.dat")
-	write(1,'(A)') 'CST values, BST values'
+	write(1,'(A)') 'CST_real, CST_imag, BST_real, BST_imag'
 	deg=10
 	allocate(p(deg+1), root(deg), roots(deg), radius(deg), h(deg+1))
 	p(1)=1
@@ -53,9 +53,13 @@ program test_modules
 	call estimates(p, deg, roots)
 	call start(deg, p, root, radius, nz, small, large, h)
 	do j=1,deg
-		write(1,'(ES15.2)', advance='no') abs(roots(j))
+		write(1,'(ES15.2)', advance='no') dble(roots(j))
 		write(1,'(A)', advance='no') ','
-		write(1,'(ES15.2)') abs(root(j))
+		write(1,'(ES15.2)', advance='no') aimag(roots(j)) 
+		write(1,'(A)', advance='no') ','
+		write(1,'(ES15.2)', advance='no') dble(root(j))
+		write(1,'(A)', advance='no') ','
+		write(1,'(ES15.2)') aimag(root(j)) 
 	end do
 	deallocate(p, root, roots, radius, h)
 	! test start timing
