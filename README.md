@@ -6,8 +6,10 @@ Fourth order Parallelizable Modified Laguerre method. This is a Fortran library 
 Davidson College, NC
 
 ## Tests
-### Initial Estimate Test
-![alt text](tests/figures/test_start_timing.png?raw=true "Title")
+### Initial Estimate Accuracy
+![alt text](tests/figures/test_start_accuracy.png?raw=true)
+### Initial Estimate Timing
+![alt text](tests/figures/test_start_timing.png?raw=true)
 
 ## Related Articles
 This software is based on the following articles:
