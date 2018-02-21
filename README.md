@@ -7,7 +7,7 @@ Davidson College, NC
 
 ## Tests
 ### Initial Estimate Test
-![alt text](tests/figures/test_start.png?raw=true "Title")
+![alt text](tests/figures/test_start_timing.png?raw=true "Title")
 
 ## Related Articles
 This software is based on the following articles:
