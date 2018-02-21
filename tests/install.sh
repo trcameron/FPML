@@ -14,7 +14,7 @@ gfortran -O3 test_modules.f90 -L/Users/thcameron/Documents/FPML/tests/src -lmodu
 ./test_modules 1000 1000000 100
 
 # compile test_modules.tex
-pdflatex -shell-escape test_start.tex
+pdflatex -shell-escape test_start_timing.tex
 cp *.png figures/
 
 #clean up

@@ -59,7 +59,7 @@ program test_modules
 	end do
 	deallocate(p, root, roots, radius, h)
 	! test start timing
-	open(unit=1,file="data_files/start.dat")
+	open(unit=1,file="data_files/start_timing.dat")
 	write(1,'(A)') 'Degree, CST, BST'
 	allocate(time(itmax,2))
 	deg=startDegree

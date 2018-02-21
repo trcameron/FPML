@@ -1,11 +1,23 @@
-!************************************************
+!****************************************************
 !	Thomas R. Cameron, Davidson College
-!	Last Modified: 19 February 2018
-!************************************************
+!	Last Modified: 20 February 2018
+!****************************************************
 !	Module: rand_poly contains double precision
 !	kind parameter and subroutines associated 
 !	with creating a random polynomial.
-!************************************************
+!****************************************************
+!	Contains the following paramaters, functions, and
+!	subroutines.
+!		dp: integer paramater for machine-compiler 
+!		specific double precision. 
+!
+!		init_random_seed: seeds random number 
+!		generator using system_clock count parameter.
+!
+!		real_rand_poly:	creates n real random coeffs
+!		uniformly distributed between -1 and 1 using
+!		random_number. 
+!****************************************************
 module rand_poly
 	implicit none
 	integer, parameter	:: dp = KIND(0.0D0)

@@ -10,10 +10,10 @@
 	ylabel = {Seconds},
 	legend pos = north west,
 ]
-\addplot table [x=Degree, y=CST, col sep=comma] {data_files/start.dat};
-\addlegendentry{Cameron}
-\addplot table [x=Degree, y=BST, col sep=comma] {data_files/start.dat};
-\addlegendentry{Bini}
+\addplot table [x=Degree, y=CST, col sep=comma] {data_files/start_timing.dat};
+\addlegendentry{FPML}
+\addplot table [x=Degree, y=BST, col sep=comma] {data_files/start_timing.dat};
+\addlegendentry{Polzeros}
 \end{semilogyaxis}
 \end{tikzpicture}
 

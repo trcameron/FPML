@@ -1,0 +1,20 @@
+\documentclass[convert={density=300,outext=.png}]{standalone}
+\usepackage{pgfplots}
+
+\begin{document}
+	
+\begin{tikzpicture}[scale=0.5]
+\begin{semilogyaxis}[
+	title = Elapsed Time Comparison,
+	xlabel = {Degree},
+	ylabel = {Seconds},
+	legend pos = north west,
+]
+\addplot table [x=Degree, y=CST, col sep=comma] {data_files/start_timing.dat};
+\addlegendentry{FPML}
+\addplot table [x=Degree, y=BST, col sep=comma] {data_files/start_timing.dat};
+\addlegendentry{Polzeros}
+\end{semilogyaxis}
+\end{tikzpicture}
+
+\end{document}
