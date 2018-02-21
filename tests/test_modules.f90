@@ -1,5 +1,5 @@
 program test_modules
-	use initial_estimates
+	use modified_laguerre
 	use poly_zeroes
 	implicit none
 	! test variables

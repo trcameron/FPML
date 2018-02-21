@@ -3,6 +3,7 @@
 # compile all files in lmpep_src
 gfortran -c -O3 ../modules/rand_poly.f90
 gfortran -c -O3 ../modules/initial_estimates.f90
+gfortran -c -O3 ../modules/modified_laguerre.f90
 gfortran -c -O3 ../modules/pzeros.f90
 
 # create library
