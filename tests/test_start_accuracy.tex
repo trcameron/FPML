@@ -5,12 +5,14 @@
 	
 \begin{tikzpicture}[scale=0.5]
 \begin{axis}[
-	title = Initial Estimates,
+	legend pos=outer north east,
 	xlabel = {Real},
 	ylabel = {Imaginary},
 ]
-\addplot[only marks, mark=*] table [x=CST_real, y=CST_imag, col sep=comma] {data_files/start_accuracy.dat};
-%\addplot[only marks, scatter] table [x=BST_real, y=BST_imag, col sep=comma] {data_files/start_accuracy.dat};
+\addplot[only marks, mark=asterisk, color=blue] table [x=CST_real, y=CST_imag, col sep=comma] {data_files/start_accuracy.dat};
+\addlegendentry{Initial Estimates}
+\addplot[only marks, mark=asterisk, color=red, opacity=0.4] table [x=zeros_real, y=zeros_imag, col sep=comma] {data_files/start_accuracy.dat};
+\addlegendentry{Computed Roots}
 \end{axis}
 \end{tikzpicture}
 

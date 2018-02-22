@@ -11,7 +11,7 @@ ar crv libmodules.a *.o
 cp libmodules.a src/
 
 # compile test_modules.f90
-gfortran -O3 test_modules.f90 -L/Users/thcameron/Documents/FPML/tests/src -lmodules -o test_modules
+gfortran -O3 test_modules2.f90 -L/Users/thcameron/Documents/FPML/tests/src -lmodules -o test_modules2
 
 #clean up
 rm *.mod
