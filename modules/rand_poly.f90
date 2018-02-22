@@ -41,7 +41,7 @@ contains
 		deallocate(seed)
 	end subroutine init_random_seed
 	
-	subroutine real_rand_poly(n,x)
+	subroutine dble_rand_poly(n,x)
 		implicit none
 		! argument variables
 		integer, intent(in)			:: n
@@ -57,5 +57,22 @@ contains
 			call random_number(r)
 			x(k) = -1 + 2 * r
 		end do
-	end subroutine real_rand_poly
+	end subroutine dble_rand_poly
+	
+	subroutine cmplx_rand_poly(n,x)
+		implicit none
+		! argument variables
+		integer, intent(in)				:: n
+		complex(kind=dp), intent(out)	:: x(:)
+		! local variables
+		integer							:: k
+		real(kind=dp)					:: r1, r2
+		
+		! main
+		do k=1,n
+			call random_number(r1)
+			call random_number(r2)
+			x(k)=(-1+2*r1)+(0,1)*(-1+2*r2)
+		end do
+	end subroutine cmplx_rand_poly
 end module rand_poly
