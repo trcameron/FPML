@@ -12,6 +12,8 @@ Davidson College, NC
 ![alt text](tests/figures/test_start_timing.png?raw=true)
 ### Correction Term Timing
 ![alt text](tests/figures/test_correction_timing.png?raw=true)
+### Program Comparison Timing
+![alt text](tests/figures/test_main_timing.png?raw=true)
 
 ## Related Articles
 This software is based on the following articles:

@@ -86,17 +86,17 @@ program test_modules
         write(2,'(I10)', advance='no') deg
         write(2,'(A)', advance='no') ','
         allocate(alpha(deg+1), roots(deg), zeros(deg), radius(deg), h(deg+1), p(deg+1), apoly(deg+1), apolyr(deg+1))
-        ! polynomial coefficients
-        call cmplx_rand_poly(deg+1,p)
-        do j=1,deg+1
-            alpha(j)=abs(p(j))
-        end do
-        do j=1,deg+1
-            apolyr(deg-j+2) = eps*alpha(j)*(3.8*(deg-j+1) + 1)
-            apoly(j) = eps*alpha(j)*(3.8*(j-1) + 1)
-        end do
         ! iterations
         do it=1,itmax
+            ! polynomial coefficients
+            call cmplx_rand_poly(deg+1,p)
+            do j=1,deg+1
+                alpha(j)=abs(p(j))
+            end do
+            do j=1,deg+1
+                apolyr(deg-j+2) = eps*alpha(j)*(3.8*(deg-j+1) + 1)
+                apoly(j) = eps*alpha(j)*(3.8*(j-1) + 1)
+            end do
             ! FPML start
             call system_clock(count_rate=clock_rate)
             call system_clock(count=clock_start)

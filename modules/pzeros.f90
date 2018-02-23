@@ -1,7 +1,6 @@
 MODULE poly_zeroes
-    use rand_poly
     implicit none
-
+    INTEGER, PARAMETER     :: dpb = KIND(0.0D0)
 CONTAINS
 
 !************************************************************************
@@ -191,17 +190,17 @@ SUBROUTINE polzeros (n, poly, eps, big, small, nitmax, root, radius, err, &
 IMPLICIT NONE
 INTEGER, INTENT(IN)            :: n, nitmax
 INTEGER, INTENT(OUT)           :: iter
-COMPLEX (KIND=dp), INTENT(IN)  :: poly(:)
-COMPLEX (KIND=dp), INTENT(OUT) :: root(:)
-REAL (KIND=dp), INTENT(OUT)    :: radius(:)
-REAL (KIND=dp), INTENT(IN)     :: eps, small, big
+COMPLEX (KIND=dpb), INTENT(IN)  :: poly(:)
+COMPLEX (KIND=dpb), INTENT(OUT) :: root(:)
+REAL (KIND=dpb), INTENT(OUT)    :: radius(:)
+REAL (KIND=dpb), INTENT(IN)     :: eps, small, big
 LOGICAL, INTENT(OUT)           :: err(:)
 
 ! Local variables
 INTEGER                   :: i, nzeros
-COMPLEX (KIND=dp)         :: corr, abcorr
-REAL (KIND=dp)            :: amax, apoly(n+1), apolyr(n+1)
-REAL (KIND=dp), PARAMETER :: zero = 0.0_dp
+COMPLEX (KIND=dpb)         :: corr, abcorr
+REAL (KIND=dpb)            :: amax, apoly(n+1), apolyr(n+1)
+REAL (KIND=dpb), PARAMETER :: zero = 0.0_dpb
 
 ! Check consistency of data
 IF (ABS(poly(n+1)) == zero)THEN
@@ -285,7 +284,7 @@ END SUBROUTINE polzeros
 !     APOLYR: upper bounds on the backward perturbations on the         *
 !             coefficients of p(x) when applying (2), (2')              *
 !     Z     : value at which the Newton correction is computed          *
-!     SMALL : the min positive REAL (KIND=dp) ::, SMALL=2**(-1074) for the IEEE.   *
+!     SMALL : the min positive REAL (KIND=dpb) ::, SMALL=2**(-1074) for the IEEE.   *
 !************************************************************************
 ! Output variables:                                                     *
 !     RADIUS: upper bound to the distance of Z from the closest root of *
@@ -298,16 +297,16 @@ END SUBROUTINE polzeros
 SUBROUTINE newton(n, poly, apoly, apolyr, z, small, radius, corr, again)
 IMPLICIT NONE
 INTEGER, INTENT(IN)            :: n
-COMPLEX (KIND=dp), INTENT(IN)  :: poly(:), z
-COMPLEX (KIND=dp), INTENT(OUT) :: corr
-REAL (KIND=dp), INTENT(IN)     :: apoly(:), apolyr(:), small
-REAL (KIND=dp), INTENT(OUT)    :: radius
+COMPLEX (KIND=dpb), INTENT(IN)  :: poly(:), z
+COMPLEX (KIND=dpb), INTENT(OUT) :: corr
+REAL (KIND=dpb), INTENT(IN)     :: apoly(:), apolyr(:), small
+REAL (KIND=dpb), INTENT(OUT)    :: radius
 LOGICAL, INTENT(OUT)           :: again
 
 ! Local variables
 INTEGER           :: i
-COMPLEX (KIND=dp) :: p, p1, zi, den, ppsp
-REAL (KIND=dp)    :: ap, az, azi, absp
+COMPLEX (KIND=dpb) :: p, p1, zi, den, ppsp
+REAL (KIND=dpb)    :: ap, az, azi, absp
 
 az = ABS(z)
 ! If |z|<=1 then apply Ruffini-Horner's rule for p(z)/p'(z)
@@ -379,15 +378,15 @@ END SUBROUTINE newton
 SUBROUTINE aberth(n, j, root, abcorr)
 IMPLICIT NONE
 INTEGER, INTENT(IN)            :: n, j
-COMPLEX (KIND=dp), INTENT(IN)  :: root(:)
-COMPLEX (KIND=dp), INTENT(OUT) :: abcorr
+COMPLEX (KIND=dpb), INTENT(IN)  :: root(:)
+COMPLEX (KIND=dpb), INTENT(OUT) :: abcorr
 
 ! Local variables
 INTEGER                   :: i
-COMPLEX (KIND=dp)         :: z, zj
-REAL (KIND=dp), PARAMETER :: zero = 0.0_dp
+COMPLEX (KIND=dpb)         :: z, zj
+REAL (KIND=dpb), PARAMETER :: zero = 0.0_dpb
 
-abcorr = CMPLX(zero, zero, KIND=dp)
+abcorr = CMPLX(zero, zero, KIND=dpb)
 zj = root(j)
 DO i = 1, j-1
   z = zj - root(i)
@@ -410,8 +409,8 @@ END SUBROUTINE aberth
 ! Input variables:                                                      *
 !     N     :  number of the coefficients of the polynomial             *
 !     A     :  moduli of the coefficients of the polynomial             *
-!     SMALL : the min positive REAL (KIND=dp) ::, SMALL=2**(-1074) for the IEEE.   *
-!     BIG   : the max REAL (KIND=dp) ::, BIG=2**1023 for the IEEE standard.        *
+!     SMALL : the min positive REAL (KIND=dpb) ::, SMALL=2**(-1074) for the IEEE.   *
+!     BIG   : the max REAL (KIND=dpb) ::, BIG=2**1023 for the IEEE standard.        *
 ! Output variables:                                                     *
 !     Y     :  starting approximations                                  *
 !     RADIUS:  if a component is -1 then the corresponding root has a   *
@@ -432,15 +431,15 @@ IMPLICIT NONE
 INTEGER, INTENT(IN)            :: n
 INTEGER, INTENT(OUT)           :: nz
 LOGICAL, INTENT(OUT)           :: h(:)
-COMPLEX (KIND=dp), INTENT(OUT) :: y(:)
-REAL (KIND=dp), INTENT(IN)     :: small, big
-REAL (KIND=dp), INTENT(IN OUT) :: a(:)
-REAL (KIND=dp), INTENT(OUT)    :: radius(:)
+COMPLEX (KIND=dpb), INTENT(OUT) :: y(:)
+REAL (KIND=dpb), INTENT(IN)     :: small, big
+REAL (KIND=dpb), INTENT(IN OUT) :: a(:)
+REAL (KIND=dpb), INTENT(OUT)    :: radius(:)
 
 ! Local variables
 INTEGER                   :: i, iold, nzeros, j, jj
-REAL (KIND=dp)            :: r, th, ang, temp, xsmall, xbig
-REAL (KIND=dp), PARAMETER :: pi2 = 6.2831853071796, sigma = 0.7
+REAL (KIND=dpb)            :: r, th, ang, temp, xsmall, xbig
+REAL (KIND=dpb), PARAMETER :: pi2 = 6.2831853071796, sigma = 0.7
 
 xsmall = LOG(small)
 xbig = LOG(big)
@@ -466,11 +465,11 @@ DO i = 2, n+1
 ! Check if the modulus is too small
     IF((temp < -xbig).AND.(temp >= xsmall))THEN
       WRITE(*,*)'WARNING:',nzeros,' ZERO(S) ARE TOO SMALL TO'
-      WRITE(*,*)'REPRESENT THEIR INVERSES AS COMPLEX (KIND=dp) ::, THEY'
+      WRITE(*,*)'REPRESENT THEIR INVERSES AS COMPLEX (KIND=dpb) ::, THEY'
       WRITE(*,*)'ARE REPLACED BY SMALL NUMBERS, THE CORRESPONDING'
       WRITE(*,*)'RADII ARE SET TO -1'
       WRITE(2,*)'WARNING:',nzeros,' ZERO(S) ARE TOO SMALL TO '
-      WRITE(2,*)'REPRESENT THEIR INVERSES AS COMPLEX (KIND=dp) ::, THEY'
+      WRITE(2,*)'REPRESENT THEIR INVERSES AS COMPLEX (KIND=dpb) ::, THEY'
       WRITE(2,*)'ARE REPLACED BY SMALL NUMBERS, THE CORRESPONDING'
       WRITE(2,*)'RADII ARE SET TO -1'
       nz = nz + nzeros
@@ -479,10 +478,10 @@ DO i = 2, n+1
     IF(temp < xsmall)THEN
       nz = nz + nzeros
       WRITE(*,*)'WARNING: ',nzeros,' ZERO(S) ARE TOO SMALL TO BE'
-      WRITE(*,*)'REPRESENTED AS COMPLEX (KIND=dp) ::, THEY ARE SET TO 0'
+      WRITE(*,*)'REPRESENTED AS COMPLEX (KIND=dpb) ::, THEY ARE SET TO 0'
       WRITE(*,*)'THE CORRESPONDING RADII ARE SET TO -1'
       WRITE(2,*)'WARNING: ',nzeros,' ZERO(S) ARE TOO SMALL TO BE'
-      WRITE(2,*)'REPRESENTED AS COMPLEX (KIND=dp) ::, THEY ARE SET 0'
+      WRITE(2,*)'REPRESENTED AS COMPLEX (KIND=dpb) ::, THEY ARE SET 0'
       WRITE(2,*)'THE CORRESPONDING RADII ARE SET TO -1'
     END IF
 ! Check if the modulus is too big
@@ -490,10 +489,10 @@ DO i = 2, n+1
       r = big
       nz = nz + nzeros
       WRITE(*,*)'WARNING: ', nzeros, ' ZEROS(S) ARE TOO BIG TO BE'
-      WRITE(*,*)'REPRESENTED AS COMPLEX (KIND=dp) ::,'
+      WRITE(*,*)'REPRESENTED AS COMPLEX (KIND=dpb) ::,'
       WRITE(*,*)'THE CORRESPONDING RADII ARE SET TO -1'
       WRITE(2,*)'WARNING: ',nzeros, ' ZERO(S) ARE TOO BIG TO BE'
-      WRITE(2,*)'REPRESENTED AS COMPLEX (KIND=dp) ::,'
+      WRITE(2,*)'REPRESENTED AS COMPLEX (KIND=dpb) ::,'
       WRITE(2,*)'THE CORRESPONDING RADII ARE SET TO -1'
     END IF
     IF((temp <= xbig).AND.(temp > MAX(-xbig, xsmall)))THEN
@@ -539,7 +538,7 @@ SUBROUTINE cnvex(n, a, h)
 IMPLICIT NONE
 INTEGER, INTENT(IN)        :: n
 LOGICAL, INTENT(OUT)       :: h(:)
-REAL (KIND=dp), INTENT(IN) :: a(:)
+REAL (KIND=dpb), INTENT(IN) :: a(:)
 
 ! Local variables
 INTEGER :: i, j, k, m, nj, jc
@@ -647,7 +646,7 @@ SUBROUTINE cmerge(n, a, i, m, h)
 IMPLICIT NONE
 INTEGER, INTENT(IN)        :: n, m, i
 LOGICAL, INTENT(IN OUT)    :: h(:)
-REAL (KIND=dp), INTENT(IN) :: a(:)
+REAL (KIND=dpb), INTENT(IN) :: a(:)
 
 ! Local variables
 INTEGER :: ir, il, irr, ill
@@ -714,12 +713,12 @@ END SUBROUTINE cmerge
 FUNCTION ctest(a, il, i, ir) RESULT(OK)
 IMPLICIT NONE
 INTEGER, INTENT(IN)        :: i, il, ir
-REAL (KIND=dp), INTENT(IN) :: a(:)
+REAL (KIND=dpb), INTENT(IN) :: a(:)
 LOGICAL                    :: OK
 
 ! Local variables
-REAL (KIND=dp)            :: s1, s2
-REAL (KIND=dp), PARAMETER :: toler = 0.4D0
+REAL (KIND=dpb)            :: s1, s2
+REAL (KIND=dpb), PARAMETER :: toler = 0.4D0
 
 s1 = a(i) - a(il)
 s2 = a(ir) - a(i)
