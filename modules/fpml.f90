@@ -33,7 +33,9 @@ contains
         call estimates(alpha, deg, roots)
         do i=1,itmax
             do j=1,deg
-                call laguerre(p, alpha, deg, j, check(j), roots, berr(j))
+                if(check(j)) then
+                    call laguerre(p, alpha, deg, j, check(j), roots, berr(j))
+                end if
             end do
         end do
     end subroutine main
