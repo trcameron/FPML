@@ -31,13 +31,13 @@ contains
     !************************************
     !               cross               *
     !************************************
-    !   returns 2D cross product of OA
-    !   and OB vectors, where
-    !   O=(h(c-1),a(h(c-1))),
-    !   A=(h(c),a(h(c))),
-    !   B=(i,a(i)).
-    !   If det>0, then OAB makes counter
-    !   clockwise turn.
+    ! Returns 2D cross product of OA and 
+    ! OB vectors, where
+    ! O=(h(c-1),a(h(c-1))),
+    ! A=(h(c),a(h(c))),
+    ! B=(i,a(i)).
+    ! If det>0, then OAB makes counter
+    ! clockwise turn.
     !************************************
     function cross(h, a, c, i) result(det)
         implicit none
@@ -55,13 +55,13 @@ contains
     !************************************
     !               conv_hull           *
     !************************************
-    !   returns upper envelope of the
-    !   convex hull of the points in the
-    !   array a, which has size n.
-    !   The number of vertices in the 
-    !   hull is equal to c, and they are
-    !   returned in the first c entries
-    !   of the array h. 
+    ! Returns upper envelope of the 
+    ! convex hull of the points in the 
+    ! array a, which has size n.
+    ! The number of vertices in the 
+    ! hull is equal to c, and they are
+    ! returned in the first c entries of 
+    ! the array h. 
     !************************************
     subroutine conv_hull(n, a, h, c)
         implicit none
@@ -86,13 +86,12 @@ contains
     !************************************
     !               estimates           *
     !************************************
-    !   returns initial estimates for
-    !   the roots of an univariate 
-    !   polynomial of degree deg, whose 
-    !   coefficients moduli are stored in 
-    !   alpha.
-    !   The estimates are returned in the
-    !   array roots.
+    ! Returns initial estimates for the 
+    ! roots of an univariate polynomial 
+    ! of degree deg, whose coefficients 
+    ! moduli are stored in alpha.
+    ! The estimates are returned in the
+    ! array roots.
     !************************************
     subroutine estimates(alpha, deg, roots)
         implicit none

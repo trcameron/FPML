@@ -5,10 +5,9 @@
 	
 \begin{tikzpicture}[scale=0.5]
 \begin{semilogyaxis}[
-	title = Elapsed Time Comparison,
 	xlabel = {Degree},
 	ylabel = {Seconds},
-	legend pos = north west,
+	legend pos = outer north east,
 ]
 \addplot table [x=Degree, y=CST, col sep=comma] {data_files/start_timing.dat};
 \addlegendentry{Monotone Chain}
