@@ -40,7 +40,7 @@ contains
             do j=1,deg
                 if(check(j)) then
                     call laguerre(p, alpha, ralpha, deg, j, check(j), roots, berr(j))
-                    if(.not.check(j)) nz=nz+1
+                    if(.not.check(j)) nz = nz+1
                     if(nz==deg) return
                 end if
             end do
