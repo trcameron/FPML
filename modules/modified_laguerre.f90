@@ -41,12 +41,12 @@ contains
     ! polynomial is used to obtain
     ! correction term.
     !************************************
-    subroutine laguerre(p, alpha, deg, j, check, roots, berr)
+    subroutine laguerre(p, alpha, ralpha, deg, j, check, roots, berr)
         implicit none
         ! argument variables
         logical, intent(out)            :: check
         integer, intent(in)             :: deg, j
-        real(kind=dp), intent(in)       :: alpha(:)
+        real(kind=dp), intent(in)       :: alpha(:), ralpha(:)
         real(kind=dp), intent(out)      :: berr
         complex(kind=dp), intent(in)    :: p(:)
         complex(kind=dp), intent(inout) :: roots(:)
@@ -62,10 +62,10 @@ contains
             z = 1/z
             r = 1/r
             a = p(1)
-            berr = alpha(1)*(3.8*deg+1)
+            berr = ralpha(1)
             do k=2,deg+1
                 a = z*a+p(k)
-                berr = r*berr+alpha(k)*(3.8*(deg+1-k)+1)
+                berr = r*berr+ralpha(k)
             end do
             berr = abs(a)/berr
             if(berr<eps) then
@@ -85,10 +85,10 @@ contains
             h = z**2*(deg-2*z*b+z**2*(b**2-c))
         else
             a = p(deg+1)
-            berr = alpha(deg+1)*(3.8*deg+1)
+            berr = alpha(deg+1)
             do k=deg,1,-1
                 a = z*a+p(k)
-                berr = r*berr+alpha(k)*(3.8*(k-1)+1)
+                berr = r*berr+alpha(k)
             end do
             berr = abs(a)/berr
             if(berr<eps) then

@@ -22,7 +22,7 @@ contains
         ! local variables
         integer                         :: i, j
         logical, dimension(deg)         :: check
-        real(kind=dp), dimension(deg+1) :: alpha
+        real(kind=dp), dimension(deg+1) :: alpha, ralpha
         
         ! main
         do i=1,deg
@@ -31,10 +31,14 @@ contains
         end do
         alpha(deg+1)=abs(p(deg+1))
         call estimates(alpha, deg, roots)
+        do i=1,deg+1
+            alpha(i) = alpha(i)*(3.8*(i-1)+1)
+            ralpha(i) = alpha(i)*(3.8*(deg+1-i)+1)
+        end do
         do i=1,itmax
             do j=1,deg
                 if(check(j)) then
-                    call laguerre(p, alpha, deg, j, check(j), roots, berr(j))
+                    call laguerre(p, alpha, ralpha, deg, j, check(j), roots, berr(j))
                 end if
             end do
         end do

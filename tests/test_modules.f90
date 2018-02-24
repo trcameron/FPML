@@ -112,7 +112,7 @@ program test_modules
             ! FPML correction
             call system_clock(count_rate=clock_rate)
             call system_clock(count=clock_start)
-            call laguerre(p, alpha, deg, it, h(it), roots, berr)
+            call laguerre(p, apoly, apolyr, deg, it, h(it), roots, berr)
             call system_clock(count=clock_stop)
             time(it,3)=dble(clock_stop-clock_start)/dble(clock_rate)
             ! Polzeros correction
