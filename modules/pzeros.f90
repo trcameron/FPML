@@ -1,6 +1,7 @@
 MODULE poly_zeroes
-    implicit none
-    INTEGER, PARAMETER     :: dpb = KIND(0.0D0)
+IMPLICIT NONE
+INTEGER, PARAMETER     :: dpb = SELECTED_REAL_KIND(15, 60)
+
 CONTAINS
 
 !************************************************************************
