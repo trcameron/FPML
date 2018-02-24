@@ -2,7 +2,7 @@
 
 # run test_modules
 ./test_modules 1000 1000000 100
-./test_main 100 10000 10
+./test_main 100 10000 25
 
 # compile test_modules.tex
 pdflatex -shell-escape test_start_timing.tex
