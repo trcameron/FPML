@@ -9,9 +9,9 @@
 	ylabel = {Seconds},
 	legend pos = outer north east,
 ]
-\addplot table [x=Degree, y=FPML, col sep=comma] {data_files/main_timing.dat};
+\addplot table [x=Degree, y=FPML_time, col sep=comma] {data_files/main_timing.dat};
 \addlegendentry{FPML}
-\addplot table [x=Degree, y=Polzeros, col sep=comma] {data_files/main_timing.dat};
+\addplot table [x=Degree, y=Polzeros_time, col sep=comma] {data_files/main_timing.dat};
 \addlegendentry{Polzeros}
 \end{semilogyaxis}
 \end{tikzpicture}

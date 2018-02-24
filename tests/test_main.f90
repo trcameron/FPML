@@ -40,8 +40,8 @@ program test_main
     
     ! testing
     open(unit=1,file="data_files/main_timing.dat")
-    write(1,'(A)') 'Degree, FPML, Polzeros'
-    allocate(time(maxit,2))
+    write(1,'(A)') 'Degree, FPML_time, FPML_berr, Polzeros_time, Polzeros_berr'
+    allocate(time(maxit,4))
     deg=startDegree
     do while(deg<=endDegree)
         write(1,'(I10)', advance='no') deg
@@ -56,18 +56,24 @@ program test_main
             call main(p, deg, roots, berr)
             call system_clock(count=clock_stop)
             time(it,1)=dble(clock_stop-clock_start)/dble(clock_rate)
+            time(it,2)=maxval(berr)
             ! Polzeros
             call system_clock(count_rate=clock_rate)
             call system_clock(count=clock_start)
             call polzeros(deg, p, eps, big, small, nitmax, zeros, radius, h, iter)
             call system_clock(count=clock_stop)
-            time(it,2)=dble(clock_stop-clock_start)/dble(clock_rate)
+            time(it,3)=dble(clock_stop-clock_start)/dble(clock_rate)
+            time(it,4)=maxval(radius)
         end do
         deallocate(p, roots, berr, zeros, radius, h)
         deg=2*deg
         write(1,'(ES15.2)', advance='no') sum(time(:,1))/maxit
         write(1,'(A)', advance='no') ','
-        write(1,'(ES15.2)') sum(time(:,2))/maxit
+        write(1,'(ES15.2)', advance='no') sum(time(:,2))/maxit
+        write(1,'(A)', advance='no') ','
+        write(1,'(ES15.2)', advance='no') sum(time(:,3))/maxit
+        write(1,'(A)', advance='no') ','
+        write(1,'(ES15.2)') sum(time(:,4))/maxit
     end do
     deallocate(time)
     close(1)

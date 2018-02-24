@@ -31,6 +31,9 @@ contains
         end do
         alpha(deg+1)=abs(p(deg+1))
         call estimates(alpha, deg, roots)
+        do i=1,deg+1
+            alpha(i) = alpha(i)*(3.8*(i-1) + 1)
+        end do
         do i=1,itmax
             do j=1,deg
                 if(check(j)) then
