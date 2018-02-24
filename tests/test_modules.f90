@@ -119,11 +119,8 @@ program test_modules
                 apoly(j) = eps*apoly(j)*(3.8*(j-1) + 1)
             end do
             do j=1,deg
-                if(radius(j)==-1) then
-                    h(j) = .false.
-                else
-                    h(j) = .true.
-                end if
+                h(j) = .true.
+                if(radius(j)==-1) h(j) = .false.
             end do
             ! FPML correction
             call system_clock(count_rate=clock_rate)

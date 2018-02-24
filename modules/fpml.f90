@@ -20,7 +20,7 @@ contains
         complex(kind=dp), intent(in)    :: p(:)
         complex(kind=dp), intent(out)   :: roots(:)
         ! local variables
-        integer                         :: i, j
+        integer                         :: i, j, nz
         logical, dimension(deg)         :: check
         real(kind=dp), dimension(deg+1) :: alpha, ralpha
         
@@ -35,10 +35,13 @@ contains
             ralpha(i) = alpha(i)*(3.8*(deg+1-i)+1)
             alpha(i) = alpha(i)*(3.8*(i-1)+1)
         end do
+        nz = 0
         do i=1,itmax
             do j=1,deg
                 if(check(j)) then
                     call laguerre(p, alpha, ralpha, deg, j, check(j), roots, berr(j))
+                    if(.not.check(j)) nz=nz+1
+                    if(nz==deg) return
                 end if
             end do
         end do
