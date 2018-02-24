@@ -10,7 +10,7 @@ program test_modules
     real(kind=dp), dimension(:,:), allocatable  :: time
     ! FPML variables
     real(kind=dp)                               :: berr
-    real(kind=dp), dimension(:),    allocatable :: alpha    
+    real(kind=dp), dimension(:),    allocatable :: alpha, ralpha    
     complex(kind=dp), dimension(:), allocatable :: p, roots
     ! Polzeros variables
     integer                                     :: nz
@@ -85,17 +85,19 @@ program test_modules
         write(1,'(A)', advance='no') ','
         write(2,'(I10)', advance='no') deg
         write(2,'(A)', advance='no') ','
-        allocate(alpha(deg+1), roots(deg), zeros(deg), radius(deg), h(deg+1), p(deg+1), apoly(deg+1), apolyr(deg+1))
+        allocate(alpha(deg+1), ralpha(deg+1), roots(deg), zeros(deg), radius(deg), h(deg+1), p(deg+1), apoly(deg+1), apolyr(deg+1))
         ! iterations
         do it=1,itmax
             ! polynomial coefficients
             call cmplx_rand_poly(deg+1,p)
             do j=1,deg+1
                 alpha(j)=abs(p(j))
+                apoly(j)=abs(p(j))
             end do
-            do j=1,deg+1
-                apolyr(deg-j+2) = eps*alpha(j)*(3.8*(deg-j+1) + 1)
-                apoly(j) = eps*alpha(j)*(3.8*(j-1) + 1)
+            ! initialize variables
+            do j=1,deg
+                radius(j) = 0.0D0
+                h(j) = .true.
             end do
             ! FPML start
             call system_clock(count_rate=clock_rate)
@@ -109,10 +111,24 @@ program test_modules
             call start(deg, alpha, zeros, radius, nz, small, big, h)
             call system_clock(count=clock_stop)
             time(it,2)=dble(clock_stop-clock_start)/dble(clock_rate)
+            ! initialize variables
+            do j=1,deg+1
+                ralpha(j) = alpha(j)*(3.8*(deg+1-j)+1)
+                alpha(j) = alpha(j)*(3.8*(j-1)+1)
+                apolyr(deg-j+2) = eps*apoly(j)*(3.8*(deg-j+1) + 1)
+                apoly(j) = eps*apoly(j)*(3.8*(j-1) + 1)
+            end do
+            do j=1,deg
+                if(radius(j)==-1) then
+                    h(j) = .false.
+                else
+                    h(j) = .true.
+                end if
+            end do
             ! FPML correction
             call system_clock(count_rate=clock_rate)
             call system_clock(count=clock_start)
-            call laguerre(p, apoly, apolyr, deg, it, h(it), roots, berr)
+            call laguerre(p, alpha, ralpha, deg, it, h(it), roots, berr)
             call system_clock(count=clock_stop)
             time(it,3)=dble(clock_stop-clock_start)/dble(clock_rate)
             ! Polzeros correction
@@ -126,7 +142,7 @@ program test_modules
             call system_clock(count=clock_stop)
             time(it,4)=dble(clock_stop-clock_start)/dble(clock_rate)
         end do
-        deallocate(alpha, roots, zeros, radius, h, p, apoly, apolyr)
+        deallocate(alpha, ralpha, roots, zeros, radius, h, p, apoly, apolyr)
         deg=2*deg
         write(1,'(ES15.2)', advance='no') sum(time(:,1))/itmax
         write(1,'(A)', advance='no') ','
