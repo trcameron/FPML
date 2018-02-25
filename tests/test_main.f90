@@ -6,7 +6,7 @@ program test_main
     character(len=32)                           :: arg
     integer                                     :: flag, startDegree, endDegree, maxit
     ! testing variables
-    integer                                     :: deg, it, clock_rate, clock_start, clock_stop
+    integer                                     :: deg, it, j, clock_rate, clock_start, clock_stop
     real(kind=dp), dimension(:,:), allocatable  :: time
     ! FPML variables
     real(kind=dp), dimension(:),    allocatable :: berr   
@@ -18,6 +18,9 @@ program test_main
     logical, dimension(:), allocatable          :: h
     real(kind=dp), dimension(:), allocatable    :: radius
     complex(kind=dp), dimension(:), allocatable :: zeros
+    ! Cpoly variables
+    logical                                     :: fail
+    real(kind=dp), dimension(:), allocatable    :: opr, opi, zeror, zeroi
     ! read in optional arguments
     call get_command_argument(1,arg,status=flag)
     if(flag==0) then
@@ -41,7 +44,7 @@ program test_main
     ! testing
     open(unit=1,file="data_files/main_timing.dat")
     write(1,'(A)') 'Degree, FPML_time, FPML_berr, Polzeros_time, Polzeros_berr'
-    allocate(time(maxit,4))
+    allocate(time(maxit,5))
     deg=startDegree
     do while(deg<=endDegree)
         write(1,'(I10)', advance='no') deg
@@ -73,7 +76,9 @@ program test_main
         write(1,'(A)', advance='no') ','
         write(1,'(ES15.2)', advance='no') sum(time(:,3))/maxit
         write(1,'(A)', advance='no') ','
-        write(1,'(ES15.2)') sum(time(:,4))/maxit
+        write(1,'(ES15.2)', advance='no') sum(time(:,4))/maxit
+        write(1,'(A)', advance='no') ','
+        write(1,'(ES15.2)') sum(time(:,5))/maxit
     end do
     deallocate(time)
     close(1)
