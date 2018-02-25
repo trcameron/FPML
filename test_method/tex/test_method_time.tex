@@ -1,0 +1,21 @@
+\documentclass[convert={density=300,outext=.png}]{standalone}
+\usepackage{pgfplots}
+
+\begin{document}
+	
+\begin{tikzpicture}[scale=0.5]
+\begin{loglogaxis}[
+	xlabel = {Degree},
+	ylabel = {Seconds},
+	legend pos = outer north east,
+]
+\addplot table [x=Degree, y=lseq_time, col sep=comma] {../data/test_methods.dat};
+\addlegendentry{Lag Sequential}
+\addplot table [x=Degree, y=lcon_time, col sep=comma] {../data/test_methods.dat};
+\addlegendentry{Lag Concurrent}
+\addplot table [x=Degree, y=aberth_time, col sep=comma] {../data/test_methods.dat};
+\addlegendentry{Aberth}
+\end{loglogaxis}
+\end{tikzpicture}
+
+\end{document}

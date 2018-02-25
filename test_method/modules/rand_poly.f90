@@ -1,6 +1,6 @@
 !****************************************************
 !   Thomas R. Cameron, Davidson College
-!   Last Modified: 20 February 2018
+!   Last Modified: 24 February 2018
 !****************************************************
 !   Module: rand_poly contains double precision
 !   kind parameter and subroutines associated 
