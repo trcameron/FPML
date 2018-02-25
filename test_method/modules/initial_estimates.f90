@@ -1,6 +1,6 @@
 !****************************************************
 !   Thomas R. Cameron, Davidson College             
-!   Last Modified: 22 February 2018
+!   Last Modified: 24 February 2018
 !****************************************************
 !   Module: initial_estimates contains the paramters 
 !   and subroutines associated with computing the 
@@ -9,10 +9,7 @@
 !****************************************************
 !   Contains the following paramaters, functions, and
 !   subroutines.
-!       pi2: 2*pi to 15 digits.
-!       
-!       sigma: nonzero constant for root placement
-!       along circles in complex plane.
+!       zero: 0 to 15 digits.
 !       
 !       cross: computes 2D cross product.
 !

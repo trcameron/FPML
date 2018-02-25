@@ -14,9 +14,14 @@
 !       init_random_seed: seeds random number 
 !       generator using system_clock count parameter.
 !
-!       real_rand_poly: creates n real random coeffs
+!       dble_rand_poly: creates n real random coeffs
 !       uniformly distributed between -1 and 1 using
-!       random_number. 
+!       random_number.
+!
+!       cmplx_rang_poly: creates n cmplx random
+!       coeffs whose real and imaginary parts are
+!       uniformly distributed between -1 and 1 using
+!       random_number.
 !****************************************************
 module rand_poly
     implicit none
@@ -55,7 +60,7 @@ contains
         ! main
         do k=1,n
             call random_number(r)
-            x(k) = -1 + 2*r
+            x(k) = -1 + 2 * r
         end do
     end subroutine dble_rand_poly
     
@@ -72,7 +77,7 @@ contains
         do k=1,n
             call random_number(r1)
             call random_number(r2)
-            x(k) = (-1+2*r1) + (0,1)*(-1+2*r2)
+            x(k)=(-1+2*r1)+(0,1)*(-1+2*r2)
         end do
     end subroutine cmplx_rand_poly
 end module rand_poly

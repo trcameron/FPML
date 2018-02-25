@@ -138,8 +138,8 @@ contains
         complex(kind=dp)                :: z, zj
         
         ! main
-        corr1 = cmplx(0.0D0, 0.0D0, kind=dp)
-        corr2 = cmplx(0.0D0, 0.0D0, kind=dp)
+        corr1 = cmplx(zero, zero, kind=dp)
+        corr2 = cmplx(zero, zero, kind=dp)
         zj = roots(j)
         do i=1,j-1
             z = 1/(zj - roots(i))
