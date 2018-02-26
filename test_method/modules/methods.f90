@@ -1,6 +1,6 @@
 !****************************************************
 !   Thomas R. Cameron, Davidson College             
-!   Last Modified: 24 February 2018
+!   Last Modified: 25 February 2018
 !****************************************************
 !   Module: methods contains the paramters and 
 !   subroutines associated with updating the root
@@ -9,11 +9,33 @@
 !   Contains the following paramaters, functions, and
 !   subroutines.
 !       eps: machine double precision.
+!
+!       laguerre_seq: a sequential modification of
+!       laguerre's method that allows all of the
+!       root approximations to be computed one at a 
+!       time.
+!
+!       laguerre_con: a concurrent modification of
+!       laguerre's method that allows progress to be
+!       made on all root approximations on a single
+!       iteration.
+!
+!       aberth: aberth method which is a concurrent
+!       modification of newton's method. 
+!
+!       modify_lseq: modification term for sequential
+!       modification of laguerres method.
+!
+!       modify_lcon: modification term for concurrent
+!       modification of laguerres method.
+!
+!       modify_aberth: modification term for aberth's
+!       method. 
 !*****************************************************
 module methods
     use initial_estimates
     implicit none
-    real(kind=dp), parameter        :: eps = epsilon(0.0D0)
+    real(kind=dp), parameter        :: eps = epsilon(zero)
 contains
     !************************************
     !               laguerre_seq        *

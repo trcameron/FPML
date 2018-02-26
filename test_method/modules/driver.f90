@@ -1,16 +1,21 @@
 !****************************************************
 !   Thomas R. Cameron, Davidson College             
-!   Last Modified: 24 February 2018
+!   Last Modified: 25 February 2018
 !****************************************************
-!   Module: methods contains the paramters and 
-!   subroutines associated with updating the root
-!   approximations of an univariate polynomial. 
+!   Module: driver contains the paramters and 
+!   subroutines associated with computing all root
+!   approximations of a univariate polynomial.
 !****************************************************
 !   Contains the following paramaters, functions, and
 !   subroutines.
 !       itmax: maximum number of iterations allowed
-!       for each method to compute all roots of
-!       the polynomial.
+!       for each method.
+!
+!       main_lseq: sequential laguerre's method.
+!
+!       main_lcon: concurrent laguerre's method.
+!
+!       main_aberth: aberth's method.
 !*****************************************************
 module driver
     use methods
@@ -83,8 +88,10 @@ contains
             do j=1,deg
                 if(check(j)) then
                     call laguerre_con(p, alpha, ralpha, deg, j, check(j), roots, berr(j))
-                    if(.not.check(j)) nz = nz+1
-                    if(nz==deg) return
+                    if(.not.check(j)) then
+                        nz = nz + 1
+                        if(nz==deg) return
+                    end if
                 end if
             end do
         end do
@@ -120,8 +127,10 @@ contains
             do j=1,deg
                 if(check(j)) then
                     call aberth(p, alpha, ralpha, deg, j, check(j), roots, berr(j))
-                    if(.not.check(j)) nz = nz+1
-                    if(nz==deg) return
+                    if(.not.check(j)) then
+                        nz = nz + 1
+                        if(nz==deg) return
+                    end if
                 end if
             end do
         end do

@@ -1,6 +1,6 @@
 !****************************************************
 !   Thomas R. Cameron, Davidson College             
-!   Last Modified: 24 February 2018
+!   Last Modified: 25 February 2018
 !****************************************************
 !   Module: initial_estimates contains the paramters 
 !   and subroutines associated with computing the 

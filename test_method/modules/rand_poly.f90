@@ -1,6 +1,6 @@
 !****************************************************
 !   Thomas R. Cameron, Davidson College
-!   Last Modified: 24 February 2018
+!   Last Modified: 25 February 2018
 !****************************************************
 !   Module: rand_poly contains double precision
 !   kind parameter and subroutines associated 
@@ -27,6 +27,9 @@ module rand_poly
     implicit none
     integer, parameter  :: dp = KIND(0.0D0)
 contains
+    !************************************
+    !               init_random_seed    *
+    !************************************
     subroutine init_random_seed()
         implicit none
         ! local variables
@@ -45,7 +48,9 @@ contains
         
         deallocate(seed)
     end subroutine init_random_seed
-    
+    !************************************
+    !               dble_rand_poly      *
+    !************************************
     subroutine dble_rand_poly(n,x)
         implicit none
         ! argument variables
@@ -60,10 +65,12 @@ contains
         ! main
         do k=1,n
             call random_number(r)
-            x(k) = -1 + 2 * r
+            x(k) = -1 + 2*r
         end do
     end subroutine dble_rand_poly
-    
+    !************************************
+    !               cmplx_rand_poly     *
+    !************************************
     subroutine cmplx_rand_poly(n,x)
         implicit none
         ! argument variables
@@ -77,7 +84,7 @@ contains
         do k=1,n
             call random_number(r1)
             call random_number(r2)
-            x(k)=(-1+2*r1)+(0,1)*(-1+2*r2)
+            x(k)=(-1+2*r1) + (0,1)*(-1+2*r2)
         end do
     end subroutine cmplx_rand_poly
 end module rand_poly
