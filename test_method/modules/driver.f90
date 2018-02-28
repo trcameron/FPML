@@ -112,16 +112,11 @@ contains
         real(kind=dp), dimension(deg+1) :: alpha, ralpha
         
         ! main
-        do i=1,deg
-            alpha(i) = abs(p(i))
-            check(i) = .true.
-        end do
-        alpha(deg+1)=abs(p(deg+1))
+        alpha = (/ (abs(p(i)), i = 1,deg+1) /)
+        check = (/ (.true., i = 1,deg) /)
         call estimates(alpha, deg, roots)
-        do i=1,deg+1
-            ralpha(i) = alpha(i)*(3.8*(deg+1-i)+1)
-            alpha(i) = alpha(i)*(3.8*(i-1)+1)
-        end do
+        ralpha = (/ (alpha(i)*(3.8*(deg+1-i)+1), i=1,deg+1)/)
+        alpha = (/ (alpha(i)*(3.8*(i-1)+1), i=1,deg+1)/)
         nz = 0
         do i=1,itmax
             do j=1,deg

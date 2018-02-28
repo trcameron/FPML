@@ -23,6 +23,42 @@ module fpml
     real(kind=dp), parameter    :: eps = epsilon(zero)
 contains
     !************************************************
+    !                       main                    *
+    !************************************************
+    subroutine main(p, deg, roots, berr, cond)
+        implicit none
+        ! argument variables
+        integer, intent(in)             :: deg
+        real(kind=dp), intent(out)      :: berr(:)
+        complex(kind=dp), intent(in)    :: p(:)
+        complex(kind=dp), intent(out)   :: roots(:)
+        ! local variables
+        integer                         :: i, j
+        logical, dimension(deg)         :: check
+        real(kind=dp), dimension(deg+1) :: alpha, ralpha
+        
+        ! main
+        alpha = (/ (abs(p(i)), i = 1,deg+1) /)
+        check = (/ (.true., i = 1,deg+1) /)
+    end subroutine main
+    !************************************************
+    !                       laguerre                *
+    !************************************************
+    subroutine laguerre(p, alpha, ralpha, deg, j, check, roots, berr)
+        implicit none
+        ! argument variables
+        logical, intent(out)            :: check
+        integer, intent(in)             :: deg, j
+        real(kind=dp), intent(in)       :: alpha(:), ralpha(:)
+        real(kind=dp), intent(out)      :: berr
+        complex(kind=dp), intent(in)    :: p(:)
+        complex(kind=dp), intent(inout) :: roots(:)
+        ! local variables
+        integer                         :: k
+        real(kind=dp)                   :: r
+        complex(kind=dp)                :: a, b, c, g, h, z, corr1, corr2
+    end subroutine laguerre
+    !************************************************
     !                       estimates               *
     !************************************************
     ! Returns initial estimates for the roots of an 
