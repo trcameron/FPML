@@ -5,15 +5,18 @@ Fourth order Parallelizable Modified Laguerre method. This is a Fortran library 
 - [Thomas R. Cameron](https://thomasrcameron.com),
 Davidson College, NC
 
+<img src="https://latex.codecogs.com/svg.latex?\Large&space;x=\frac{-b\pm\sqrt{b^2-4ac}}{2a}" title="\Large x=\frac{-b\pm\sqrt{b^2-4ac}}{2a}" />
+
 ## Tests
-### Initial Estimate Accuracy
-![alt text](tests/figures/test_start_accuracy.png?raw=true)
-### Initial Estimate Timing
-![alt text](tests/figures/test_start_timing.png?raw=true)
-### Correction Term Timing
-![alt text](tests/figures/test_correction_timing.png?raw=true)
-### Program Comparison Timing
-![alt text](tests/figures/test_main_timing.png?raw=true)
+### Initial Estimate
+Below is a graph of the initial estimates of the roots of the polynomial p(z)=1+3000z+3000000z^2+1000000000z^3+z^10.
+![alt text](tests/figures/module.png?raw=true)
+### Random Polynomials
+Random complex polynomials whose coefficients are uniformly distributed over the interval [-1,1] are used to compare FPML against Polzeros and the singleshift version of AMVW. The plot below includes the elapsed time measured in seconds and the accuracy which is measured as the forward error. Iterations are run for polynomials of degree 100 to degree 6400, doubling the degree on each step. For each iteration there are 25 tests performed, the average time elapsed and the average of the maximum forward error over all these tests is recorded.
+![alt text](tests/figures/rand_poly.png?raw=true)
+### Roots of Unity
+The polynomial z^n-1
+
 
 ## Related Articles
 This software is based on the following articles:

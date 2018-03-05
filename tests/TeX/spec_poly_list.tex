@@ -1,0 +1,37 @@
+\documentclass[convert={density=300,outext=.png}]{standalone}
+\usepackage{booktabs} % For \toprule, \midrule and \bottomrule
+\usepackage{pgfplotstable} % Generates table from .csv
+
+\newcommand{\iu}{{i\mkern1mu}}
+
+\begin{document}
+    \pgfplotstabletypeset[
+        col sep=&,
+        row sep=\\,
+        columns/Description/.style={string type},
+        columns/Roots/.style={string type},
+        every head row/.style={
+  		before row={\toprule}, % have a rule at top
+  		after row={
+  			\midrule} % rule under units
+  			},
+  		every last row/.style={after row=\bottomrule}, % rule at bottom
+    ]
+    {
+        Poly No. & Description & Deg. & Roots \\
+        1 & Wilkinson polynomial & 10 & {$1,\ldots,10$} \\
+        2 & Wilkinson polynomial & 15 & {$1,\ldots,15$} \\
+        3 & Wilkinson polynomial & 20 & {$1,\ldots,20$} \\
+        4 & scale and shifted Wilkinson polynomial & 20 & {$-2.1,-1.9,\ldots,1.7$} \\
+        5 & reverse Wilkinson polynomial & 10 & {$1,1/2,\ldots,1/10$} \\
+        6 & reverse Wilkinson polynomial & 15 & {$1,1/2,\ldots,1/15$} \\
+        7 & reverse Wilkinson polynomial & 20 & {$1,1/2,\ldots,1/20$} \\
+        8 & prescribed roots of varying scale & 20 & {$2^{-10},2^{-9},\ldots,2^{9}$} \\
+        9 & prescribed roots of varying scale -3 & 20 & {$2^{-10}-3,2^{-9}-3,\ldots,2^{9}-3$} \\
+        10 & Chebyshev polynomial & 20 &{ $\cos(\frac{2j-1}{40}\pi)$} \\
+        11 & $z^{20}+z^{19}+\cdots+z+1$ & 20 & {$e^{\iu\frac{2j}{21}\pi}$} \\
+        12 & C. Traverso & 24 & known \\
+        13 & Mandelbrot & 31 & known \\
+        14 & Mandelbrot & 63 & known \\
+    }
+\end{document}
