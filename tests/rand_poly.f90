@@ -35,13 +35,13 @@ program rand_poly
     if(flag==0) then
         read(arg, '(I10)') endDegree
     else
-        endDegree=1600
+        endDegree=12800
     end if
     call get_command_argument(3,arg,status=flag)
     if(flag==0) then
         read(arg, '(I10)') maxit
     else
-        maxit=10
+        maxit=25
     end if
     
     ! testing random non-monic polynomials
