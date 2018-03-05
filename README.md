@@ -9,7 +9,7 @@ Davidson College, NC
 
 ## Tests
 ### Initial Estimate
-Below is a graph of the initial estimates of the roots of the polynomial p(z)=1+3000z+3000000z^2+1000000000z^3+z^10.
+Below is a graph of the initial estimates of the roots of the polynomial <img src="https://latex.codecogs.com/svg.latex?\Large&space;p(z)=1+3000z+3000000z^{2}+1000000000z^{3}+z^{10}" title="\Large p(z)=1+3000z+3000000z^{2}+1000000000z^{3}+z^{10}" />.
 ![alt text](tests/figures/module.png?raw=true)
 ### Random Polynomials
 Random complex polynomials whose coefficients are uniformly distributed over the interval [-1,1] are used to compare FPML against Polzeros and the singleshift version of AMVW. The plot below includes the elapsed time measured in seconds and the accuracy which is measured as the forward error. Iterations are run for polynomials of degree 100 to degree 6400, doubling the degree on each step. For each iteration there are 25 tests performed, the average time elapsed and the average of the maximum forward error over all these tests is recorded.
