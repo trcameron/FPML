@@ -25,9 +25,9 @@
 \addplot table [x=Degree, y=aberth_time, col sep=comma] {../data_files/methods.dat};
 \addlegendentry{Aberth}
 \nextgroupplot[ylabel = {Accuracy}, xmode=log,ymode=log] 
-\addplot table [x=Degree, y=lseq_berr, col sep=comma] {../data_files/methods.dat};
-\addplot table [x=Degree, y=lcon_berr, col sep=comma] {../data_files/methods.dat};
-\addplot table [x=Degree, y=aberth_berr, col sep=comma] {../data_files/methods.dat};
+\addplot table [x=Degree, y=lseq_err, col sep=comma] {../data_files/methods.dat};
+\addplot table [x=Degree, y=lcon_err, col sep=comma] {../data_files/methods.dat};
+\addplot table [x=Degree, y=aberth_err, col sep=comma] {../data_files/methods.dat};
 \end{groupplot}
 \end{tikzpicture}
 

@@ -13,7 +13,9 @@ Below is a graph of the initial estimates and exact roots of the polynomial <img
 
 ![alt text](tests/figures/module.png?raw=true)
 
-As can be seen from this graph, the initial estimates are incredibly close to the exact roots of the polynomial. While the outcome is not always this favorable, this example highlights the 
+As can be seen from this graph, the initial estimates are incredibly close to the exact roots of the polynomial. While the outcome is not always this favorable, this example highlights the power of the method for computing initial estimates due to Bini. 
+### Modification Choices
+
 ### Random Polynomials
 Random complex polynomials whose coefficients are uniformly distributed over the interval [-1,1] are used to compare FPML against Polzeros and the singleshift version of AMVW. The plot below includes the elapsed time measured in seconds and the accuracy which is measured as the forward error. Iterations are run for polynomials of degree 100 to degree 6400, doubling the degree on each step. For each iteration there are 25 tests performed, the average time elapsed and the average of the maximum forward error over all these tests is recorded.
 

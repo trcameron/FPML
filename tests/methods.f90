@@ -89,8 +89,8 @@ program methods
     ! testing
     call irc()  ! initiate random seed
     open(unit=1,file="data_files/methods.dat")
-    write(1,'(A)') 'Degree, lseq_time, lseq_berr, lcon_time, lcon_berr, aberth_time, aberth_berr'
-    allocate(time(maxit,6))
+    write(1,'(A)') 'Degree, lseq_time, lseq_err, lcon_time, lcon_err, aberth_time, aberth_err, lhan_time, lhan_err'
+    allocate(time(maxit,8))
     deg=startDegree
     do while(deg<=endDegree)
         write(1,'(I10)',advance='no') deg
@@ -120,6 +120,13 @@ program methods
             call system_clock(count=clock_stop)
             time(it,5)=dble(clock_stop-clock_start)/dble(clock_rate)
             time(it,6)=maxval(berr*cond)
+            ! lhan
+            !call system_clock(count_rate=clock_rate)
+            !call system_clock(count=clock_start)
+            !call main_lhan(p, deg, roots, berr, cond)
+            !call system_clock(count=clock_stop)
+            !time(it,7)=dble(clock_stop-clock_start)/dble(clock_rate)
+            !time(it,8)=maxval(berr*cond)
         end do
         deallocate(p, roots, berr, cond)
         deg=2*deg
@@ -133,7 +140,11 @@ program methods
         write(1,'(A)', advance='no') ','
         write(1,'(ES15.2)', advance='no') sum(time(:,5))/maxit
         write(1,'(A)', advance='no') ','
-        write(1,'(ES15.2)') sum(time(:,6))/maxit
+        write(1,'(ES15.2)', advance='no') sum(time(:,6))/maxit
+        write(1,'(A)', advance='no') ','
+        write(1,'(ES15.2)', advance='no') sum(time(:,7))/maxit
+        write(1,'(A)', advance='no') ','
+        write(1,'(ES15.2)') sum(time(:,8))/maxit
     end do
     deallocate(time)
     close(1)
@@ -194,11 +205,8 @@ contains
         real(kind=dp), dimension(deg+1) :: alpha, ralpha
         
         ! main
-        do i=1,deg
-            alpha(i) = abs(p(i))
-            check(i) = .true.
-        end do
-        alpha(deg+1)=abs(p(deg+1))
+        alpha = (/ (abs(p(i)), i = 1,deg+1) /)
+        check = (/ (.true., i = 1,deg) /)
         call estimates(alpha, deg, roots)
         ralpha = (/ (alpha(i)*(3.8*(deg+1-i)+1), i=1,deg+1)/)
         alpha = (/ (alpha(i)*(3.8*(i-1)+1), i=1,deg+1)/)
@@ -227,11 +235,8 @@ contains
         real(kind=dp), dimension(deg+1) :: alpha, ralpha
         
         ! main
-        do i=1,deg
-            alpha(i) = abs(p(i))
-            check(i) = .true.
-        end do
-        alpha(deg+1)=abs(p(deg+1))
+        alpha = (/ (abs(p(i)), i = 1,deg+1) /)
+        check = (/ (.true., i = 1,deg) /)
         call estimates(alpha, deg, roots)
         ralpha = (/ (alpha(i)*(3.8*(deg+1-i)+1), i=1,deg+1)/)
         alpha = (/ (alpha(i)*(3.8*(i-1)+1), i=1,deg+1)/)
@@ -267,6 +272,8 @@ contains
         alpha = (/ (abs(p(i)), i = 1,deg+1) /)
         check = (/ (.true., i = 1,deg) /)
         call estimates(alpha, deg, roots)
+        ralpha = (/ (alpha(i)*(3.8*(deg+1-i)+1), i=1,deg+1)/)
+        alpha = (/ (alpha(i)*(3.8*(i-1)+1), i=1,deg+1)/)
         nz = 0
         do i=1,itmax
             do j=1,deg
@@ -280,6 +287,40 @@ contains
             end do
         end do
     end subroutine main_aberth
+    !************************************
+    !               main_lhan           *
+    !************************************
+    subroutine main_lhan(p, deg, roots, berr, cond)
+        implicit none
+        ! argument variables
+        integer, intent(in)             :: deg
+        real(kind=dp), intent(out)      :: berr(:), cond(:)
+        complex(kind=dp), intent(in)    :: p(:)
+        complex(kind=dp), intent(out)   :: roots(:)
+        ! local variables
+        integer                         :: i, j, nz
+        logical, dimension(deg)         :: check
+        real(kind=dp), dimension(deg+1) :: alpha, ralpha
+        
+        ! main
+        alpha = (/ (abs(p(i)), i = 1,deg+1) /)
+        check = (/ (.true., i = 1,deg) /)
+        call estimates(alpha, deg, roots)
+        ralpha = (/ (alpha(i)*(3.8*(deg+1-i)+1), i=1,deg+1)/)
+        alpha = (/ (alpha(i)*(3.8*(i-1)+1), i=1,deg+1)/)
+        nz = 0
+        do i=1,itmax
+            do j=1,deg
+                if(check(j)) then
+                    call laguerre_han(p, alpha, ralpha, deg, j, check(j), roots, berr(j), cond(j))
+                    if(.not.check(j)) then
+                        nz = nz + 1
+                        if(nz==deg) return
+                    end if
+                end if
+            end do
+        end do
+    end subroutine main_lhan
     !************************************
     !               laguerre_seq        *
     !************************************
@@ -514,6 +555,89 @@ contains
         roots(j) = roots(j) - g/(1-g*corr)
     end subroutine aberth
     !************************************
+    !               laguerre_han        *
+    !************************************
+    subroutine laguerre_han(p, alpha, ralpha, deg, j, check, roots, berr, cond)
+        implicit none
+        ! argument variables
+        logical, intent(out)            :: check
+        integer, intent(in)             :: deg, j
+        real(kind=dp), intent(in)       :: alpha(:), ralpha(:)
+        real(kind=dp), intent(out)      :: berr, cond
+        complex(kind=dp), intent(in)    :: p(:)
+        complex(kind=dp), intent(inout) :: roots(:)
+        ! local variables
+        integer                         :: k
+        real(kind=dp)                   :: r
+        complex(kind=dp)                :: a, b, c, g, h, z, corr
+        
+        ! main
+        z = roots(j)
+        r = abs(z)
+        if(r>1) then
+            z = 1/z
+            r = 1/r
+            a = p(1)
+            b = deg*p(1)
+            berr = ralpha(1)
+            do k=2,deg
+                a = z*a + p(k)
+                b = z*b + (deg-k+1)*p(k)
+                berr = r*berr + ralpha(k)
+            end do
+            a = z*a + p(deg+1)
+            berr = r*berr + ralpha(deg+1)
+            if(abs(a)<berr*eps) then
+                cond = berr/(r*abs(b))
+                berr = abs(a)/berr
+                check = .false.
+                return
+            end if
+            c = deg*(deg-1)*p(1)
+            do k=2,deg-1
+                c = z*c+(deg-k+1)*(deg-k)*p(k)
+            end do
+            b = b/a
+            c = c/a
+            g = z*(deg-z*b)
+            h = z**2*(deg-2*z*b+z**2*(b**2-c))
+        else
+            a = p(deg+1)
+            b = deg*p(deg+1)
+            berr = alpha(deg+1)
+            do k=deg,2,-1
+                a = z*a + p(k)
+                b = z*b + (k-1)*p(k)
+                berr = r*berr + alpha(k)
+            end do
+            a = z*a + p(1)
+            berr = r*berr + alpha(1)
+            if(abs(a)<berr*eps) then
+                cond = berr/(r*abs(b))
+                berr = abs(a)/berr
+                check = .false.
+                return
+            end if
+            c = deg*(deg-1)*p(deg+1)
+            do k=deg,3,-1
+                c = z*c+(k-1)*(k-2)*p(k)
+            end do
+            b = b/a
+            c = c/a
+            g = b
+            h = b**2-c
+        end if
+        call modify_lhan(deg, j, roots, corr)
+        z = sqrt((deg-1)*(deg*h-g**2-deg*corr))
+        h = g - z
+        g = g + z
+        if(abs(g)>abs(h)) then
+            roots(j) = roots(j) - deg/g
+        else 
+            roots(j) = roots(j) - deg/h
+        end if
+    end subroutine laguerre_han
+    !************************************
     !               modify_lseq         *
     !************************************
     subroutine modify_lseq(j, roots, corr1, corr2)
@@ -589,6 +713,41 @@ contains
             corr = corr + z
         end do
     end subroutine modify_aberth
+    !************************************
+    !               modify_lhan         *
+    !************************************
+    subroutine modify_lhan(n, j, roots, corr)
+        implicit none
+        ! argument variables
+        integer, intent(in)             :: n, j
+        complex(kind=dp), intent(in)    :: roots(:)
+        complex(kind=dp), intent(out)   :: corr
+        ! local variables
+        integer                         :: i
+        complex(kind=dp)                :: beta, z, zj
+        
+        ! main
+        beta = cmplx(zero, zero, kind=dp)
+        zj = roots(j)
+        do i=1,j-1
+            z = 1/(zj-roots(i))
+            beta = beta + z
+        end do
+        do i=j+1,n
+            z = 1/(zj-roots(i))
+            beta = beta + z
+        end do
+        beta = beta/(n-1)
+        corr = cmplx(zero, zero, kind=dp)
+        do i=1,j-1
+            z = 1/(zj-roots(i))
+            corr = corr + (z-beta)**2
+        end do
+        do i=j+1,n
+            z = 1/(zj-roots(i))
+            corr = corr + (z-beta)**2
+        end do
+    end subroutine modify_lhan
     !************************************************
     !                       estimates               *
     !************************************************
