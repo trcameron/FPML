@@ -63,7 +63,7 @@ program methods
     integer                                     :: deg, it, clock_rate, clock_start, clock_stop
     real(kind=dp), dimension(:,:), allocatable  :: time
     ! method variables
-    real(kind=dp), dimension(:),    allocatable :: berr   
+    real(kind=dp), dimension(:),    allocatable :: berr, cond
     complex(kind=dp), dimension(:), allocatable :: p, roots
     
     ! read in optional arguments
@@ -77,13 +77,13 @@ program methods
     if(flag==0) then
         read(arg, '(I10)') endDegree
     else
-        endDegree=12800
+        endDegree=1600
     end if
     call get_command_argument(3,arg,status=flag)
     if(flag==0) then
         read(arg, '(I10)') maxit
     else
-        maxit=25
+        maxit=10
     end if
     
     ! testing
@@ -95,17 +95,17 @@ program methods
     do while(deg<=endDegree)
         write(1,'(I10)',advance='no') deg
         write(1,'(A)',advance='no') ','
-        allocate(p(deg+1), roots(deg), berr(deg))
+        allocate(p(deg+1), roots(deg), berr(deg), cond(deg))
         do it=1,maxit
             ! polynomial
             call cmplx_rand_poly(deg+1,p)
             ! lseq
             call system_clock(count_rate=clock_rate)
             call system_clock(count=clock_start)
-            call main_lseq(p, deg, roots, berr)
+            call main_lseq(p, deg, roots, berr, cond)
             call system_clock(count=clock_stop)
             time(it,1)=dble(clock_stop-clock_start)/dble(clock_rate)
-            time(it,2)=maxval(berr)
+            time(it,2)=maxval(berr*cond)
             ! lcon
             call system_clock(count_rate=clock_rate)
             call system_clock(count=clock_start)
@@ -121,7 +121,7 @@ program methods
             time(it,5)=dble(clock_stop-clock_start)/dble(clock_rate)
             time(it,6)=maxval(berr)
         end do
-        deallocate(p, roots, berr)
+        deallocate(p, roots, berr, cond)
         deg=2*deg
         write(1,'(ES15.2)', advance='no') sum(time(:,1))/maxit
         write(1,'(A)', advance='no') ','
@@ -181,11 +181,11 @@ contains
     !************************************
     !               main_lseq           *
     !************************************
-    subroutine main_lseq(p, deg, roots, berr)
+    subroutine main_lseq(p, deg, roots, berr, cond)
         implicit none
         ! argument variables
         integer, intent(in)             :: deg
-        real(kind=dp), intent(out)      :: berr(:)
+        real(kind=dp), intent(out)      :: berr(:), cond(:)
         complex(kind=dp), intent(in)    :: p(:)
         complex(kind=dp), intent(out)   :: roots(:)
         ! local variables
@@ -207,7 +207,7 @@ contains
         do j=1,deg
             do i=1,itmax
                 if(check(j)) then
-                    call laguerre_seq(p, alpha, ralpha, deg, j, check(j), roots, berr(j))
+                    call laguerre_seq(p, alpha, ralpha, deg, j, check(j), roots, berr(j), cond(j))
                     if(.not.check(j)) exit
                 end if
             end do
@@ -289,13 +289,13 @@ contains
     !************************************
     !               laguerre_seq        *
     !************************************
-    subroutine laguerre_seq(p, alpha, ralpha, deg, j, check, roots, berr)
+    subroutine laguerre_seq(p, alpha, ralpha, deg, j, check, roots, berr, cond)
         implicit none
         ! argument variables
         logical, intent(out)            :: check
         integer, intent(in)             :: deg, j
         real(kind=dp), intent(in)       :: alpha(:), ralpha(:)
-        real(kind=dp), intent(out)      :: berr
+        real(kind=dp), intent(out)      :: berr, cond
         complex(kind=dp), intent(in)    :: p(:)
         complex(kind=dp), intent(inout) :: roots(:)
         ! local variables
@@ -310,46 +310,50 @@ contains
             z = 1/z
             r = 1/r
             a = p(1)
+            b = deg*p(1)
             berr = ralpha(1)
-            do k=2,deg+1
-                a = z*a+p(k)
-                berr = r*berr+ralpha(k)
+            do k=2,deg
+                a = z*a + p(k)
+                b = z*b + (deg-k+1)*p(k)
+                berr = r*berr + ralpha(k)
             end do
-            berr = abs(a)/berr
-            if(berr<eps) then
+            a = z*a + p(deg+1)
+            berr = r*berr + ralpha(deg+1)
+            if(abs(a)<berr*eps) then
+                cond = berr/(r*abs(b))
+                berr = abs(a)/berr
                 check = .false.
                 return
             end if
-            b = deg*p(1)
             c = deg*(deg-1)*p(1)
             do k=2,deg-1
-                b = z*b+(deg-k+1)*p(k)
                 c = z*c+(deg-k+1)*(deg-k)*p(k)
             end do
-            b = z*b+p(deg)
             b = b/a
             c = c/a
             g = z*(deg-z*b)
             h = z**2*(deg-2*z*b+z**2*(b**2-c))
         else
             a = p(deg+1)
+            b = deg*p(deg+1)
             berr = alpha(deg+1)
-            do k=deg,1,-1
-                a = z*a+p(k)
-                berr = r*berr+alpha(k)
+            do k=deg,2,-1
+                a = z*a + p(k)
+                b = z*b + (k-1)*p(k)
+                berr = r*berr + alpha(k)
             end do
-            berr = abs(a)/berr
-            if(berr<eps) then
+            a = z*a + p(1)
+            berr = r*berr + alpha(1)
+            if(abs(a)<berr*eps) then
+                cond = berr/(r*abs(b))
+                berr = abs(a)/berr
                 check = .false.
                 return
             end if
-            b = deg*p(deg+1)
             c = deg*(deg-1)*p(deg+1)
             do k=deg,3,-1
-                b = z*b+(k-1)*p(k)
                 c = z*c+(k-1)*(k-2)*p(k)
             end do
-            b = z*b+p(2)
             b = b/a
             c = c/a
             g = b
