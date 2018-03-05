@@ -5,17 +5,19 @@ Fourth order Parallelizable Modified Laguerre method. This is a Fortran library 
 - [Thomas R. Cameron](https://thomasrcameron.com),
 Davidson College, NC
 
-<img src="https://latex.codecogs.com/svg.latex?\Large&space;x=\frac{-b\pm\sqrt{b^2-4ac}}{2a}" title="\Large x=\frac{-b\pm\sqrt{b^2-4ac}}{2a}" />
+## Instalation Instructions
 
 ## Tests
 ### Initial Estimate
-Below is a graph of the initial estimates of the roots of the polynomial <img src="https://latex.codecogs.com/svg.latex?\Large&space;p(z)=1+3000z+3000000z^{2}+1000000000z^{3}+z^{10}" title="\Large p(z)=1+3000z+3000000z^{2}+1000000000z^{3}+z^{10}" />.
+Below is a graph of the initial estimates and exact roots of the polynomial <img src="https://latex.codecogs.com/svg.latex?\Large&space;p(z)=1+3000z+3000000z^{2}+1000000000z^{3}+z^{10}" title="\Large p(z)=1+3000z+3000000z^{2}+1000000000z^{3}+z^{10}" />.
 ![alt text](tests/figures/module.png?raw=true)
+As can be seen from this graph, the initial estimates are incredibly close to the exact roots of the polynomial. While the outcome is not always this favorable, this example highlights the 
 ### Random Polynomials
 Random complex polynomials whose coefficients are uniformly distributed over the interval [-1,1] are used to compare FPML against Polzeros and the singleshift version of AMVW. The plot below includes the elapsed time measured in seconds and the accuracy which is measured as the forward error. Iterations are run for polynomials of degree 100 to degree 6400, doubling the degree on each step. For each iteration there are 25 tests performed, the average time elapsed and the average of the maximum forward error over all these tests is recorded.
 ![alt text](tests/figures/rand_poly.png?raw=true)
 ### Roots of Unity
-The polynomial z^n-1
+The polynomial <img src="https://latex.codecogs.com/svg.latex?\Large&space;z^{n}-1" title="\Large z^{n}-1" /> has as roots the n roots of unity: <img src="https://latex.codecogs.com/svg.latex?\Large&space;\cos(\frac{2\pi j}{n})+i\sin(\frac{2\pi j}{n})"> for j=1,...,n. These polynomials are used to compare FPML against Polzeros and the singleshift version of AMVW. The plot below includes the elapsed time measured in seconds and the accuracy which is measured as the absolute difference between the computed and exact roots. Iterations are run for polynomials of degree 100 to degree 6400, doubling the degree on each step. For each iteration there are 25 tests performed, the average time elapsed over the number of tests and the average error over the degree is recorded. 
+![alt text](tests/figures/unity.png?raw=true)
 
 
 ## Related Articles
