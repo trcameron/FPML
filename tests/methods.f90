@@ -109,17 +109,17 @@ program methods
             ! lcon
             call system_clock(count_rate=clock_rate)
             call system_clock(count=clock_start)
-            call main_lcon(p, deg, roots, berr)
+            call main_lcon(p, deg, roots, berr, cond)
             call system_clock(count=clock_stop)
             time(it,3)=dble(clock_stop-clock_start)/dble(clock_rate)
-            time(it,4)=maxval(berr)
+            time(it,4)=maxval(berr*cond)
             ! aberth
             call system_clock(count_rate=clock_rate)
             call system_clock(count=clock_start)
-            call main_aberth(p, deg, roots, berr)
+            call main_aberth(p, deg, roots, berr, cond)
             call system_clock(count=clock_stop)
             time(it,5)=dble(clock_stop-clock_start)/dble(clock_rate)
-            time(it,6)=maxval(berr)
+            time(it,6)=maxval(berr*cond)
         end do
         deallocate(p, roots, berr, cond)
         deg=2*deg
@@ -200,10 +200,8 @@ contains
         end do
         alpha(deg+1)=abs(p(deg+1))
         call estimates(alpha, deg, roots)
-        do i=1,deg+1
-            ralpha(i) = alpha(i)*(3.8*(deg+1-i)+1)
-            alpha(i) = alpha(i)*(3.8*(i-1)+1)
-        end do
+        ralpha = (/ (alpha(i)*(3.8*(deg+1-i)+1), i=1,deg+1)/)
+        alpha = (/ (alpha(i)*(3.8*(i-1)+1), i=1,deg+1)/)
         do j=1,deg
             do i=1,itmax
                 if(check(j)) then
@@ -216,11 +214,11 @@ contains
     !************************************
     !               main_lcon           *
     !************************************
-    subroutine main_lcon(p, deg, roots, berr)
+    subroutine main_lcon(p, deg, roots, berr, cond)
         implicit none
         ! argument variables
         integer, intent(in)             :: deg
-        real(kind=dp), intent(out)      :: berr(:)
+        real(kind=dp), intent(out)      :: berr(:), cond(:)
         complex(kind=dp), intent(in)    :: p(:)
         complex(kind=dp), intent(out)   :: roots(:)
         ! local variables
@@ -235,15 +233,13 @@ contains
         end do
         alpha(deg+1)=abs(p(deg+1))
         call estimates(alpha, deg, roots)
-        do i=1,deg+1
-            ralpha(i) = alpha(i)*(3.8*(deg+1-i)+1)
-            alpha(i) = alpha(i)*(3.8*(i-1)+1)
-        end do
+        ralpha = (/ (alpha(i)*(3.8*(deg+1-i)+1), i=1,deg+1)/)
+        alpha = (/ (alpha(i)*(3.8*(i-1)+1), i=1,deg+1)/)
         nz = 0
         do i=1,itmax
             do j=1,deg
                 if(check(j)) then
-                    call laguerre_con(p, alpha, ralpha, deg, j, check(j), roots, berr(j))
+                    call laguerre_con(p, alpha, ralpha, deg, j, check(j), roots, berr(j), cond(j))
                     if(.not.check(j)) then
                         nz = nz + 1
                         if(nz==deg) return
@@ -255,11 +251,11 @@ contains
     !************************************
     !               main_aberth         *
     !************************************
-    subroutine main_aberth(p, deg, roots, berr)
+    subroutine main_aberth(p, deg, roots, berr, cond)
         implicit none
         ! argument variables
         integer, intent(in)             :: deg
-        real(kind=dp), intent(out)      :: berr(:)
+        real(kind=dp), intent(out)      :: berr(:), cond(:)
         complex(kind=dp), intent(in)    :: p(:)
         complex(kind=dp), intent(out)   :: roots(:)
         ! local variables
@@ -271,13 +267,11 @@ contains
         alpha = (/ (abs(p(i)), i = 1,deg+1) /)
         check = (/ (.true., i = 1,deg) /)
         call estimates(alpha, deg, roots)
-        ralpha = (/ (alpha(i)*(3.8*(deg+1-i)+1), i=1,deg+1)/)
-        alpha = (/ (alpha(i)*(3.8*(i-1)+1), i=1,deg+1)/)
         nz = 0
         do i=1,itmax
             do j=1,deg
                 if(check(j)) then
-                    call aberth(p, alpha, ralpha, deg, j, check(j), roots, berr(j))
+                    call aberth(p, alpha, ralpha, deg, j, check(j), roots, berr(j), cond(j))
                     if(.not.check(j)) then
                         nz = nz + 1
                         if(nz==deg) return
@@ -374,13 +368,13 @@ contains
     !************************************
     !               laguerre_con        *
     !************************************
-    subroutine laguerre_con(p, alpha, ralpha, deg, j, check, roots, berr)
+    subroutine laguerre_con(p, alpha, ralpha, deg, j, check, roots, berr, cond)
         implicit none
         ! argument variables
         logical, intent(out)            :: check
         integer, intent(in)             :: deg, j
         real(kind=dp), intent(in)       :: alpha(:), ralpha(:)
-        real(kind=dp), intent(out)      :: berr
+        real(kind=dp), intent(out)      :: berr, cond
         complex(kind=dp), intent(in)    :: p(:)
         complex(kind=dp), intent(inout) :: roots(:)
         ! local variables
@@ -395,46 +389,50 @@ contains
             z = 1/z
             r = 1/r
             a = p(1)
+            b = deg*p(1)
             berr = ralpha(1)
-            do k=2,deg+1
-                a = z*a+p(k)
-                berr = r*berr+ralpha(k)
+            do k=2,deg
+                a = z*a + p(k)
+                b = z*b + (deg-k+1)*p(k)
+                berr = r*berr + ralpha(k)
             end do
-            berr = abs(a)/berr
-            if(berr<eps) then
+            a = z*a + p(deg+1)
+            berr = r*berr + ralpha(deg+1)
+            if(abs(a)<berr*eps) then
+                cond = berr/(r*abs(b))
+                berr = abs(a)/berr
                 check = .false.
                 return
             end if
-            b = deg*p(1)
             c = deg*(deg-1)*p(1)
             do k=2,deg-1
-                b = z*b+(deg-k+1)*p(k)
                 c = z*c+(deg-k+1)*(deg-k)*p(k)
             end do
-            b = z*b+p(deg)
             b = b/a
             c = c/a
             g = z*(deg-z*b)
             h = z**2*(deg-2*z*b+z**2*(b**2-c))
         else
             a = p(deg+1)
+            b = deg*p(deg+1)
             berr = alpha(deg+1)
-            do k=deg,1,-1
-                a = z*a+p(k)
-                berr = r*berr+alpha(k)
+            do k=deg,2,-1
+                a = z*a + p(k)
+                b = z*b + (k-1)*p(k)
+                berr = r*berr + alpha(k)
             end do
-            berr = abs(a)/berr
-            if(berr<eps) then
+            a = z*a + p(1)
+            berr = r*berr + alpha(1)
+            if(abs(a)<berr*eps) then
+                cond = berr/(r*abs(b))
+                berr = abs(a)/berr
                 check = .false.
                 return
             end if
-            b = deg*p(deg+1)
             c = deg*(deg-1)*p(deg+1)
             do k=deg,3,-1
-                b = z*b+(k-1)*p(k)
                 c = z*c+(k-1)*(k-2)*p(k)
             end do
-            b = z*b+p(2)
             b = b/a
             c = c/a
             g = b
@@ -455,13 +453,13 @@ contains
     !************************************
     !               aberth              *
     !************************************
-    subroutine aberth(p, alpha, ralpha, deg, j, check, roots, berr)
+    subroutine aberth(p, alpha, ralpha, deg, j, check, roots, berr, cond)
         implicit none
         ! argument variables
         logical, intent(out)            :: check
         integer, intent(in)             :: deg, j
         real(kind=dp), intent(in)       :: alpha(:), ralpha(:)
-        real(kind=dp), intent(out)      :: berr
+        real(kind=dp), intent(out)      :: berr, cond
         complex(kind=dp), intent(in)    :: p(:)
         complex(kind=dp), intent(inout) :: roots(:)
         ! local variables
@@ -476,38 +474,40 @@ contains
             z = 1/z
             r = 1/r
             a = p(1)
+            b = deg*p(1)
             berr = ralpha(1)
-            do k=2,deg+1
-                a = z*a+p(k)
-                berr = r*berr+ralpha(k)
+            do k=2,deg
+                a = z*a + p(k)
+                b = z*b + (deg-k+1)*p(k)
+                berr = r*berr + ralpha(k)
             end do
-            berr = abs(a)/berr
-            if(berr<eps) then
+            a = z*a + p(deg+1)
+            berr = r*berr + ralpha(deg+1)
+            if(abs(a)<berr*eps) then
+                cond = berr/(r*abs(b))
+                berr = abs(a)/berr
                 check = .false.
                 return
             end if
-            b = deg*p(1)
-            do k=2,deg
-                b = z*b+(deg-k+1)*p(k)
-            end do
             g = b/a
             g = 1/(z*(deg-z*g))
         else
             a = p(deg+1)
+            b = deg*p(deg+1)
             berr = alpha(deg+1)
-            do k=deg,1,-1
-                a = z*a+p(k)
-                berr = r*berr+alpha(k)
+            do k=deg,2,-1
+                a = z*a + p(k)
+                b = z*b + (k-1)*p(k)
+                berr = r*berr + alpha(k)
             end do
-            berr = abs(a)/berr
-            if(berr<eps) then
+            a = z*a + p(1)
+            berr = r*berr + alpha(1)
+            if(abs(a)<berr*eps) then
+                cond = berr/(r*abs(b))
+                berr = abs(a)/berr
                 check = .false.
                 return
             end if
-            b = deg*p(deg+1)
-            do k=deg,2,-1
-                b = z*b+(k-1)*p(k)
-            end do
             g = a/b
         end if
         call modify_aberth(deg, j, roots, corr)

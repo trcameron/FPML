@@ -17,14 +17,14 @@
     xlabel = {Degree},
     legend style={at={(1.2,0.1)}, anchor=north}
 ]
-\nextgroupplot[ylabel = {Time (s)}] 
+\nextgroupplot[ylabel = {Time (s)}, xmode=log,ymode=log] 
 \addplot table [x=Degree, y=lseq_time, col sep=comma] {../data_files/methods.dat};
 \addlegendentry{Seq. Lag.}
 \addplot table [x=Degree, y=lcon_time, col sep=comma] {../data_files/methods.dat};
 \addlegendentry{Con. Lag.}
 \addplot table [x=Degree, y=aberth_time, col sep=comma] {../data_files/methods.dat};
 \addlegendentry{Aberth}
-\nextgroupplot[ylabel = {Accuracy}] 
+\nextgroupplot[ylabel = {Accuracy}, xmode=log,ymode=log] 
 \addplot table [x=Degree, y=lseq_berr, col sep=comma] {../data_files/methods.dat};
 \addplot table [x=Degree, y=lcon_berr, col sep=comma] {../data_files/methods.dat};
 \addplot table [x=Degree, y=aberth_berr, col sep=comma] {../data_files/methods.dat};

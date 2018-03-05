@@ -11,13 +11,13 @@
 
 \begin{document}
     \pgfplotstabletypeset[
-          multicolumn names, % allows to have multicolumn names
-          col sep=comma, % the seperator in our .csv file
-          every head row/.style={
-    		before row={\toprule}, % have a rule at top
-    		after row={
-    			\midrule} % rule under units
-    			},
-    		every last row/.style={after row=\bottomrule}, % rule at bottom
-        ]{table.dat} % filename/path to file
+        font=\small,
+        col sep=comma, % the seperator in our .csv file
+        every head row/.style={
+        before row={\toprule}, % have a rule at top
+    	after row={
+    	    \midrule} % rule under units
+    	},
+    	every last row/.style={after row=\bottomrule}, % rule at bottom
+    ]{table.dat} % filename/path to file
 \end{document}
