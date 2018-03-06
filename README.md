@@ -29,7 +29,7 @@ As can be seen from the graph above, all three modifications are comparable with
 ### Convergence
 Three special polynomials are used to test the theoretical convergence properties of FPML. The first polynomial is <img src="https://latex.codecogs.com/svg.latex?\Large&space;z^{5}-1" title="\Large z^{5}-1" />, the second is the degree 10 Chebyshev polynomial, and the third polynomial is <img src="https://latex.codecogs.com/svg.latex?\Large&space;z^{20}+z^{19}+\cdots+z+1">. The error is measured as the maximum absolute forward error. For each polynomial, the error after each iteration is recorded in the table below. The column Error-1 corresponds to the error in the roots approximations for the first polynomial, Error-2 for the second polynomial, and Error-3 for the third polynomial.
 
-![alt text](texts/figures/conv.png?raw=true)
+![alt text](tests/figures/conv.png?raw=true)
 
 Note that evidence of fourth order convergence can be seen in each column. This is somewhat of a surprising feature of our method. Often, higher order methods do not display their convergence rate. For instance, the method in [6] has fourth order convergence, but the radius of convergence is so small that by the time the estimates begin to converge the fourth order property will not be noticed in double precision floating arithmetic. 
 ### Random Polynomials
