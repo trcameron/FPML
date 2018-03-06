@@ -20,6 +20,8 @@ gfortran -O2 other_src/pzeros.f90 ../src/fpml.f90 unity.f90 -L lib -lfpml_test -
 gfortran -O2 ../src/fpml.f90 module.f90 -o module
 # compile methods.f90
 gfortran -O2 methods.f90 -o methods
+# compile conv.f90
+gfortran -O2 ../src/fpml.f90 conv.f90 -o conv
 
 # clean up
 rm *.mod
