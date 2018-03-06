@@ -1,0 +1,22 @@
+\documentclass[convert={density=300,outext=.png}]{standalone}
+\usepackage{pgfplots}
+\usetikzlibrary{pgfplots.groupplots}
+
+
+\pgfplotsset{compat=1.14}
+\begin{document}
+
+\begin{tikzpicture}[scale=0.5]
+\begin{loglogaxis}[
+    xlabel = {Degree},
+    ylabel = {Time (s)},
+    legend pos = outer north east,
+]
+\addplot table [x=Degree, y=estimates, col sep=comma] {../data_files/estimates_time.dat};
+\addlegendentry{Monotone Chain}
+\addplot table [x=Degree, y=start, col sep=comma] {../data_files/estimates_time.dat};
+\addlegendentry{Divide and Conquor}
+\end{loglogaxis}
+\end{tikzpicture}
+
+\end{document}

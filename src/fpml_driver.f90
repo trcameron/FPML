@@ -53,7 +53,7 @@ program fpml_driver
         ! random polynomial
         write(*,*) 'Warning: No file was given. Now running random problem of degree 4096.'
         call init_random_seed()
-        deg = 3200
+        deg = 4096
         allocate(p(deg+1), roots(deg), berr(deg), cond(deg))
         call cmplx_rand_poly(deg+1,p)
         ! run main in fpml

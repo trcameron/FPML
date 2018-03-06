@@ -943,7 +943,7 @@ program spec_poly
     deallocate(rcoeffs, icoeffs, reigs, ieigs, its, zeros)
     deallocate(exact_roots, p, err)
     close(1)
-    call execute_command_line('cp data_files/spec_poly.dat TeX/table.dat')
+    call execute_command_line('cp data_files/spec_poly.dat TeX/table_spec_poly.dat')
 contains
     !****************************************
     !               sort                    *

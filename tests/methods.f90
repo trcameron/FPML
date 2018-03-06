@@ -54,7 +54,7 @@
 !****************************************************
 program methods
     implicit none
-    integer, parameter                          :: dp = KIND(1.0D0), itmax = 30
+    integer, parameter                          :: dp = KIND(1.0D0), itmax = 50
     real(kind=dp), parameter                    :: zero = 0.0D0, eps = epsilon(1.0D0)
     ! read in variables
     character(len=32)                           :: arg

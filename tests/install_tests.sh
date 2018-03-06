@@ -16,8 +16,8 @@ gfortran -O2 other_src/pzeros.f90 ../src/fpml.f90 rand_poly.f90 -L lib -lfpml_te
 gfortran -O2 other_src/pzeros.f90 ../src/fpml.f90 spec_poly.f90 -L lib -lfpml_test -lblas -o spec_poly
 # compile unity.f90
 gfortran -O2 other_src/pzeros.f90 ../src/fpml.f90 unity.f90 -L lib -lfpml_test -lblas -o unity
-# compile module.f90
-gfortran -O2 ../src/fpml.f90 module.f90 -o module
+# compile init_est.f90
+gfortran -O2 other_src/pzeros.f90 ../src/fpml.f90 init_est.f90 -o init_est
 # compile methods.f90
 gfortran -O2 methods.f90 -o methods
 # compile conv.f90
