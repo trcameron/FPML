@@ -1,0 +1,23 @@
+\providecommand{\bysame}{\leavevmode\hbox to3em{\hrulefill}\thinspace}
+\providecommand{\MR}{\relax\ifhmode\unskip\space\fi MR }
+% \MRhref is called by the amsart/book/proc definition of \MR.
+\providecommand{\MRhref}[2]{%
+  \href{http://www.ams.org/mathscinet-getitem?mr=#1}{#2}
+}
+\providecommand{\href}[2]{#2}
+\begin{thebibliography}{1}
+
+\bibitem{Andrew1979}
+A.~M. Andrew, \emph{Another efficient algorithm for convex hulls in two
+  dimensions}, Info. Proc. Letters \textbf{9} (1979), no.~15, 216--219.
+
+\bibitem{Aurentz2015}
+J.~L. Aurentz, T.~Mach, R.~Vandebril, and D.~S. Watkins, \emph{Fast and
+  backward stable computation of roots of polynomials}, SIAM J. Matrix Anal.
+  Appl. \textbf{36} (2015), no.~3, 942--973.
+
+\bibitem{Bini1996}
+D.~A. Bini, \emph{Numerical computation of polynomial zeros by means of
+  {A}berth's method}, Numer. Algorithms \textbf{13} (1996), 179--200.
+
+\end{thebibliography}
