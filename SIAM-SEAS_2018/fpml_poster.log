@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017) (preloaded format=pdflatex 2017.5.23)  7 MAR 2018 11:46
+This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017) (preloaded format=pdflatex 2017.5.23)  7 MAR 2018 13:03
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -582,15 +582,10 @@ File: pgflibraryarrows.code.tex 2013/09/23 v3.0.1a (rcs-revision 1.16)
 \TP@noteheight=\dimen288
 \TP@notebox=\box65
 \notelinewidth=\dimen289
-
-
-Package tikzposter Warning: Unknown Option orientation=portrait. on input line 
-204.
-
-(/usr/local/texlive/2017/texmf-dist/tex/latex/extsizes/extarticle.cls
+ (/usr/local/texlive/2017/texmf-dist/tex/latex/extsizes/extarticle.cls
 Document Class: extarticle 1996/10/08 v1.0 Non Standard LaTeX document class
-(/usr/local/texlive/2017/texmf-dist/tex/latex/base/size10.clo
-File: size10.clo 2014/09/29 v1.4h Standard LaTeX file (size option)
+(/usr/local/texlive/2017/texmf-dist/tex/latex/extsizes/size20.clo
+File: size20.clo 1999/11/11 NON-Standard LaTeX file (size option)
 )
 (/usr/local/texlive/2017/texmf-dist/tex/latex/base/exscale.sty
 Package: exscale 2014/09/29 v2.1h Standard LaTeX package exscale
@@ -638,15 +633,6 @@ Package: ifxetex 2010/09/12 v0.6 Provides ifxetex conditional
 \Gm@layouthoffset=\dimen298
 \Gm@layoutvoffset=\dimen299
 \Gm@dimlist=\toks28
-)
-(/usr/local/texlive/2017/texmf-dist/tex/latex/a0poster/a0size.sty
-File: a0size.sty 2004/01/31 v1.22b a0poster class (GK, MW)
-LaTeX Font Info:    Redeclaring symbol font `largesymbols' on input line 229.
-LaTeX Font Info:    Overwriting symbol font `largesymbols' in version `normal'
-(Font)                  OMX/cmex/m/n --> OMX/cmex/m/n on input line 229.
-LaTeX Font Info:    Overwriting symbol font `largesymbols' in version `bold'
-(Font)                  OMX/cmex/m/n --> OMX/cmex/m/n on input line 229.
-\big@size=\dimen300
 )
 \pgf@layerbox@backgroundlayer=\box66
 \pgf@layerboxsaved@backgroundlayer=\box67
@@ -999,11 +985,11 @@ Package: amstext 2000/06/29 v2.01 AMS text
 (/usr/local/texlive/2017/texmf-dist/tex/latex/amsmath/amsgen.sty
 File: amsgen.sty 1999/11/30 v2.0 generic functions
 \@emptytoks=\toks31
-\ex@=\dimen301
+\ex@=\dimen300
 ))
 (/usr/local/texlive/2017/texmf-dist/tex/latex/amsmath/amsbsy.sty
 Package: amsbsy 1999/11/29 v1.2d Bold Symbols
-\pmbraise@=\dimen302
+\pmbraise@=\dimen301
 )
 (/usr/local/texlive/2017/texmf-dist/tex/latex/amsmath/amsopn.sty
 Package: amsopn 2016/03/08 v2.02 operator names
@@ -1020,7 +1006,7 @@ LaTeX Info: Redefining \dots on input line 475.
 LaTeX Info: Redefining \cdots on input line 596.
 \Mathstrutbox@=\box70
 \strutbox@=\box71
-\big@size=\dimen303
+\big@size=\dimen302
 LaTeX Font Info:    Redeclaring font encoding OML on input line 712.
 LaTeX Font Info:    Redeclaring font encoding OMS on input line 713.
 \macc@depth=\count124
@@ -1033,12 +1019,12 @@ LaTeX Font Info:    Redeclaring font encoding OMS on input line 713.
 \column@=\count129
 \maxfields@=\count130
 \andhelp@=\toks33
-\eqnshift@=\dimen304
-\alignsep@=\dimen305
-\tagshift@=\dimen306
-\tagwidth@=\dimen307
-\totwidth@=\dimen308
-\lineht@=\dimen309
+\eqnshift@=\dimen303
+\alignsep@=\dimen304
+\tagshift@=\dimen305
+\tagwidth@=\dimen306
+\totwidth@=\dimen307
+\lineht@=\dimen308
 \@envbody=\toks34
 \multlinegap=\skip47
 \multlinetaggap=\skip48
@@ -1046,71 +1032,101 @@ LaTeX Font Info:    Redeclaring font encoding OMS on input line 713.
 LaTeX Info: Redefining \[ on input line 2817.
 LaTeX Info: Redefining \] on input line 2818.
 )
+(/usr/local/texlive/2017/texmf-dist/tex/latex/amsfonts/amssymb.sty
+Package: amssymb 2013/01/14 v3.01 AMS font symbols
+
+(/usr/local/texlive/2017/texmf-dist/tex/latex/amsfonts/amsfonts.sty
+Package: amsfonts 2013/01/14 v3.01 Basic AMSFonts support
+\symAMSa=\mathgroup4
+\symAMSb=\mathgroup5
+LaTeX Font Info:    Overwriting math alphabet `\mathfrak' in version `bold'
+(Font)                  U/euf/m/n --> U/euf/b/n on input line 106.
+))
+(/usr/local/texlive/2017/texmf-dist/tex/latex/algorithms/algorithm.sty
+Package: algorithm 2009/08/24 v0.1 Document Style `algorithm' - floating enviro
+nment
+
+(/usr/local/texlive/2017/texmf-dist/tex/latex/float/float.sty
+Package: float 2001/11/08 v1.3d Float enhancements (AL)
+\c@float@type=\count131
+\float@exts=\toks36
+\float@box=\box72
+\@float@everytoks=\toks37
+\@floatcapt=\box73
+)
+\@float@every@algorithm=\toks38
+\c@algorithm=\count132
+)
+(/usr/local/texlive/2017/texmf-dist/tex/latex/algorithms/algorithmic.sty
+Package: algorithmic 2009/08/24 v0.1 Document Style `algorithmic'
+\c@ALC@unique=\count133
+\c@ALC@line=\count134
+\c@ALC@rem=\count135
+\c@ALC@depth=\count136
+\ALC@tlm=\skip49
+\algorithmicindent=\skip50
+)
 (/usr/local/texlive/2017/texmf-dist/tex/latex/blindtext/blindtext.sty
 Package: blindtext 2012/01/06 V2.0 blindtext-Package
 
 (/usr/local/texlive/2017/texmf-dist/tex/latex/tools/xspace.sty
 Package: xspace 2014/10/28 v1.13 Space after command names (DPC,MH)
 )
-\c@blindtext=\count131
-\c@Blindtext=\count132
-\c@blind@countparstart=\count133
-\blind@countxx=\count134
-\blindtext@numBlindtext=\count135
-\blind@countyy=\count136
-\c@blindlist=\count137
-\c@blindlistlevel=\count138
-\c@blindlist@level=\count139
-\blind@listitem=\count140
-\c@blind@listcount=\count141
-\c@blind@levelcount=\count142
-\blind@mathformula=\count143
-\blind@Mathformula=\count144
-\c@blind@randomcount=\count145
-\c@blind@randommax=\count146
-\c@blind@pangramcount=\count147
-\c@blind@pangrammax=\count148
+\c@blindtext=\count137
+\c@Blindtext=\count138
+\c@blind@countparstart=\count139
+\blind@countxx=\count140
+\blindtext@numBlindtext=\count141
+\blind@countyy=\count142
+\c@blindlist=\count143
+\c@blindlistlevel=\count144
+\c@blindlist@level=\count145
+\blind@listitem=\count146
+\c@blind@listcount=\count147
+\c@blind@levelcount=\count148
+\blind@mathformula=\count149
+\blind@Mathformula=\count150
+\c@blind@randomcount=\count151
+\c@blind@randommax=\count152
+\c@blind@pangramcount=\count153
+\c@blind@pangrammax=\count154
 )
 (/usr/local/texlive/2017/texmf-dist/tex/latex/comment/comment.sty
 \CommentStream=\write5
 
 Excluding comment 'comment')
 
-Package tikzposter Warning: Unknown layouttheme `Autum'. on input line 19.
-
-
-LaTeX Warning: Unused global option(s):
-    [orientation=portrait].
+Package tikzposter Warning: Unknown layouttheme `Autum'. on input line 28.
 
 (./fpml_poster.aux)
 \openout1 = `fpml_poster.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 21.
-LaTeX Font Info:    ... okay on input line 21.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 21.
-LaTeX Font Info:    ... okay on input line 21.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 21.
-LaTeX Font Info:    ... okay on input line 21.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 21.
-LaTeX Font Info:    ... okay on input line 21.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 21.
-LaTeX Font Info:    ... okay on input line 21.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 21.
-LaTeX Font Info:    ... okay on input line 21.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 30.
+LaTeX Font Info:    ... okay on input line 30.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 30.
+LaTeX Font Info:    ... okay on input line 30.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 30.
+LaTeX Font Info:    ... okay on input line 30.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 30.
+LaTeX Font Info:    ... okay on input line 30.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 30.
+LaTeX Font Info:    ... okay on input line 30.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 30.
+LaTeX Font Info:    ... okay on input line 30.
  ABD: EveryShipout initializing macros
 (/usr/local/texlive/2017/texmf-dist/tex/context/base/mkii/supp-pdf.mkii
 [Loading MPS to PDF converter (version 2006.09.02).]
-\scratchcounter=\count149
-\scratchdimen=\dimen310
-\scratchbox=\box72
-\nofMPsegments=\count150
-\nofMParguments=\count151
-\everyMPshowfont=\toks36
-\MPscratchCnt=\count152
-\MPscratchDim=\dimen311
-\MPnumerator=\count153
-\makeMPintoPDFobject=\count154
-\everyMPtoPDFconversion=\toks37
+\scratchcounter=\count155
+\scratchdimen=\dimen309
+\scratchbox=\box74
+\nofMPsegments=\count156
+\nofMParguments=\count157
+\everyMPshowfont=\toks39
+\MPscratchCnt=\count158
+\MPscratchDim=\dimen310
+\MPnumerator=\count159
+\makeMPintoPDFobject=\count160
+\everyMPtoPDFconversion=\toks40
 ) (/usr/local/texlive/2017/texmf-dist/tex/generic/oberdiek/pdftexcmds.sty
 Package: pdftexcmds 2017/03/19 v0.25 Utility functions of pdfTeX for LuaTeX (HO
 )
@@ -1173,15 +1189,15 @@ e
 * \textheight=2601.71999pt
 * \oddsidemargin=-72.26999pt
 * \evensidemargin=-72.26999pt
-* \topmargin=-109.26999pt
-* \headheight=12.0pt
-* \headsep=25.0pt
-* \topskip=10.0pt
-* \footskip=30.0pt
-* \marginparwidth=65.0pt
-* \marginparsep=11.0pt
+* \topmargin=-122.26999pt
+* \headheight=20.0pt
+* \headsep=30.0pt
+* \topskip=20.0pt
+* \footskip=35.0pt
+* \marginparwidth=0.0pt
+* \marginparsep=15.0pt
 * \columnsep=10.0pt
-* \skip\footins=9.0pt plus 4.0pt minus 2.0pt
+* \skip\footins=16.0pt plus 6.0pt minus 3.0pt
 * \hoffset=0.0pt
 * \voffset=0.0pt
 * \mag=1000
@@ -1191,52 +1207,44 @@ e
 * \@reversemarginfalse
 * (1in=72.27pt=25.4mm, 1cm=28.453pt)
 
+LaTeX Font Info:    Try loading font information for U+msa on input line 30.
+(/usr/local/texlive/2017/texmf-dist/tex/latex/amsfonts/umsa.fd
+File: umsa.fd 2013/01/14 v3.01 AMS symbols A
+)
+LaTeX Font Info:    Try loading font information for U+msb on input line 30.
+
+(/usr/local/texlive/2017/texmf-dist/tex/latex/amsfonts/umsb.fd
+File: umsb.fd 2013/01/14 v3.01 AMS symbols B
+)
 Missing character: There is no 1 in font nullfont!
 Missing character: There is no = in font nullfont!
 Missing character: There is no 1 in font nullfont!
-
-LaTeX Font Warning: Font shape `OMX/cmex/m/n' in size <29.86> not available
-(Font)              size <24.88> substituted on input line 48.
-
-
-Underfull \hbox (badness 1082) in paragraph at lines 48--48
-[]\T1/aer/m/n/29.86 Let $\OML/cmm/m/it/29.86 p\OT1/cmr/m/n/29.86 (\OML/cmm/m/it
-/29.86 ^^U\OT1/cmr/m/n/29.86 )$ \T1/aer/m/n/29.86 be a poly-no-mial of de-gree 
-$\OML/cmm/m/it/29.86 m$ \T1/aer/m/n/29.86 and de-note by
- []
-
-LaTeX Font Info:    Try loading font information for T1+aett on input line 58.
-(/usr/local/texlive/2017/texmf-dist/tex/latex/ae/t1aett.fd
-File: t1aett.fd 1997/11/16 Font definitions for T1/aett.
-) [1
+ [1
 
 {/usr/local/texlive/2017/texmf-var/fonts/map/pdftex/updmap/pdftex.map}] (./fpml
-_poster.aux)
-
-LaTeX Font Warning: Size substitutions with differences
-(Font)              up to 4.98pt have occurred.
-
- ) 
+_poster.aux) ) 
 Here is how much of TeX's memory you used:
- 18005 strings out of 492995
- 384470 string characters out of 6132704
- 476926 words of memory out of 5000000
- 21113 multiletter control sequences out of 15000+600000
- 49706 words of font info for 100 fonts, out of 8000000 for 9000
+ 18399 strings out of 492995
+ 385075 string characters out of 6132704
+ 487096 words of memory out of 5000000
+ 21487 multiletter control sequences out of 15000+600000
+ 51071 words of font info for 109 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 62i,10n,84p,821b,918s stack positions out of 5000i,500n,10000p,200000b,80000s
-</usr/local/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb
-></usr/local/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmcsc10.pfb
-></usr/local/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb>
-</usr/local/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi12.pfb><
-/usr/local/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmr17.pfb></u
-sr/local/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></us
-r/local/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmti12.pfb></usr
-/local/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt12.pfb>
-Output written on fpml_poster.pdf (1 page, 81397 bytes).
+ 62i,10n,84p,821b,1138s stack positions out of 5000i,500n,10000p,200000b,80000s
+</usr/local/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/c
+m/cmbx10.pfb></usr/local/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm
+/cmbx12.pfb></usr/local/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/
+cmcsc10.pfb></usr/local/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/
+cmex10.pfb></usr/local/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/c
+mmi12.pfb></usr/local/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cm
+r12.pfb></usr/local/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmr1
+7.pfb></usr/local/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10
+.pfb></usr/local/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmti12.
+pfb>
+Output written on fpml_poster.pdf (1 page, 98966 bytes).
 PDF statistics:
- 67 PDF objects out of 1000 (max. 8388607)
- 39 compressed objects within 1 object stream
+ 71 PDF objects out of 1000 (max. 8388607)
+ 42 compressed objects within 1 object stream
  0 named destinations out of 1000 (max. 500000)
  109 words of extra memory for PDF output out of 10000 (max. 10000000)
 

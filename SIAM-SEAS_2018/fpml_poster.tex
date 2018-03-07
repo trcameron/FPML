@@ -1,6 +1,15 @@
-\documentclass[orientation=portrait]{tikzposter}
+\documentclass[20 pt, a0paper, portrait]{tikzposter}
 \usepackage[utf8]{inputenc}
 \usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{algorithm,algorithmic}
+
+% Algorithmic modifications
+\makeatletter
+\newcommand{\ALOOP}[1]{\ALC@it\algorithmicloop\ #1 ~\algorithmicdo\begin{ALC@loop}}
+\newcommand{\ENDALOOP}{\end{ALC@loop}\ALC@it\algorithmicendloop}
+\renewcommand{\algorithmicloop}{\textbf{parfor}}
+\makeatother
 
 \geometry{paperwidth=24in,paperheight=36in}
 \makeatletter
@@ -8,7 +17,7 @@
 \setlength{\TP@visibletextheight}{\textheight-2\TP@innermargin}
 \makeatother
 
-\title{FPML}
+\title{Fourth Order Modified Laguerre's Method}
 \author{Thomas R. Cameron}
 \date{\today}
 \institute{Davidson College}
@@ -34,7 +43,7 @@ We present a novel modification of Laguerre's method that results in a method fo
 %								Introduction					%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{columns}
-	\column{0.5}
+	\column{0.6}
 	\block{Introduction}
 	{
 		Let $p(\lambda)$ be a polynomial of degree $m$ and denote by $(z_{1},\ldots,z_{m})$ the current approximations to the roots $r_{1},\ldots,r_{m}$ of $p(\lambda)$. The $j$th approximation is updated via
@@ -43,19 +52,52 @@ We present a novel modification of Laguerre's method that results in a method fo
 		\end{equation}
 		where 
 		\begin{equation}
-		G_{j}=\frac{p^{'}(z_{j})}{p(z_{j})}-\sum_{\substack{i=1\\i\neq j}}^{m}\frac{1}{(z_{j}-z_{i})}~\text{ and }~H_{j}=
+		G_{j}=\frac{p^{'}(z_{j})}{p(z_{j})}-\sum_{\substack{i=1\\i\neq j}}^{m}\frac{1}{(z_{j}-z_{i})}~\text{ and }~H_{j}=-\left(\frac{p^{'}(z_{j})}{p(z_{j})}\right)^{'}-\sum_{\substack{i=1\\i\neq j}}^{m}\frac{1}{(z_{j}-z_{i})^{2}}.
 		\end{equation}
+		On each iteration, $z_{j}$ is updated for $j=1,\ldots,m$, unless it was accepted on a previous iteration. In this sense, all roots of the polynomial are approximated concurrently, rather than sequentially.
+		
+	\textbf{Initial Estimates} In essence, we select complex numbers along circles of suitable radii. What constitues suitable radii is formalized in~[Bini] and can be computed via the upper envelope of the convex hull of the set $\{(i,\log|a_{i}|),~i=0,1,\ldots,m\}$. We compute the convex hull via Andrew's Monotone Chain algorithm~[Andrew].
+	
+	\textbf{Backward Error} The backward error of an approximate root $\xi$ is given by
+	\begin{equation}
+	\eta(\xi)=\frac{|p(\xi)|}{\alpha(\xi)},
+	\end{equation}
+	where $\alpha(\xi) = \sum_{i=0}^{m}|e_{i}||\xi|^{i}$. 
 	}
 	
-	\column{0.5}
-	\block{Something else}{Here, \blindtext
-	\vspace{4cm}}
-	\note[
-		targetoffsetx=-9cm, 
-        		targetoffsety=-6.5cm, 
-        		width=0.5\linewidth
-		]
-		{email\texttt{thcameron@davidson.edu}}
-\end{columns}
- 
+	\column{0.4}
+	\block{Pseudocode}
+	{
+	\underline{\textbf{Concurrent Style}}
+		\begin{algorithmic}
+		\STATE	$(z_{1},\ldots,z_{m}) \gets \text{initial estimates}$
+		\WHILE{$i<itmax$}
+			\FOR{$j=1$ to $m$}
+				\IF{$z_{j}$ is not close enough to $r_{j}$}
+					\STATE Update via~(1)~and~(2)
+				\ENDIF
+			\ENDFOR	
+			\STATE $i \gets it+1$
+		\ENDWHILE
+		\end{algorithmic}
+		~\\
+	\underline{\textbf{Parallel Style}}
+		\begin{algorithmic}
+		\STATE	$(z_{1},\ldots,z_{m}) \gets \text{initial estimates}$
+		\WHILE{$i<itmax$}
+			\ALOOP{$j=1$ to $m$}
+				\IF{$z_{j}$ is not close enough to $r_{j}$}
+					\STATE Compute $G_{j}$ and $H_{j}$ via~(2) and store
+				\ENDIF
+			\ENDALOOP
+			\ALOOP{$j=1$ to $m$}
+				\IF{$z_{j}$ is not close enough to $r_{j}$}
+					\STATE Use $G_{j}$ and $H_{j}$ to compute $z_{j}$ via~(1)
+				\ENDIF
+			\ENDALOOP
+			\STATE $i \gets i+1$
+		\ENDWHILE
+		\end{algorithmic}
+	}
+ \end{columns}
 \end{document}
