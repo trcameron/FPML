@@ -1,0 +1,53 @@
+\documentclass[orientation=portrait]{tikzposter}
+\usepackage[utf8]{inputenc}
+
+\geometry{paperwidth=24in,paperheight=36in}
+\makeatletter
+\setlength{\TP@visibletextwidth}{\textwidth-2\TP@innermargin}
+\setlength{\TP@visibletextheight}{\textheight-2\TP@innermargin}
+\makeatother
+
+\title{FPML}
+\author{Thomas R. Cameron}
+\date{\today}
+\institute{Davidson College}
+ 
+\usepackage{blindtext}
+\usepackage{comment}
+
+\usetheme{Autum}
+ 
+\begin{document}
+ 
+\maketitle
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%								Abstract						%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\block{Abstract}
+{
+We present a novel modification of Laguerre's method that results in a method for the concurrent approximation of all roots of a univariate polynomial. Our method has strong virtues including fourth-order convergence that is observed in practice and belonging to the class of embarrassingly parallel algorithms. A Fortran 90 implementation of our algorithm is available online and comparisons with several other software are provided to show the effectiveness of our approach.
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%								Introduction					%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{columns}
+	\column{0.5}
+	\block{Introduction}
+	{
+		Let $p(\lambda)$ be a polynomial of degree $m$ and denote by $(z_{1},\ldots,z_{m})$ the current approximations to the roots $r_{1},\ldots,r_{m}$ of $p(\lambda)$. The $j$th approximation by 
+	}
+	
+	\column{0.5}
+	\block{Something else}{Here, \blindtext
+	\vspace{4cm}}
+	\note[
+		targetoffsetx=-9cm, 
+        		targetoffsety=-6.5cm, 
+        		width=0.5\linewidth
+		]
+		{email\texttt{thcameron@davidson.edu}}
+\end{columns}
+ 
+\end{document}

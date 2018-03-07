@@ -46,6 +46,7 @@ program unity
     end if
     
     ! testing polynomials of the form z^n -1
+    call init_random_seed()
     open(unit=1,file="data_files/unity.dat")
     write(1,'(A)') 'Degree, FPML_time, FPML_err, Polzeros_time, Polzeros_err, AMVW_time, AMVW_err'
     allocate(results(maxit,6))
@@ -109,6 +110,27 @@ program unity
         write(1,'(ES15.2)') sum(results(:,6))/maxit
     end do
 contains
+    !****************************************
+    !               init_random_seed        *
+    !****************************************
+    subroutine init_random_seed()
+        implicit none
+        ! local variables
+        integer                             :: i, n , clock
+        integer, dimension(:), allocatable  :: seed
+        ! intrinsic subroutines
+        intrinsic                           :: random_seed, system_clock
+        
+        ! main
+        call random_seed(size = n)
+        allocate(seed(n))
+        
+        call system_clock(count = clock)
+        seed = clock + 37 * (/ (i - 1, i = 1,n) /)
+        call random_seed(put = seed)
+        
+        deallocate(seed)
+    end subroutine init_random_seed
     !****************************************
     !               sort                    *
     !****************************************

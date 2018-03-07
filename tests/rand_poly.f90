@@ -45,7 +45,7 @@ program rand_poly
     end if
     
     ! testing random non-monic polynomials
-    call irc()  ! initiate random seed
+    call init_random_seed()  ! initiate random seed
     open(unit=1,file="data_files/rand_poly.dat")
     write(1,'(A)') 'Degree, FPML_time, FPML_err, Polzeros_time, Polzeros_err, AMVW_time, AMVW_err'
     allocate(results(maxit,6))
@@ -106,9 +106,9 @@ program rand_poly
     close(1)
 contains
     !****************************************
-    !               init_random_seed (irc)  *
+    !               init_random_seed        *
     !****************************************
-    subroutine irc()
+    subroutine init_random_seed()
         implicit none
         ! local variables
         integer                             :: i, n , clock
@@ -125,7 +125,7 @@ contains
         call random_seed(put = seed)
         
         deallocate(seed)
-    end subroutine irc
+    end subroutine init_random_seed
     !****************************************
     !               cmplx_rand_poly         *
     !****************************************

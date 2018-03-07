@@ -23,6 +23,7 @@ program spec_poly
     real(kind=dp), dimension(:), allocatable    :: reigs, ieigs, rcoeffs, icoeffs
     
     ! testing specific polynomials
+    call init_random_seed()
     open(unit=1,file="data_files/spec_poly.dat")
     write(1,'(A)') 'Poly No., FPML, Polzeros, AMVW'
     ! Poly 1: Wilkinson deg 10
@@ -945,6 +946,27 @@ program spec_poly
     close(1)
     call execute_command_line('cp data_files/spec_poly.dat TeX/table_spec_poly.dat')
 contains
+    !****************************************
+    !               init_random_seed        *
+    !****************************************
+    subroutine init_random_seed()
+        implicit none
+        ! local variables
+        integer                             :: i, n , clock
+        integer, dimension(:), allocatable  :: seed
+        ! intrinsic subroutines
+        intrinsic                           :: random_seed, system_clock
+        
+        ! main
+        call random_seed(size = n)
+        allocate(seed(n))
+        
+        call system_clock(count = clock)
+        seed = clock + 37 * (/ (i - 1, i = 1,n) /)
+        call random_seed(put = seed)
+        
+        deallocate(seed)
+    end subroutine init_random_seed
     !****************************************
     !               sort                    *
     !****************************************
