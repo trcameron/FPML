@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017) (preloaded format=pdflatex 2017.5.23)  7 MAR 2018 16:05
+This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017) (preloaded format=pdflatex 2017.5.23)  7 MAR 2018 17:37
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -1375,7 +1375,7 @@ Package rerunfilecheck Info: File `fpml_poster.out' has not changed.
 Here is how much of TeX's memory you used:
  21711 strings out of 492995
  436937 string characters out of 6132704
- 566210 words of memory out of 5000000
+ 566213 words of memory out of 5000000
  24747 multiletter control sequences out of 15000+600000
  59506 words of font info for 123 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
@@ -1389,7 +1389,7 @@ usr/local/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></us
 r/local/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmr17.pfb></usr/
 local/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/l
 ocal/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmti12.pfb>
-Output written on fpml_poster.pdf (1 page, 312094 bytes).
+Output written on fpml_poster.pdf (1 page, 312062 bytes).
 PDF statistics:
  110 PDF objects out of 1000 (max. 8388607)
  69 compressed objects within 1 object stream
