@@ -4,7 +4,7 @@ Fourth order Parallelizable Modified Laguerre method. This is a Fortran library 
 ## Authors
 * [Thomas R. Cameron](https://thomasrcameron.com)
     * Mathematics and Computer Science Department, Davidson College
-    * [email](mailto:thcameron@davidson.edu)
+    * [Email: thcameron@davidson.edu](mailto:thcameron@davidson.edu)
 
 ## Installation Instructions
 The main driver can be installed by running the install\_driver.sh script. When running the fpml\_driver, the program will expect the name of a file located in data\_files. This file is expected to store the coefficients of a polynomial as follows: The first row contains the degree and every subsequent line contains the coefficients from constant to leading (see poly1.dat for an example). If no data file is given, then the program will run on a random polynomial. The results including each computed root its backward error and condition number is recorded in the file results.dat.
