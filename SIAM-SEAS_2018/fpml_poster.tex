@@ -1,5 +1,6 @@
 \documentclass[orientation=portrait]{tikzposter}
 \usepackage[utf8]{inputenc}
+\usepackage{amsmath}
 
 \geometry{paperwidth=24in,paperheight=36in}
 \makeatletter
@@ -36,7 +37,14 @@ We present a novel modification of Laguerre's method that results in a method fo
 	\column{0.5}
 	\block{Introduction}
 	{
-		Let $p(\lambda)$ be a polynomial of degree $m$ and denote by $(z_{1},\ldots,z_{m})$ the current approximations to the roots $r_{1},\ldots,r_{m}$ of $p(\lambda)$. The $j$th approximation by 
+		Let $p(\lambda)$ be a polynomial of degree $m$ and denote by $(z_{1},\ldots,z_{m})$ the current approximations to the roots $r_{1},\ldots,r_{m}$ of $p(\lambda)$. The $j$th approximation is updated via
+		\begin{equation}
+		\hat{z}_{j}=z_{j}-\frac{m}{G_{j}\pm\sqrt{(m-1)(mH_{j}-G_{j}^{2})}},
+		\end{equation}
+		where 
+		\begin{equation}
+		G_{j}=\frac{p^{'}(z_{j})}{p(z_{j})}-\sum_{\substack{i=1\\i\neq j}}^{m}\frac{1}{(z_{j}-z_{i})}~\text{ and }~H_{j}=
+		\end{equation}
 	}
 	
 	\column{0.5}

@@ -89,12 +89,12 @@ contains
         alpha = (/ (abs(p(i)), i = 1,deg+1) /)
         check = (/ (.true., i = 1,deg) /)
         call estimates(alpha, deg, roots)
-        ralpha = (/ (alpha(i)*(3.8*(deg+1-i)+1), i=1,deg+1)/)
-        alpha = (/ (alpha(i)*(3.8*(i-1)+1), i=1,deg+1)/)
+        ralpha = (/ (alpha(i)*(1.8*(deg+1-i)+1), i=1,deg+1)/)
+        alpha = (/ (alpha(i)*(1.8*(i-1)+1), i=1,deg+1)/)
         nz = 0
         do i=1,itmax
             call sort(roots, exact_roots, deg, check)
-            err(i) = maxval(abs(roots-exact_roots))
+            err(i) = maxval(abs(roots-exact_roots)/abs(exact_roots))
             if(nz==deg) return
             do j=1,deg
                 if(check(j)) then

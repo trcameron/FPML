@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017) (preloaded format=pdflatex 2017.5.23)  6 MAR 2018 17:49
+This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017) (preloaded format=pdflatex 2017.5.23)  7 MAR 2018 11:46
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -988,37 +988,95 @@ Now handling font encoding U ...
    defining Unicode char U+2122 (decimal 8482)
    defining Unicode char U+2423 (decimal 9251)
 ))
+(/usr/local/texlive/2017/texmf-dist/tex/latex/amsmath/amsmath.sty
+Package: amsmath 2016/11/05 v2.16a AMS math features
+\@mathmargin=\skip46
+
+For additional information on amsmath, use the `?' option.
+(/usr/local/texlive/2017/texmf-dist/tex/latex/amsmath/amstext.sty
+Package: amstext 2000/06/29 v2.01 AMS text
+
+(/usr/local/texlive/2017/texmf-dist/tex/latex/amsmath/amsgen.sty
+File: amsgen.sty 1999/11/30 v2.0 generic functions
+\@emptytoks=\toks31
+\ex@=\dimen301
+))
+(/usr/local/texlive/2017/texmf-dist/tex/latex/amsmath/amsbsy.sty
+Package: amsbsy 1999/11/29 v1.2d Bold Symbols
+\pmbraise@=\dimen302
+)
+(/usr/local/texlive/2017/texmf-dist/tex/latex/amsmath/amsopn.sty
+Package: amsopn 2016/03/08 v2.02 operator names
+)
+\inf@bad=\count119
+LaTeX Info: Redefining \frac on input line 213.
+\uproot@=\count120
+\leftroot@=\count121
+LaTeX Info: Redefining \overline on input line 375.
+\classnum@=\count122
+\DOTSCASE@=\count123
+LaTeX Info: Redefining \ldots on input line 472.
+LaTeX Info: Redefining \dots on input line 475.
+LaTeX Info: Redefining \cdots on input line 596.
+\Mathstrutbox@=\box70
+\strutbox@=\box71
+\big@size=\dimen303
+LaTeX Font Info:    Redeclaring font encoding OML on input line 712.
+LaTeX Font Info:    Redeclaring font encoding OMS on input line 713.
+\macc@depth=\count124
+\c@MaxMatrixCols=\count125
+\dotsspace@=\muskip10
+\c@parentequation=\count126
+\dspbrk@lvl=\count127
+\tag@help=\toks32
+\row@=\count128
+\column@=\count129
+\maxfields@=\count130
+\andhelp@=\toks33
+\eqnshift@=\dimen304
+\alignsep@=\dimen305
+\tagshift@=\dimen306
+\tagwidth@=\dimen307
+\totwidth@=\dimen308
+\lineht@=\dimen309
+\@envbody=\toks34
+\multlinegap=\skip47
+\multlinetaggap=\skip48
+\mathdisplay@stack=\toks35
+LaTeX Info: Redefining \[ on input line 2817.
+LaTeX Info: Redefining \] on input line 2818.
+)
 (/usr/local/texlive/2017/texmf-dist/tex/latex/blindtext/blindtext.sty
 Package: blindtext 2012/01/06 V2.0 blindtext-Package
 
 (/usr/local/texlive/2017/texmf-dist/tex/latex/tools/xspace.sty
 Package: xspace 2014/10/28 v1.13 Space after command names (DPC,MH)
 )
-\c@blindtext=\count119
-\c@Blindtext=\count120
-\c@blind@countparstart=\count121
-\blind@countxx=\count122
-\blindtext@numBlindtext=\count123
-\blind@countyy=\count124
-\c@blindlist=\count125
-\c@blindlistlevel=\count126
-\c@blindlist@level=\count127
-\blind@listitem=\count128
-\c@blind@listcount=\count129
-\c@blind@levelcount=\count130
-\blind@mathformula=\count131
-\blind@Mathformula=\count132
-\c@blind@randomcount=\count133
-\c@blind@randommax=\count134
-\c@blind@pangramcount=\count135
-\c@blind@pangrammax=\count136
+\c@blindtext=\count131
+\c@Blindtext=\count132
+\c@blind@countparstart=\count133
+\blind@countxx=\count134
+\blindtext@numBlindtext=\count135
+\blind@countyy=\count136
+\c@blindlist=\count137
+\c@blindlistlevel=\count138
+\c@blindlist@level=\count139
+\blind@listitem=\count140
+\c@blind@listcount=\count141
+\c@blind@levelcount=\count142
+\blind@mathformula=\count143
+\blind@Mathformula=\count144
+\c@blind@randomcount=\count145
+\c@blind@randommax=\count146
+\c@blind@pangramcount=\count147
+\c@blind@pangrammax=\count148
 )
 (/usr/local/texlive/2017/texmf-dist/tex/latex/comment/comment.sty
 \CommentStream=\write5
 
 Excluding comment 'comment')
 
-Package tikzposter Warning: Unknown layouttheme `Autum'. on input line 18.
+Package tikzposter Warning: Unknown layouttheme `Autum'. on input line 19.
 
 
 LaTeX Warning: Unused global option(s):
@@ -1027,32 +1085,32 @@ LaTeX Warning: Unused global option(s):
 (./fpml_poster.aux)
 \openout1 = `fpml_poster.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 20.
-LaTeX Font Info:    ... okay on input line 20.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 20.
-LaTeX Font Info:    ... okay on input line 20.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 20.
-LaTeX Font Info:    ... okay on input line 20.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 20.
-LaTeX Font Info:    ... okay on input line 20.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 20.
-LaTeX Font Info:    ... okay on input line 20.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 20.
-LaTeX Font Info:    ... okay on input line 20.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 21.
+LaTeX Font Info:    ... okay on input line 21.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 21.
+LaTeX Font Info:    ... okay on input line 21.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 21.
+LaTeX Font Info:    ... okay on input line 21.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 21.
+LaTeX Font Info:    ... okay on input line 21.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 21.
+LaTeX Font Info:    ... okay on input line 21.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 21.
+LaTeX Font Info:    ... okay on input line 21.
  ABD: EveryShipout initializing macros
 (/usr/local/texlive/2017/texmf-dist/tex/context/base/mkii/supp-pdf.mkii
 [Loading MPS to PDF converter (version 2006.09.02).]
-\scratchcounter=\count137
-\scratchdimen=\dimen301
-\scratchbox=\box70
-\nofMPsegments=\count138
-\nofMParguments=\count139
-\everyMPshowfont=\toks31
-\MPscratchCnt=\count140
-\MPscratchDim=\dimen302
-\MPnumerator=\count141
-\makeMPintoPDFobject=\count142
-\everyMPtoPDFconversion=\toks32
+\scratchcounter=\count149
+\scratchdimen=\dimen310
+\scratchbox=\box72
+\nofMPsegments=\count150
+\nofMParguments=\count151
+\everyMPshowfont=\toks36
+\MPscratchCnt=\count152
+\MPscratchDim=\dimen311
+\MPnumerator=\count153
+\makeMPintoPDFobject=\count154
+\everyMPtoPDFconversion=\toks37
 ) (/usr/local/texlive/2017/texmf-dist/tex/generic/oberdiek/pdftexcmds.sty
 Package: pdftexcmds 2017/03/19 v0.25 Utility functions of pdfTeX for LuaTeX (HO
 )
@@ -1137,38 +1195,48 @@ Missing character: There is no 1 in font nullfont!
 Missing character: There is no = in font nullfont!
 Missing character: There is no 1 in font nullfont!
 
-Underfull \hbox (badness 1082) in paragraph at lines 40--40
+LaTeX Font Warning: Font shape `OMX/cmex/m/n' in size <29.86> not available
+(Font)              size <24.88> substituted on input line 48.
+
+
+Underfull \hbox (badness 1082) in paragraph at lines 48--48
 []\T1/aer/m/n/29.86 Let $\OML/cmm/m/it/29.86 p\OT1/cmr/m/n/29.86 (\OML/cmm/m/it
 /29.86 ^^U\OT1/cmr/m/n/29.86 )$ \T1/aer/m/n/29.86 be a poly-no-mial of de-gree 
 $\OML/cmm/m/it/29.86 m$ \T1/aer/m/n/29.86 and de-note by
  []
 
-LaTeX Font Info:    Try loading font information for T1+aett on input line 50.
+LaTeX Font Info:    Try loading font information for T1+aett on input line 58.
 (/usr/local/texlive/2017/texmf-dist/tex/latex/ae/t1aett.fd
 File: t1aett.fd 1997/11/16 Font definitions for T1/aett.
 ) [1
 
 {/usr/local/texlive/2017/texmf-var/fonts/map/pdftex/updmap/pdftex.map}] (./fpml
-_poster.aux) ) 
+_poster.aux)
+
+LaTeX Font Warning: Size substitutions with differences
+(Font)              up to 4.98pt have occurred.
+
+ ) 
 Here is how much of TeX's memory you used:
- 17400 strings out of 492995
- 377514 string characters out of 6132704
- 465353 words of memory out of 5000000
- 20525 multiletter control sequences out of 15000+600000
- 46931 words of font info for 99 fonts, out of 8000000 for 9000
+ 18005 strings out of 492995
+ 384470 string characters out of 6132704
+ 476926 words of memory out of 5000000
+ 21113 multiletter control sequences out of 15000+600000
+ 49706 words of font info for 100 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 62i,8n,84p,821b,910s stack positions out of 5000i,500n,10000p,200000b,80000s
-</usr/local/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/c
-m/cmbx12.pfb></usr/local/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm
-/cmcsc10.pfb></usr/local/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm
-/cmmi12.pfb></usr/local/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/
-cmr17.pfb></usr/local/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cm
-ti12.pfb></usr/local/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmt
-t12.pfb>
-Output written on fpml_poster.pdf (1 page, 63483 bytes).
+ 62i,10n,84p,821b,918s stack positions out of 5000i,500n,10000p,200000b,80000s
+</usr/local/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb
+></usr/local/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmcsc10.pfb
+></usr/local/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb>
+</usr/local/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi12.pfb><
+/usr/local/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmr17.pfb></u
+sr/local/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></us
+r/local/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmti12.pfb></usr
+/local/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt12.pfb>
+Output written on fpml_poster.pdf (1 page, 81397 bytes).
 PDF statistics:
- 59 PDF objects out of 1000 (max. 8388607)
- 33 compressed objects within 1 object stream
+ 67 PDF objects out of 1000 (max. 8388607)
+ 39 compressed objects within 1 object stream
  0 named destinations out of 1000 (max. 500000)
  109 words of extra memory for PDF output out of 10000 (max. 10000000)
 
