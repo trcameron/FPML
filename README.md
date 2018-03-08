@@ -29,9 +29,7 @@ Random complex polynomials whose coefficients are uniformly distributed over the
 
 ![alt text](tests/figures/methods.png?raw=true)
 
-As can be seen from the graph above, all three modifications are comparable until the last two degrees tested. In these cases Seq. Lag. is failing to meet the stopping criterion for each root, so the backward error and condition are never recorded 
-
-all three modifications are comparable with respect to both time and accuracy. However, a careful eye will note that the time elapsed for Seq. Lag. is growing faster than the other methods. Indeed, the Seq. Lag. algorithm requires an increasing number of iterations as the degree of the polynomial grows. This combined Seq. Lag. not being parallelizable is our motivation for using the Con. Lag. modification. 
+As can be seen from the graph above, all three modifications are comparable until the last two degrees tested. In these cases Seq. Lag. is failing to meet the stopping criterion for each root, so the maximum backward error and condition number are much higher than the rest. In fact, we've observed that Seq. Lag. requires an increasing number of iterations as the degree of the polynomial grows. This, combined with Seq. Lag. not being parallelizable, is our motivation for using the Con. Lag. modification.
 ### Convergence
 Three special polynomials are used to test the theoretical convergence properties of FPML. The first polynomial is <img src="https://latex.codecogs.com/svg.latex?\Large&space;z^{5}-1" title="\Large z^{5}-1" />, the second is the degree 10 Chebyshev polynomial, and the third polynomial is <img src="https://latex.codecogs.com/svg.latex?\Large&space;z^{20}+z^{19}+\cdots+z+1">. The error is measured as the maximum relative forward error. For each polynomial, the error after each iteration is recorded in the table below. The column Error-1 corresponds to the error in the roots approximations for the first polynomial, Error-2 for the second polynomial, and Error-3 for the third polynomial.
 
@@ -43,13 +41,13 @@ Random complex polynomials whose coefficients are uniformly distributed over the
 
 ![alt text](tests/figures/rand_poly.png?raw=true)
 
-It is clear in the figure above that FPML and Polzeros are very close with respect to both time and accuracy, with FPML having the slight advantage in both categories. In addition, AMVW is about 2 times slower on average, but is also slightly more accurate. 
+It is clear that FPML and Polzeros are very close with respect to time, with FPML having the slight advantage and AMVW being about 2 times slower on average. With respect to accuracy, FPML and AMVW are comparable, with AMVW have the slight advantage and Polzeros having 2 times larger accuracy on average.
 ### Roots of Unity
 The polynomial <img src="https://latex.codecogs.com/svg.latex?\Large&space;z^{n}-1" title="\Large z^{n}-1" /> has as roots the n roots of unity: <img src="https://latex.codecogs.com/svg.latex?\Large&space;\cos(\frac{2\pi}{n}j)+i\sin(\frac{2\pi}{n}j)" title="\Large \cos(\frac{2\pi}{n}j)+i\sin(\frac{2\pi}{n}j)" /> for <img src="https://latex.codecogs.com/svg.latex?\Large&space;j=1,\ldots,n" title="\Large j=1,\ldots,n" />. These polynomials are used to compare FPML against Polzeros and the singleshift version of AMVW. The plot below includes the elapsed time measured in seconds and the accuracy which is measured as the average absolute difference between the computed and exact roots. Iterations are run for polynomials of degree 80 to degree 10240, doubling the degree on each step. For each iteration there are 25 tests performed, the average time elapsed over the number of tests and the accuracy is recorded. 
 
 ![alt text](tests/figures/unity.png?raw=true)
 
-It is clear from the figure above that FPML and Polzeros are very close with respect to both time and accuracy, with FPML having the slight advantage in time. Note that the difference between FPML and Polzeros with respect to accuracy is within double precision unit roundoff and can therefore be attributed as noise. In these tests, AMVW is both slower and less accurate. 
+It is clear from the figure above that FPML and Polzeros are very close with respect to both time and accuracy. Note that the difference between FPML and Polzeros with respect to accuracy is within double precision unit roundoff and can therefore be attributed as noise. In these tests, AMVW is both slower and less accurate.
 ### Special Polynomials
 Below is a table of the special polynomials used for providing additional comparisons between FPML, Polzeros, and the singleshift version of AMVW.
 
