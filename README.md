@@ -29,7 +29,7 @@ Random complex polynomials whose coefficients are uniformly distributed over the
 
 ![alt text](tests/figures/methods.png?raw=true)
 
-As can be seen from the graph above, all three modifications are comparable until degree 10240 where Seq. Lag. has a large spike. What is occurring 
+As can be seen from the graph above, all three modifications are comparable until the last two degrees tested. In these cases Seq. Lag. is failing to meet the stopping criterion for each root, so the backward error and condition are never recorded 
 
 all three modifications are comparable with respect to both time and accuracy. However, a careful eye will note that the time elapsed for Seq. Lag. is growing faster than the other methods. Indeed, the Seq. Lag. algorithm requires an increasing number of iterations as the degree of the polynomial grows. This combined Seq. Lag. not being parallelizable is our motivation for using the Con. Lag. modification. 
 ### Convergence
@@ -39,13 +39,13 @@ Three special polynomials are used to test the theoretical convergence propertie
 
 Note that evidence of fourth order convergence can be seen in each column. This is somewhat of a surprising feature of our method. Often, higher order methods do not display their convergence rate in practice. For instance, the method in [6] has fourth order convergence, but the radius of convergence is so small that by the time the estimates begin to converge the fourth order property will not be noticed in double precision floating arithmetic.
 ### Random Polynomials
-Random complex polynomials whose coefficients are uniformly distributed over the interval [-1,1] are used to compare FPML against Polzeros and the singleshift version of AMVW. The plot below includes the elapsed time measured in seconds and the accuracy which is measured as the forward error. Iterations are run for polynomials of degree 80 to degree 10240, doubling the degree on each step. For each iteration there are 25 tests performed, the average time elapsed and the average of the maximum forward error over all these tests is recorded.
+Random complex polynomials whose coefficients are uniformly distributed over the interval [-1,1] are used to compare FPML against Polzeros and the singleshift version of AMVW. The plot below includes the elapsed time measured in seconds and the accuracy which is measured as the maximum relative forward error. Iterations are run for polynomials of degree 80 to degree 10240, doubling the degree on each step. For each iteration there are 25 tests performed, the average time elapsed and the average accuracy over all these tests is recorded.
 
 ![alt text](tests/figures/rand_poly.png?raw=true)
 
 It is clear in the figure above that FPML and Polzeros are very close with respect to both time and accuracy, with FPML having the slight advantage in both categories. In addition, AMVW is about 2 times slower on average, but is also slightly more accurate. 
 ### Roots of Unity
-The polynomial <img src="https://latex.codecogs.com/svg.latex?\Large&space;z^{n}-1" title="\Large z^{n}-1" /> has as roots the n roots of unity: <img src="https://latex.codecogs.com/svg.latex?\Large&space;\cos(\frac{2\pi}{n}j)+i\sin(\frac{2\pi}{n}j)" title="\Large \cos(\frac{2\pi}{n}j)+i\sin(\frac{2\pi}{n}j)" /> for <img src="https://latex.codecogs.com/svg.latex?\Large&space;j=1,\ldots,n" title="\Large j=1,\ldots,n" />. These polynomials are used to compare FPML against Polzeros and the singleshift version of AMVW. The plot below includes the elapsed time measured in seconds and the accuracy which is measured as the absolute difference between the computed and exact roots. Iterations are run for polynomials of degree 80 to degree 10240, doubling the degree on each step. For each iteration there are 25 tests performed, the average time elapsed over the number of tests and the average error over the degree is recorded.
+The polynomial <img src="https://latex.codecogs.com/svg.latex?\Large&space;z^{n}-1" title="\Large z^{n}-1" /> has as roots the n roots of unity: <img src="https://latex.codecogs.com/svg.latex?\Large&space;\cos(\frac{2\pi}{n}j)+i\sin(\frac{2\pi}{n}j)" title="\Large \cos(\frac{2\pi}{n}j)+i\sin(\frac{2\pi}{n}j)" /> for <img src="https://latex.codecogs.com/svg.latex?\Large&space;j=1,\ldots,n" title="\Large j=1,\ldots,n" />. These polynomials are used to compare FPML against Polzeros and the singleshift version of AMVW. The plot below includes the elapsed time measured in seconds and the accuracy which is measured as the average absolute difference between the computed and exact roots. Iterations are run for polynomials of degree 80 to degree 10240, doubling the degree on each step. For each iteration there are 25 tests performed, the average time elapsed over the number of tests and the accuracy is recorded. 
 
 ![alt text](tests/figures/unity.png?raw=true)
 
@@ -59,7 +59,7 @@ For each special polynomial, the roots are computed using FPML, Polzeros, and AM
 
 ![alt text](tests/figures/spec_poly_results.png?raw=true)
 
-It is clear that FPML and Polzeros have comparable accuracy when solving for the roots of each of the above special polynomials, often FPML is better by an order of magnitude. In addition, AMVW is performing much worse in many of these tests.
+It is clear that FPML and Polzeros have comparable accuracy when solving for the roots of each of the above special polynomials, often FPML is better by an order of magnitude. In addition, AMVW is performing much worse than both FPML and Polzeros in many of these tests.
 ## References
 
 1. O. Aberth, *Iteration methods for finding all zeros of a polynomial simultaneously*, Math. Comp. 27 (1973), no. 122, 339-344.

@@ -205,10 +205,8 @@ contains
         alpha = (/ (alpha(i)*(1.8*(i-1)+1), i=1,deg+1)/)
         do j=1,deg
             do i=1,itmax
-                if(check(j)) then
-                    call laguerre_seq(p, alpha, ralpha, deg, j, check(j), roots, berr(j), cond(j))
-                    if(.not.check(j)) exit
-                end if
+                call laguerre_seq(p, alpha, ralpha, deg, j, check(j), roots, berr(j), cond(j))
+                if(.not.check(j)) exit
             end do
         end do
     end subroutine main_lseq
@@ -313,9 +311,9 @@ contains
             end do
             a = z*a + p(deg+1)
             berr = r*berr + ralpha(deg+1)
-            if(abs(a)<berr*eps) then
-                cond = berr/(r*abs(b))
-                berr = abs(a)/berr
+            cond = berr/(r*abs(b))
+            berr = abs(a)/berr
+            if(berr<eps) then
                 check = .false.
                 return
             end if
@@ -338,9 +336,9 @@ contains
             end do
             a = z*a + p(1)
             berr = r*berr + alpha(1)
-            if(abs(a)<berr*eps) then
-                cond = berr/(r*abs(b))
-                berr = abs(a)/berr
+            cond = berr/(r*abs(b))
+            berr = abs(a)/berr
+            if(berr<eps) then
                 check = .false.
                 return
             end if

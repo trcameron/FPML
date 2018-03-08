@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# compile other_src
+# compile other_src (except for poly_zeros which is included as module)
 gfortran -c -O2 other_src/*.f90 -lblas
 gfortran -c -O2 other_src/turnovers/*.f90 -lblas
 rm poly_zeroes.mod
