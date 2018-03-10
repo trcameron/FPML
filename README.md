@@ -1,5 +1,5 @@
 # FPML
-Fourth order Parallelizable Modified Laguerre method. This is a Fortran library that includes a module of subroutines for computing the roots of an univariate polynomial. This module is name fpml and located in the src directory. 
+Fourth order Parallelizable Modified Laguerre method. This is a Fortran library that includes a module of subroutines for computing the roots of an univariate polynomial. The module is named fpml and is located in the src directory. 
 
 ## Authors
 * [Thomas R. Cameron](https://thomasrcameron.com)
