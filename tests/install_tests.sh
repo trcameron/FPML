@@ -1,6 +1,6 @@
 #!/bin/bash
 
-gfortran -O3 -cpp test_eiscor.f90 -o test_eiscor -I /Users/thcameron/Documents/eiscor/include /Users/thcameron/eiscor/lib/libeiscor.dylib.0.2.0
+gfortran -O3 -cpp test_eiscor.f90 -o test_eiscor -I eiscor/include /Users/thcameron/eiscor/lib/libeiscor.dylib.0.2.0
 
 
 # compile other_src (except for poly_zeros which is included as module)
