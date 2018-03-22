@@ -1,25 +1,60 @@
-!************************************************************************                       
+!********************************************************************************
 !   FPML: Fourth order Parallelizable Modification of Laguerre's method
 !   Author: Thomas R. Cameron, Davidson College
-!   Last Modified: 25 February 2018
-!************************************************************************
-!   This software is being provided as is, without any express or
-!   implied warranty. In no event, may the author be liable for any error
-!   in the software, or any misuse of it or any damage occuring out of 
-!   its use. The entire risk of using the software lies with the party
-!   doing so. 
-!   Any use of the software constitutes acceptance of the terms of the
-!   above statement. 
-!************************************************************************
+!   Last Modified: 20 March 2018
+!********************************************************************************
+! MIT License
+!
+! Copyright (c) 2018 Thomas R. Cameron
+!
+! Permission is hereby granted, free of charge, to any person obtaining a copy
+! of this software and associated documentation files (the "Software"), to deal
+! in the Software without restriction, including without limitation the rights
+! to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+! copies of the Software, and to permit persons to whom the Software is
+! furnished to do so, subject to the following conditions:
+!
+! The above copyright notice and this permission notice shall be included in all
+! copies or substantial portions of the Software.
+!
+! THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+! IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+! FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+! AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+! LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+! OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+! SOFTWARE.
+!********************************************************************************
 !   This module contains the following paramaters, functions, and 
 !   subroutines:
 !       dp: integer paramater for machine-compiler specific double 
 !       precision.
 !
-!       zero: 16 digits of 0.
+!       zero: floating point double precision 0.
 !
 !       eps: machine-compiler specific double precision unit roundoff.
-!************************************************************************
+!
+!       main: main subroutine for computing roots of polynomial.
+!
+!       rcheck_lag: subroutine for checking backward error in approximation with
+!       moduli greater than 1.
+!
+!       check_lag: subroutine for checking backward error in approximation with
+!       moduli less than or equal to 1.
+!
+!       rmodify_lag: subroutine for modifying approximation with moduli greather
+!       than 1.
+!
+!       modify_lag: subroutine for modifying approximation wtih moduli less than
+!       or equal to 1.
+!
+!       estimates: subroutine that computes the initial root approximations.
+!
+!       conv_hull: subroutines that computes the indices of the upper envelope
+!       of the convex hull of a 2D point set.
+!
+!       cross: returns 2D cross product of two vectors.
+!********************************************************************************
 module fpml
     implicit none
     integer, parameter          :: dp = KIND(1.0D0)
@@ -27,6 +62,13 @@ module fpml
 contains
     !************************************************
     !                       main                    *
+    !************************************************
+    ! Computes the roots of a polynomial of degree 
+    ! deg whose coefficients are stored in p. The
+    ! root approximations are stored in roots, the
+    ! backward error in each approximation in berr,
+    ! and the condition number of each root 
+    ! approximation is stored in cond. 
     !************************************************
     subroutine main(p, deg, roots, berr, cond)
         implicit none
@@ -47,8 +89,8 @@ contains
         alpha = (/ (abs(p(i)), i = 1,deg+1) /)
         check = (/ (.true., i = 1,deg) /)
         call estimates(alpha, deg, roots)
-        ralpha = (/ (alpha(i)*(1.8*(deg+1-i)+1), i=1,deg+1)/)
-        alpha = (/ (alpha(i)*(1.8*(i-1)+1), i=1,deg+1)/)
+        ralpha = (/ (alpha(i)*(1.0D0*(deg+1-i)+1), i=1,deg+1)/)
+        alpha = (/ (alpha(i)*(1.0D0*(i-1)+1), i=1,deg+1)/)
         nz = 0
         do i=1,itmax
             do j=1,deg
@@ -80,6 +122,13 @@ contains
     end subroutine main
     !************************************************
     !                       rcheck_lag              *
+    !************************************************
+    ! Computes backward error of root approximation
+    ! with moduli greater than 1. 
+    ! If the backward error is less than eps, then
+    ! both backward error and condition number are
+    ! computed. Otherwise, the correction term
+    ! p'/p is computed.
     !************************************************
     subroutine rcheck_lag(p, ralpha, deg, a, b, z, r, check, berr, cond)
         ! argument variables
@@ -118,6 +167,13 @@ contains
     !************************************************
     !                       check_lag               *
     !************************************************
+    ! Computes backward error of root approximation
+    ! with moduli less than or equal to 1. 
+    ! If the backward error is less than eps, then
+    ! both backward error and condition number are
+    ! computed. Otherwise, the correction term
+    ! p'/p is computed.
+    !************************************************
     subroutine check_lag(p, alpha, deg, a, b, z, r, check, berr, cond)
         ! argument variables
         integer, intent(in)             :: deg
@@ -150,6 +206,16 @@ contains
     end subroutine check_lag
     !************************************************
     !                       rmodify_lag             *
+    !************************************************
+    ! Computes modified Laguerre modification of
+    ! the jth rooot approximation stored in z,
+    ! which has moduli greater than 1.
+    ! The coefficients of the polynomial of degree 
+    ! deg are stored in p, all root approximations 
+    ! are stored in roots. The values a and b come
+    ! from rcheck_lag, c will store the second 
+    ! derivative and be used to return the correction
+    ! term. 
     !************************************************
     subroutine rmodify_lag(p, deg, a, b, c, z, j, roots)
         ! argument variables
@@ -191,6 +257,16 @@ contains
     !************************************************
     !                       modify_lag              *
     !************************************************
+    ! Computes modified Laguerre modification of
+    ! the jth rooot approximation stored in z,
+    ! which has moduli less than or equal to 1. 
+    ! The coefficients of the polynomial of degree 
+    ! deg are stored in p, all root approximations 
+    ! are stored in roots. The values a and b come
+    ! from rcheck_lag, c will store the second 
+    ! derivative and be used to return the correction
+    ! term.
+    !************************************************
     subroutine modify_lag(p, deg, a, b, c, z, j, roots)
         ! argument variables
         integer, intent(in)             :: deg, j
@@ -230,7 +306,7 @@ contains
     !************************************************
     !                       estimates               *
     !************************************************
-    ! Returns initial estimates for the roots of an 
+    ! Computes initial estimates for the roots of an 
     ! univariate polynomial of degree deg, whose 
     ! coefficients moduli are stored in alpha. The 
     ! estimates are returned in the array roots.
@@ -282,7 +358,7 @@ contains
     !************************************************
     !                       conv_hull               *
     !************************************************
-    ! Returns upper envelope of the convex hull of 
+    ! Computex upper envelope of the convex hull of 
     ! the points in the array a, which has size n.
     ! The number of vertices in the hull is equal to 
     ! c, and they are returned in the first c entries 

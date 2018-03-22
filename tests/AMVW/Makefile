@@ -1,0 +1,25 @@
+include make.inc .master.inc
+
+SRCS := $(wildcard ./src/*/*.f90)
+OBJS := $(SRCS:.f90=.o)
+
+all: lib$(LIBNAME).$(SLIB).$(VERSION)
+
+install: lib$(LIBNAME).$(SLIB).$(VERSION)
+	@mkdir -p $(INSTALLDIR)/$(LIBNAME)/lib
+	@cp ./lib$(LIBNAME).$(SLIB).$(VERSION) $(INSTALLDIR)/$(LIBNAME)/lib
+
+lib$(LIBNAME).$(SLIB).$(VERSION): srcs
+	$(FC) $(FFLAGS) -shared -o lib$(LIBNAME).$(SLIB).$(VERSION) $(OBJS) 
+
+srcs:
+	@$(MAKE) $@ -C ./src
+
+uninstall: clean
+	@rm -rf $(INSTALLDIR)/$(LIBNAME)
+
+clean:
+	@$(MAKE) clean -C ./src
+	@rm -f lib$(LIBNAME).$(SLIB).$(VERSION)
+
+

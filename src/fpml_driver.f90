@@ -1,3 +1,14 @@
+!********************************************************************************
+!   FPML_DRIVER: Driver Program for FPML
+!   Author: Thomas R. Cameron, Davidson College
+!   Last Modified: 20 March 2018
+!********************************************************************************
+! Loads polynomial stored in data_files and computes the roots of said polynomial
+! and returns the results along with backward error and condtion numbers into
+! data_files/results.dat. The polynomial should be stored with degree on first
+! line, then subsequent lines should contain the coefficients from leading to
+! constant.
+!********************************************************************************
 program fpml_driver
     use fpml
     implicit none
@@ -16,6 +27,7 @@ program fpml_driver
     if(flag==0) then
         ! load polynomial
         read(arg, '(A)') poly_file
+        write(*,*) 'Starting: running on '//poly_file
         open(unit=1,file="data_files/"//poly_file, err=10, status='OLD')
         read(1,*) deg
         allocate(p(deg+1), roots(deg), berr(deg), cond(deg))
@@ -45,17 +57,21 @@ program fpml_driver
         deallocate(p, roots, berr, cond)
         close(1)
         close(2)
+        write(*,*) 'Finished: results are located in data_files/results.dat.'
         return
         ! statement only for poly_file open error
         10  write(*,*) 'Warning: File does not exist.'
         return
     else
-        ! random polynomial
-        write(*,*) 'Warning: No file was given. Now running random problem of degree 4096.'
-        call init_random_seed()
-        deg = 4096
+        ! poly1.dat
+        write(*,*) 'Warning: no file was given, running on poly1.dat.'
+        open(unit=1,file="data_files/poly1.dat", status='OLD')
+        read(1,*) deg
         allocate(p(deg+1), roots(deg), berr(deg), cond(deg))
-        call cmplx_rand_poly(deg+1,p)
+        do i=1, deg+1
+            read(1,*) aux
+            p(i) = aux
+        end do
         ! run main in fpml
         open(unit=2,file="data_files/results.dat")
         write(2,'(A)') 'root_real, root_imag, berr, cond'
@@ -76,48 +92,9 @@ program fpml_driver
             write(2,'(ES15.2)') cond(i)
         end do
         deallocate(p, roots, berr, cond)
+        close(1)
         close(2)
+        write(*,*) 'Finished: results are located in data_files/results.dat.'
         return
     end if
-contains
-    !****************************************
-    !               init_random_seed        *
-    !****************************************
-    subroutine init_random_seed()
-        implicit none
-        ! local variables
-        integer                             :: i, n , clock
-        integer, dimension(:), allocatable  :: seed
-        ! intrinsic subroutines
-        intrinsic                           :: random_seed, system_clock
-        
-        ! main
-        call random_seed(size = n)
-        allocate(seed(n))
-        
-        call system_clock(count = clock)
-        seed = clock + 37 * (/ (i - 1, i = 1,n) /)
-        call random_seed(put = seed)
-        
-        deallocate(seed)
-    end subroutine init_random_seed
-    !****************************************
-    !               cmplx_rand_poly         *
-    !****************************************
-    subroutine cmplx_rand_poly(n,x)
-        implicit none
-        ! argument variables
-        integer, intent(in)             :: n
-        complex(kind=dp), intent(out)   :: x(:)
-        ! local variables
-        integer                         :: k
-        real(kind=dp)                   :: r1, r2
-        
-        ! main
-        do k=1,n
-            call random_number(r1)
-            call random_number(r2)
-            x(k)=(-1+2*r1) + (0,1)*(-1+2*r2)
-        end do
-    end subroutine cmplx_rand_poly
 end program fpml_driver
