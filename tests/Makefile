@@ -25,6 +25,9 @@ unity: eiscor
 
 eiscor:
 	$(MAKE) install -C AMVW
+
+compile:
+	$(MAKE) all -C TeX
 	
 uninstall: clean
 	$(MAKE) uninstall -C AMVW

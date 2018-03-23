@@ -6,7 +6,6 @@
 FC := gfortran
 FFLAGS := -O2
 
-# test variables
-startDegree := 80
-endDegree := 10240
-itnum := 25
+# latex compiler and flags
+LC := pdflatex
+LFLAGS := -shell-escape

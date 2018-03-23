@@ -13,6 +13,9 @@ uninstall: clean
 
 run:
 	$(MAKE) run -C tests
+
+compile:
+	$(MAKE) compile -C tests
 	
 clean:
 	rm -f *.mod
