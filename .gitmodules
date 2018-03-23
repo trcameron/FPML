@@ -1,3 +1,0 @@
-[submodule "tests/eiscor"]
-	path = tests/eiscor
-	url = https://github.com/eiscor/eiscor.git
