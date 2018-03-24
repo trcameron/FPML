@@ -1,9 +1,5 @@
-# directory where the library will be installed 
+# directory where the eiscor library will be installed 
 INSTALLDIR := $(CURDIR)
-
-# fortran compiler and flags
-FC := gfortran
-FFLAGS := -O2
 
 # current version of eiscor
 LIBNAME := eiscor

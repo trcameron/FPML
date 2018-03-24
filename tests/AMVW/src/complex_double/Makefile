@@ -1,4 +1,4 @@
-include ../../.master.inc
+include ../../.master.inc ../../../../make.inc
 
 ZSRCS := $(wildcard ./*.f90)
 ZOBJS := $(ZSRCS:.f90=.o)

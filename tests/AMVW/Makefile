@@ -1,4 +1,4 @@
-include .master.inc
+include .master.inc ../../make.inc
 
 SRCS := $(wildcard ./src/*/*.f90)
 OBJS := $(SRCS:.f90=.o)
