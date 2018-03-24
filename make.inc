@@ -9,7 +9,7 @@ FFLAGS := -O2
 # tests run variables
 SD := 80		# start degree
 
-ED := 2560		# end degree
+ED := 10240		# end degree
 
 IT := 10		# iteration number
 

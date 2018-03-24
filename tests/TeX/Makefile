@@ -1,6 +1,6 @@
-#
-# Makefile for FPML tests
-# 
+#############################################
+#           FPML Make File TeX DIRECTORY    #
+#############################################
 include ../../make.inc
 
 all: conv init_est_acc init_est_time methods rand_poly spec_poly_list spec_poly_results unity clean
@@ -30,10 +30,10 @@ unity:
 	$(LC) $(LFLAGS) unity.tex
 	
 clean: copy
-	rm *.log
-	rm *.aux
-	rm *.pdf
-	rm *.png
+	@rm -r *.log
+	@rm -r *.aux
+	@rm -r *.pdf
+	@rm -r *.png
 	
 copy:
-	cp *.png ../figures/
+	@cp -r *.png ../figures/
