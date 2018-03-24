@@ -1,4 +1,4 @@
-include ../../make.inc
+include ../../.master.inc
 
 DSRCS := $(wildcard ./*.f90)
 DOBJS := $(DSRCS:.f90=.o)

@@ -1,4 +1,4 @@
-include ../../make.inc
+include ../../.master.inc
 
 LSRCS := $(wildcard ./*.f90)
 LOBJS := $(LSRCS:.f90=.o)
