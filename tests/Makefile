@@ -1,9 +1,9 @@
-#
-# Makefile for FPML tests
-# 
+#############################################
+#           FPML Make File TESTS DIRECTORY  #
+#############################################
 include ../make.inc
 
-all: conv init_est methods rand_poly spec_poly unity eiscor
+install: conv init_est methods rand_poly spec_poly unity eiscor
 	
 conv:
 	$(FC) $(FFLAGS) -o conv ../src/fpml.f90 src/conv.f90
@@ -24,20 +24,23 @@ unity: eiscor
 	$(FC) $(FFLAGS) -o unity ../src/fpml.f90 Polzeros/pzeros.f90 src/unity.f90 -I AMVW/include AMVW/eiscor/lib/libeiscor.dylib.0.2.0
 
 eiscor:
-	$(MAKE) install -C AMVW
+	@$(MAKE) install -C AMVW
+	
+run:
+	@./run_tests.sh $(SD) $(ED) $(IT)
 
 compile:
-	$(MAKE) all -C TeX
+	@$(MAKE) all -C TeX
 	
 uninstall: clean
-	$(MAKE) uninstall -C AMVW
-	rm -f conv
-	rm -f init_est
-	rm -f methods
-	rm -f rand_poly
-	rm -f spec_poly
-	rm -f unity
+	@$(MAKE) uninstall -C AMVW
+	@rm -f conv
+	@rm -f init_est
+	@rm -f methods
+	@rm -f rand_poly
+	@rm -f spec_poly
+	@rm -f unity
 
 clean:
-	$(MAKE) clean -C AMVW
-	rm -f *.mod
+	@$(MAKE) clean -C AMVW
+	@rm -f *.mod

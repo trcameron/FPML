@@ -1,22 +1,22 @@
-#
-# Makefile for FPML 
-#
+#############################################
+#           FPML Make File ROOT DIRECTORY   #
+#############################################
 include make.inc
 
 install:
 	$(FC) $(FFLAGS) -o fpml_driver src/fpml.f90 src/fpml_driver.f90
-	$(MAKE) all -C tests
+	@$(MAKE) install -C tests
 	
 uninstall: clean
-	rm -f fpml_driver
-	$(MAKE) uninstall -C tests
+	@$(MAKE) uninstall -C tests
+	@rm -f fpml_driver
 
 run:
-	$(MAKE) run -C tests
+	@$(MAKE) run -C tests
 
 compile:
-	$(MAKE) compile -C tests
+	@$(MAKE) compile -C tests
 	
 clean:
-	rm -f *.mod
-	$(MAKE) clean -C tests
+	@$(MAKE) clean -C tests
+	@rm -f *.mod

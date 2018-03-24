@@ -40,7 +40,7 @@ program init_est
     if(flag==0) then
         read(arg, '(I10)') endDegree
     else
-        endDegree=1000000
+        endDegree=512000
     end if
     call get_command_argument(3,arg,status=flag)
     if(flag==0) then
