@@ -42,5 +42,4 @@ uninstall: clean
 	@rm -f unity
 
 clean:
-	@$(MAKE) clean -C AMVW
 	@rm -f *.mod
