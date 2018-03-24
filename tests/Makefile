@@ -1,7 +1,7 @@
 #############################################
-#           FPML Make File TESTS DIRECTORY  #
+#           FPML Make File Tests Directory  #
 #############################################
-include ../make.inc
+include ../make.inc ../.master.inc
 
 install: conv init_est methods rand_poly spec_poly unity eiscor
 	
@@ -15,13 +15,13 @@ methods:
 	$(FC) $(FFLAGS) -o methods src/methods.f90
 	
 rand_poly: eiscor
-	$(FC) $(FFLAGS) -o rand_poly ../src/fpml.f90 Polzeros/pzeros.f90 src/rand_poly.f90 -I AMVW/include AMVW/eiscor/lib/libeiscor.dylib.0.2.0
+	$(FC) $(FFLAGS) -o rand_poly ../src/fpml.f90 Polzeros/pzeros.f90 src/rand_poly.f90 -I AMVW/include AMVW/eiscor/lib/lib$(LIBNAME).$(SLIB).$(VERSION)
 
 spec_poly: eiscor
-	$(FC) $(FFLAGS) -o spec_poly ../src/fpml.f90 Polzeros/pzeros.f90 src/spec_poly.f90 -I AMVW/include AMVW/eiscor/lib/libeiscor.dylib.0.2.0
+	$(FC) $(FFLAGS) -o spec_poly ../src/fpml.f90 Polzeros/pzeros.f90 src/spec_poly.f90 -I AMVW/include AMVW/eiscor/lib/lib$(LIBNAME).$(SLIB).$(VERSION)
 	
 unity: eiscor
-	$(FC) $(FFLAGS) -o unity ../src/fpml.f90 Polzeros/pzeros.f90 src/unity.f90 -I AMVW/include AMVW/eiscor/lib/libeiscor.dylib.0.2.0
+	$(FC) $(FFLAGS) -o unity ../src/fpml.f90 Polzeros/pzeros.f90 src/unity.f90 -I AMVW/include AMVW/eiscor/lib/lib$(LIBNAME).$(SLIB).$(VERSION)
 
 eiscor:
 	@$(MAKE) install -C AMVW

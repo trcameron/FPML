@@ -1,5 +1,5 @@
 #############################################
-#           FPML Make File ROOT DIRECTORY   #
+#           FPML Make File Root directory   #
 #############################################
 include make.inc
 

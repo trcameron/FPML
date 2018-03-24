@@ -1,5 +1,5 @@
 #############################################
-#           FPML Make File TeX DIRECTORY    #
+#           FPML Make File TeX Directory    #
 #############################################
 include ../../make.inc
 
