@@ -86,11 +86,16 @@ contains
         integer, parameter              :: itmax = 30
         
         ! main
-        alpha = (/ (abs(p(i)), i = 1,deg+1) /)
-        check = (/ (.true., i = 1,deg) /)
+        do i=1,deg
+            alpha(i) = abs(p(i))
+            check(i) = .true.
+        end do
+        alpha(deg+1) = abs(p(deg+1))
         call estimates(alpha, deg, roots)
-        ralpha = (/ (alpha(i)*(1.0D0*(deg+1-i)+1), i=1,deg+1)/)
-        alpha = (/ (alpha(i)*(1.0D0*(i-1)+1), i=1,deg+1)/)
+        do i=1,deg+1
+            ralpha(i) = alpha(i)*(1.0D0*(deg+1-i)+1)
+            alpha(i) = alpha(i)*(1.0D0*(i-1)+1)
+        end do
         nz = 0
         do i=1,itmax
             do j=1,deg

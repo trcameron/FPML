@@ -23,7 +23,7 @@ After running a test the results will be in a file (named after the test) locate
 
 The compilation of these TeX files requires *pdflatex* and *imagemagick* to first compile the pdf and then convert it to a png, which is done on the fly. For specific package dependencies see the individual TeX files, but note that the typical TeX Live installation should include all necessary packages.
 ## Tests
-The following numerical experiments are provided to motivate our choices in several design aspects of our algorithm, including our use of the monotone chain algorithm and our modification of Laguerre's method, and in addition to compare our algorithm with Polzeros [5] and AMVW [4]. All tests are run on an Intel Core i5 CPU running at 2.7 GHz with 16GB of memory.
+The following numerical experiments are provided to motivate our choices in several design aspects of our algorithm, including our use of the monotone chain algorithm and our modification of Laguerre's method. In addition, we compare the accuracy and efficiency of our algorithm against AMVW [4] and Polzeros [5]. All tests are run on an Intel Core i5 CPU running at 2.7 GHz with 16GB of memory.
 ### Initial Estimate
 Below is a graph of the initial estimates and exact roots of the polynomial <img src="https://latex.codecogs.com/svg.latex?\Large&space;p(z)=1+3000z+3000000z^{2}+1000000000z^{3}+z^{10}" title="\Large p(z)=1+3000z+3000000z^{2}+1000000000z^{3}+z^{10}" />.
 
@@ -33,7 +33,7 @@ As can be seen from this graph, the initial estimates are incredibly close to th
 
 ![alt text](tests/figures/init_est_time.png?raw=true)
 
-As expected, the monotone chain algorithm is significantly less expensive than the divide and conquer method for large degree polynomials. 
+As expected, the monotone chain algorithm is less expensive than the divide and conquer method for large degree polynomials. 
 ### Modifications
 Random complex polynomials whose coefficients are uniformly distributed over the interval [-1,1] are used to compare several modifications of Laguerre's method and Newton's method. The modification of Newton's method was proposed in [1] and is referenced as Aberth's method. The modification we propose is referenced as concurrent Laguerre (Con. Lag.), and the modification used in [7,8] is referenced as sequential Laguerre (Seq. Lag.). The plot below includes the elapsed time measured in seconds and the accuracy which is measured as the maximum relative forward error. Iterations are run for polynomials of degree 80 to degree 10240, doubling the degree on each step. For each iteration there are 25 tests performed, the average time elapsed and the average accuracy over all these tests is recorded.
 
