@@ -1,4 +1,4 @@
-include ../.master.inc ../../../make.inc
+include ../../../make.inc
 
 all: srcs
 

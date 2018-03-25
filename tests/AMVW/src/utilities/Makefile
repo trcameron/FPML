@@ -1,4 +1,4 @@
-include ../../.master.inc ../../../../make.inc
+include ../../../../make.inc
 
 USRCS := $(wildcard ./*.f90)
 UOBJS := $(USRCS:.f90=.o)
