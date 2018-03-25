@@ -1,5 +1,5 @@
 # FPML
-Fourth order Parallelizable Modified Laguerre method. This is a Fortran library that includes a module of subroutines for computing the roots of an univariate polynomial. The module is named fpml and is located in the src directory. 
+FPML is an acronym for Fourth order Parallelizable Modified Laguerre method. A collection of Fortran subroutines for computing the roots of a univariate polynomial is located in the module *fpml*, located in the src directory.
 
 ## Authors
 * [Thomas R. Cameron](https://thomasrcameron.com)
@@ -69,13 +69,21 @@ For each special polynomial, the roots are computed using FPML, Polzeros, and AM
 
 It is clear that FPML and Polzeros have comparable accuracy when solving for the roots of each of the above special polynomials, often FPML is better by an order of magnitude. In addition, AMVW is performing much worse than both FPML and Polzeros in many of these tests.
 ## References
+We extend our gratitude to those who came before us: thank you for your work and insight. Below is a list of references that were used during our research. In addition, we explicitly acknowledge David Watkins for his mentorship throughout graduate school, Hammurabi Mendes for numerous conversations regarding the development of this software, and Nick Steckley for testing our software. 
 
-1. O. Aberth, *Iteration methods for finding all zeros of a polynomial simultaneously*, Math. Comp. 27 (1973), no. 122, 339-344.
+1. O. Aberth, *Iteration methods for finding all zeros of a polynomial simultaneously*, Math. Comp. **27** (1973), no. 122, 339-344.
 2. F. S. Acton, *Numerical methods that work*, Harper and Row, New York, New York, 1970.
-3. A. M. Andrew, *Another efficient algorithm for convex hulls in two dimensions*, Info. Proc. Letters 9 (1979), no. 5, 216-219.
-4. J. L. Aurentz, T. Mach, R. Vandebril, and D. S. Watkins, *Fast and backward stable computation of roots of polynomials*, SIAM J. Matrix Anal. Appl. 36 (2015), no. 3, 942-973.
-5. D. A. Bini, *Numerical computation of polynomial zeros by means of Aberth's method*, Numer. Algorithms 13 (1996), 179-200
-6. E. Hansen, M. Patrick, and J. Rusnak, *Some modifications of Laguerre's method*, BIT 17 (1977), no. 4, 409-417.
-7. P. Lancaster, *Lambda-matrices and vibrating systems*, International Series of Monographs on Pure and Applied Mathematics, vol. 94, Pergamon, Oxford, United Kingdom, 1966. 
-8. B. Parlett, *Laguerre's method applied to the matrix eigenvalue problem*, Math. Comp. 18 (1964), no. 87, 464-485.
-9. F. Tisseur, *Backward error and condition of polynomial eigenvalue problems*, Linear Algebra Appl. 309 (2000), no. 1-3, 339-361. 
+3. A. M. Andrew, *Another efficient algorithm for convex hulls in two dimensions*, Info. Proc. Letters **9** (1979), no. 5, 216-219.
+4. J. L. Aurentz, T. Mach, R. Vandebril, and D. S. Watkins, *Fast and backward stable computation of roots of polynomials*, SIAM J. Matrix Anal. Appl. **36** (2015), no. 3, 942-973.
+5. D. A. Bini, *Numerical computation of polynomial zeros by means of Aberth's method*, Numer. Algorithms **13** (1996), 179-200
+6. E. Hansen, M. Patrick, and J. Rusnak, *Some modifications of Laguerre's method*, BIT **17** (1977), no. 4, 409-417.
+7. P. Lancaster, *Lambda-matrices and vibrating systems*, International Series of Monographs on Pure and Applied Mathematics, vol. 94, Pergamon, Oxford, United Kingdom, 1966.
+8. M. R. Leuze, *A hybrid Laguerre method*, BIT **23** (1983), no. 1, 132-138.
+9. A. M. Ostrowski, *Solution of Equations in Euclidean and Banach Spaces*, 3rd ed., Academic Press, New York, New York, 1973. 
+10. B. Parlett, *Laguerre's method applied to the matrix eigenvalue problem*, Math. Comp. **18** (1964), no. 87, 464-485.
+11. A. E. Pellet, *Sur un mode de separation des racines des equations et la formule de Lagrange*, Bull. Sci. Math. **5** (1881), no. 2, 393-395.
+12. M. Petkovic, L. Rancic, and D. Milosevic, *Laguerre-like methods for the simultaneous approximation of polynomial multiple zeros*, YUJOR **16** (2006), no. 1, 31-44.
+13. K. A. Redish, *On Laguerre's method*, Int J. of Math. Educ. in Sci. and Tech. **5** (1974), no. 1, 91-102.
+14. F. Tisseur, *Backward error and condition of polynomial eigenvalue problems*, Linear Algebra Appl. **309** (2000), no. 1-3, 339-361.
+15. J. L. Walsh, *On Pellet's theorem concerning the roots of a polynomial*, Ann. of Math. **26** (1924), 59-64.
+16. J. H. Wilkinson, *The algebraic eigenvalue problem*, Clarendon Press, Oxford, United Kingdom, 1965. 
