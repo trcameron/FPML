@@ -13,7 +13,7 @@ First open the make.inc file to specify the Fortran compiler and flags. The defa
 
 When running the fpml\_driver, the program will expect the name of a file located in data\_files. This file is expected to store the coefficients of a polynomial as follows: The first row contains the degree and every subsequent line contains the coefficients from constant to leading (see poly1.dat for an example). If no data file is given, then the program will run on poly1.dat by default. Each computed root, its backward error, and condition number is recorded in the file results.dat located in data\_files. 
 ### Run Tests
-All tests that were used in the research and development of FPML are included in the tests directory, along with 3rd party software from AMVW [4] and Pzeros [5]. The software for AMVW is now maintained at https://github.com/eiscor/eiscor and the software for Pzeros can be downloaded at https://jblevins.org/mirror/amiller/.
+All tests that were used in the research and development of FPML are included in the tests directory, along with 3rd party software from AMVW [4] and Polzeros [5]. The software for AMVW is now maintained at https://github.com/eiscor/eiscor and the software for Polzeros can be downloaded at https://jblevins.org/mirror/amiller/.
 
 Each test can be run individually using the executables inside the tests directory. Note that the tests init\_est, methods, rand\_poly, and unity take on three parameters: startDegree, endDegree, and itnum. If these parameters are not given, then each test runs on its default setting that is set in its respective source file, located in tests/src. One may also run all tests by running *make run* from the root directory of FPML, the parameters for these test runs may be set from within the make.inc file.
 
@@ -23,7 +23,7 @@ After running a test the results will be in a file (named after the test) locate
 
 The compilation of these TeX files requires *pdflatex* and *imagemagick* to first compile the pdf and then convert it to a png. For specific package dependencies see the individual TeX files, but note that the typical TeX Live installation should include all necessary packages.
 ## Tests
-The following numerical experiments are provided to motivate our choices in several design aspects of our algorithm, including the use of the monotone chain algorithm and our modification of Laguerre's method. In addition, we compare the accuracy and efficiency of our algorithm against AMVW [4] and Pzeros [5]. All tests are run on an Intel Core i5 CPU running at 2.7 GHz with 16GB of memory.
+The following numerical experiments are provided to motivate our choices in several design aspects of our algorithm, including the use of the monotone chain algorithm and our modification of Laguerre's method. In addition, we compare the accuracy and efficiency of our algorithm against AMVW [4] and Polzeros [5]. All tests are run on an Intel Core i5 CPU running at 2.7 GHz with 16GB of memory.
 ### Initial Estimate
 Below is a graph of the initial estimates and exact roots of the polynomial <img src="https://latex.codecogs.com/svg.latex?\Large&space;p(z)=1+3000z+3000000z^{2}+1000000000z^{3}+z^{10}" title="\Large p(z)=1+3000z+3000000z^{2}+1000000000z^{3}+z^{10}" />.
 
@@ -47,27 +47,27 @@ Three special polynomials are used to test the theoretical convergence propertie
 
 Note that evidence of fourth-order convergence can be seen in each column. This is somewhat of a surprising feature of our method. Often, higher order methods do not display their convergence rate in practice. For instance, the method in [7] has fourth-order convergence, but the estimates must be so close to the exact roots before this convergence rate will set in that it will not be noticed in double-precision floating-point arithmetic.
 ### Random Polynomials
-Random complex polynomials whose coefficients are uniformly distributed over the interval [-1,1] are used to compare FPML against AMVW and Pzeros. The plot below includes the elapsed time measured in seconds and the error which is measured as the maximum relative forward error. Iterations are run for polynomials of degree 80 to degree 10240, doubling the degree on each step. For each iteration there are 10 tests performed, the average time elapsed and the average error over all these tests is recorded.
+Random complex polynomials whose coefficients are uniformly distributed over the interval [-1,1] are used to compare FPML against AMVW and Polzeros. The plot below includes the elapsed time measured in seconds and the error which is measured as the maximum relative forward error. Iterations are run for polynomials of degree 80 to degree 10240, doubling the degree on each step. For each iteration there are 10 tests performed, the average time elapsed and the average error over all these tests is recorded.
 
 ![alt text](tests/figures/rand_poly.png?raw=true)
 
-It is clear that FPML and Pzeros are very close with respect to time, with FPML having the slight advantage and AMVW being about 2 times slower on average. In addition, FPML is on average twice as accurate as both AMVW and Pzeros. 
+It is clear that FPML and Polzeros are very close with respect to time, with FPML having the slight advantage and AMVW being about 2 times slower on average. In addition, FPML is on average twice as accurate as both AMVW and Polzeros. 
 ### Roots of Unity
-The polynomial <img src="https://latex.codecogs.com/svg.latex?\Large&space;z^{n}-1" title="\Large z^{n}-1" /> has the n roots of unity: <img src="https://latex.codecogs.com/svg.latex?\Large&space;\cos(\frac{2\pi}{n}j)+i\sin(\frac{2\pi}{n}j)" title="\Large \cos(\frac{2\pi}{n}j)+i\sin(\frac{2\pi}{n}j)" /> for <img src="https://latex.codecogs.com/svg.latex?\Large&space;j=1,\ldots,n" title="\Large j=1,\ldots,n" />. These polynomials are used to compare FPML against Pzeros and the singleshift version of AMVW. The plot below includes the elapsed time measured in seconds and the error which is measured as the average absolute difference between the computed and exact roots. Iterations are run for polynomials of degree 80 to degree 10240, doubling the degree on each step. For each iteration there are 10 tests performed, the average time elapsed over the number of tests and the error for each test is recorded. 
+The polynomial <img src="https://latex.codecogs.com/svg.latex?\Large&space;z^{n}-1" title="\Large z^{n}-1" /> has the n roots of unity: <img src="https://latex.codecogs.com/svg.latex?\Large&space;\cos(\frac{2\pi}{n}j)+i\sin(\frac{2\pi}{n}j)" title="\Large \cos(\frac{2\pi}{n}j)+i\sin(\frac{2\pi}{n}j)" /> for <img src="https://latex.codecogs.com/svg.latex?\Large&space;j=1,\ldots,n" title="\Large j=1,\ldots,n" />. These polynomials are used to compare FPML against Polzeros and the singleshift version of AMVW. The plot below includes the elapsed time measured in seconds and the error which is measured as the average absolute difference between the computed and exact roots. Iterations are run for polynomials of degree 80 to degree 10240, doubling the degree on each step. For each iteration there are 10 tests performed, the average time elapsed over the number of tests and the error for each test is recorded. 
 
 ![alt text](tests/figures/unity.png?raw=true)
 
-It is clear from the figure above that FPML and Pzeros are very close with respect to both speed and accuracy. Note that the difference between FPML and Pzeros with respect to error is within double-precision unit roundoff and can therefore be attributed as noise. In these tests, AMVW is both slower and less accurate.
+It is clear from the figure above that FPML and Polzeros are very close with respect to both speed and accuracy. Note that the difference between FPML and Polzeros with respect to error is within double-precision unit roundoff and can therefore be attributed as noise. In these tests, AMVW is both slower and less accurate.
 ### Special Polynomials
-Below is a table of the special polynomials used for providing additional comparisons between FPML, Pzeros, and the singleshift version of AMVW.
+Below is a table of the special polynomials used for providing additional comparisons between FPML, Polzeros, and the singleshift version of AMVW.
 
 ![alt text](tests/figures/spec_poly_list.png?raw=true)
 
-For each special polynomial, the roots are computed using FPML, Pzeros, and AMVW. The maximum relative forward error is recorded in the table below. 
+For each special polynomial, the roots are computed using FPML, Polzeros, and AMVW. The maximum relative forward error is recorded in the table below. 
 
 ![alt text](tests/figures/spec_poly_results.png?raw=true)
 
-It is clear that FPML and Pzeros have comparable accuracy when solving for the roots of each of the above special polynomials. There are several tests where FPML is at least an order of magnitude better than both AMVW and Pzeros (e.g. 1, 2, 5, 10, 13) and only one test where FPML is at least an order of magnitude worse (e.g. 7). There are several tests where AMVW is severely worse than FPML and Pzeros (e.g. 3, 5, 6, 8, 12). This is likely due to the different styles in which these roots are computed: Both FPML and Pzeros are based on the classic iterative methods of Laguerre and Newton, respectively, whereas AMVW is computing the eigenvalues of the companion matrix. 
+It is clear that FPML and Polzeros have comparable accuracy when solving for the roots of each of the above special polynomials. There are several tests where FPML is at least an order of magnitude better than both AMVW and Polzeros (e.g. 1, 2, 5, 10, 13) and only one test where FPML is at least an order of magnitude worse (e.g. 7). There are several tests where AMVW is severely worse than FPML and Polzeros (e.g. 3, 5, 6, 8, 12). This is likely due to the different styles in which these roots are computed: Both FPML and Polzeros are based on the classic iterative methods of Laguerre and Newton, respectively, whereas AMVW is computing the eigenvalues of the companion matrix. 
 ## References
 Below is a list of references that were used during our research.
 
