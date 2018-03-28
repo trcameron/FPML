@@ -57,7 +57,7 @@ The polynomial <img src="https://latex.codecogs.com/svg.latex?\Large&space;z^{n}
 
 ![alt text](tests/figures/unity.png?raw=true)
 
-It is clear from the figure above that FPML and Pzeros are very close with respect to both speed and accuracy. Note that the difference between FPML and Pzeros with respect to error is within double precision unit roundoff and can therefore be attributed as noise. In these tests, AMVW is both slower and less accurate.
+It is clear from the figure above that FPML and Pzeros are very close with respect to both speed and accuracy. Note that the difference between FPML and Pzeros with respect to error is within double-precision unit roundoff and can therefore be attributed as noise. In these tests, AMVW is both slower and less accurate.
 ### Special Polynomials
 Below is a table of the special polynomials used for providing additional comparisons between FPML, Pzeros, and the singleshift version of AMVW.
 
