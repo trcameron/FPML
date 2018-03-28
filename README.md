@@ -1,5 +1,5 @@
 # FPML
-FPML is an acronym for Fourth order Parallelizable Modified Laguerre method. A collection of Fortran subroutines for computing the roots of a univariate polynomial is located in the module *fpml*, located in the src directory.
+FPML: Fourth-order Parallelizable Modified Laguerre method is a collection of Fortran subroutines for computing the roots of a univariate polynomial. All subroutines are located in the module *fpml* inside the src directory.
 
 ## Authors
 * [Thomas R. Cameron](https://thomasrcameron.com)
@@ -7,13 +7,13 @@ FPML is an acronym for Fourth order Parallelizable Modified Laguerre method. A c
     * [Email: thcameron@davidson.edu](mailto:thcameron@davidson.edu)
 
 ## Instructions
-Below are instructions for the installation, testing, and compiling of FPML. These instructions have been tested on macOS High Sierra 10.13.3 and Ubuntu 16.04.4 LTS and should work on most Mac and Linux systems provided the dependencies are met. 
+Below are instructions for the installation of FPML, the testing of FPML, and compiling of TeX figures. These instructions have been tested on macOS High Sierra 10.13.3 and Ubuntu 16.04.4 LTS and will work on most Mac and Linux systems provided the dependencies are met. 
 ### Installation
 First open the make.inc file to specify the Fortran compiler and flags. The default settings use the *gfortran* compiler with flags *-O2*. Once these parameters are set, the fpml\_driver and testing library can be installed by running *make install* from the root directory of FPML, in the terminal. Once installed, *make clean* can be run to remove the leftover installation files, such as .mod and .o files. Note that the installation is done relative to the location of the FPML directory and nothing is installed outside of this directory.
 
-When running the fpml\_driver, the program will expect the name of a file located in data\_files. This file is expected to store the coefficients of a polynomial as follows: The first row contains the degree and every subsequent line contains the coefficients from constant to leading (see poly1.dat for an example). If no data file is given, then the program will run on poly1.dat by default. Each computed root, its backward error, and condition number is recorded in the file results.dat.
+When running the fpml\_driver, the program will expect the name of a file located in data\_files. This file is expected to store the coefficients of a polynomial as follows: The first row contains the degree and every subsequent line contains the coefficients from constant to leading (see poly1.dat for an example). If no data file is given, then the program will run on poly1.dat by default. Each computed root, its backward error, and condition number is recorded in the file results.dat located in data\_files. 
 ### Run Tests
-All tests that were used in the research and development of FPML are included in the tests directory, along with 3rd party software from AMVW [4] and Polzeros [5].
+All tests that were used in the research and development of FPML are included in the tests directory, along with 3rd party software from AMVW [4] and Pzeros [5]. The software for AMVW is now maintained at https://github.com/eiscor/eiscor and the software for Pzeros can be downloaded at https://jblevins.org/mirror/amiller/.
 
 Each test can be run individually using the executables inside the tests directory. Note that the tests init\_est, methods, rand\_poly, and unity take on three parameters: startDegree, endDegree, and itnum. If these parameters are not given, then each test runs on its default setting that is set in its respective source file, located in tests/src. One may also run all tests by running *make run* from the root directory of FPML, the parameters for these test runs may be set from within the make.inc file.
 
@@ -23,7 +23,7 @@ After running a test the results will be in a file (named after the test) locate
 
 The compilation of these TeX files requires *pdflatex* and *imagemagick* to first compile the pdf and then convert it to a png. For specific package dependencies see the individual TeX files, but note that the typical TeX Live installation should include all necessary packages.
 ## Tests
-The following numerical experiments are provided to motivate our choices in several design aspects of our algorithm, including the use of the monotone chain algorithm and our modification of Laguerre's method. In addition, we compare the accuracy and efficiency of our algorithm against AMVW [4] and Polzeros [5]. All tests are run on an Intel Core i5 CPU running at 2.7 GHz with 16GB of memory.
+The following numerical experiments are provided to motivate our choices in several design aspects of our algorithm, including the use of the monotone chain algorithm and our modification of Laguerre's method. In addition, we compare the accuracy and efficiency of our algorithm against AMVW [4] and Pzeros [5]. All tests are run on an Intel Core i5 CPU running at 2.7 GHz with 16GB of memory.
 ### Initial Estimate
 Below is a graph of the initial estimates and exact roots of the polynomial <img src="https://latex.codecogs.com/svg.latex?\Large&space;p(z)=1+3000z+3000000z^{2}+1000000000z^{3}+z^{10}" title="\Large p(z)=1+3000z+3000000z^{2}+1000000000z^{3}+z^{10}" />.
 
@@ -35,7 +35,7 @@ As can be seen from this graph, the initial estimates are incredibly close to th
 
 As expected, the monotone chain algorithm is less expensive than the divide and conquer method for large degree polynomials. 
 ### Modifications
-Random complex polynomials whose coefficients are uniformly distributed over the interval [-1,1] are used to compare several modifications of Laguerre's method and Newton's method. The modification of Newton's method was proposed in [1] and is referenced as Aberth's method. The modification we propose is referenced as concurrent Laguerre (Con. Lag.), and the modification used in [7,8] is referenced as sequential Laguerre (Seq. Lag.). The plot below includes the elapsed time measured in seconds and the accuracy which is measured as the maximum relative forward error. Iterations are run for polynomials of degree 80 to degree 10240, doubling the degree on each step. For each iteration there are 10 tests performed, the average time elapsed and the average accuracy over all these tests is recorded.
+Random complex polynomials whose coefficients are uniformly distributed over the interval [-1,1] are used to compare several modifications of Laguerre's method and Newton's method. The modification of Newton's method was proposed in [1] and is referenced as Aberth's method. The modification we propose is referenced as concurrent Laguerre (Con. Lag.), and the modification used in [8,11] is referenced as sequential Laguerre (Seq. Lag.). The plot below includes the elapsed time measured in seconds and the error which is measured as the maximum relative forward error. Iterations are run for polynomials of degree 80 to degree 10240, doubling the degree on each step. For each iteration there are 10 tests performed, the average time elapsed and the average accuracy over all these tests is recorded.
 
 ![alt text](tests/figures/methods.png?raw=true)
 
@@ -45,29 +45,29 @@ Three special polynomials are used to test the theoretical convergence propertie
 
 ![alt text](tests/figures/conv.png?raw=true)
 
-Note that evidence of fourth order convergence can be seen in each column. This is somewhat of a surprising feature of our method. Often, higher order methods do not display their convergence rate in practice. For instance, the method in [6] has fourth order convergence, but the estimates must be so close to the exact roots before this convergence rate will set in that it will not be noticed in double precision floating point arithmetic. 
+Note that evidence of fourth-order convergence can be seen in each column. This is somewhat of a surprising feature of our method. Often, higher order methods do not display their convergence rate in practice. For instance, the method in [7] has fourth-order convergence, but the estimates must be so close to the exact roots before this convergence rate will set in that it will not be noticed in double-precision floating-point arithmetic.
 ### Random Polynomials
-Random complex polynomials whose coefficients are uniformly distributed over the interval [-1,1] are used to compare FPML against AMVW and Polzeros. The plot below includes the elapsed time measured in seconds and the accuracy which is measured as the maximum relative forward error. Iterations are run for polynomials of degree 80 to degree 10240, doubling the degree on each step. For each iteration there are 10 tests performed, the average time elapsed and the average accuracy over all these tests is recorded.
+Random complex polynomials whose coefficients are uniformly distributed over the interval [-1,1] are used to compare FPML against AMVW and Pzeros. The plot below includes the elapsed time measured in seconds and the error which is measured as the maximum relative forward error. Iterations are run for polynomials of degree 80 to degree 10240, doubling the degree on each step. For each iteration there are 10 tests performed, the average time elapsed and the average accuracy over all these tests is recorded.
 
 ![alt text](tests/figures/rand_poly.png?raw=true)
 
-It is clear that FPML and Polzeros are very close with respect to time, with FPML having the slight advantage and AMVW being about 2 times slower on average. In addition, FPML is on average twice as accurate as both AMVW and Polzeros. 
+It is clear that FPML and Pzeros are very close with respect to time, with FPML having the slight advantage and AMVW being about 2 times slower on average. In addition, FPML is on average twice as accurate as both AMVW and Pzeros. 
 ### Roots of Unity
-The polynomial <img src="https://latex.codecogs.com/svg.latex?\Large&space;z^{n}-1" title="\Large z^{n}-1" /> has the n roots of unity: <img src="https://latex.codecogs.com/svg.latex?\Large&space;\cos(\frac{2\pi}{n}j)+i\sin(\frac{2\pi}{n}j)" title="\Large \cos(\frac{2\pi}{n}j)+i\sin(\frac{2\pi}{n}j)" /> for <img src="https://latex.codecogs.com/svg.latex?\Large&space;j=1,\ldots,n" title="\Large j=1,\ldots,n" />. These polynomials are used to compare FPML against Polzeros and the singleshift version of AMVW. The plot below includes the elapsed time measured in seconds and the accuracy which is measured as the average absolute difference between the computed and exact roots. Iterations are run for polynomials of degree 80 to degree 10240, doubling the degree on each step. For each iteration there are 10 tests performed, the average time elapsed over the number of tests and the accuracy for each test is recorded. 
+The polynomial <img src="https://latex.codecogs.com/svg.latex?\Large&space;z^{n}-1" title="\Large z^{n}-1" /> has the n roots of unity: <img src="https://latex.codecogs.com/svg.latex?\Large&space;\cos(\frac{2\pi}{n}j)+i\sin(\frac{2\pi}{n}j)" title="\Large \cos(\frac{2\pi}{n}j)+i\sin(\frac{2\pi}{n}j)" /> for <img src="https://latex.codecogs.com/svg.latex?\Large&space;j=1,\ldots,n" title="\Large j=1,\ldots,n" />. These polynomials are used to compare FPML against Pzeros and the singleshift version of AMVW. The plot below includes the elapsed time measured in seconds and the error which is measured as the average absolute difference between the computed and exact roots. Iterations are run for polynomials of degree 80 to degree 10240, doubling the degree on each step. For each iteration there are 10 tests performed, the average time elapsed over the number of tests and the accuracy for each test is recorded. 
 
 ![alt text](tests/figures/unity.png?raw=true)
 
-It is clear from the figure above that FPML and Polzeros are very close with respect to both time and accuracy. Note that the difference between FPML and Polzeros with respect to accuracy is within double precision unit roundoff and can therefore be attributed as noise. In these tests, AMVW is both slower and less accurate.
+It is clear from the figure above that FPML and Pzeros are very close with respect to both speed and accuracy. Note that the difference between FPML and Pzeros with respect to error is within double precision unit roundoff and can therefore be attributed as noise. In these tests, AMVW is both slower and less accurate.
 ### Special Polynomials
-Below is a table of the special polynomials used for providing additional comparisons between FPML, Polzeros, and the singleshift version of AMVW.
+Below is a table of the special polynomials used for providing additional comparisons between FPML, Pzeros, and the singleshift version of AMVW.
 
 ![alt text](tests/figures/spec_poly_list.png?raw=true)
 
-For each special polynomial, the roots are computed using FPML, Polzeros, and AMVW. The maximum relative forward error is recorded in the table below. 
+For each special polynomial, the roots are computed using FPML, Pzeros, and AMVW. The maximum relative forward error is recorded in the table below. 
 
 ![alt text](tests/figures/spec_poly_results.png?raw=true)
 
-It is clear that FPML and Polzeros have comparable accuracy when solving for the roots of each of the above special polynomials. There are several tests where FPML is at least an order of magnitude better than both AMVW and Polzeros (e.g. 1, 2, 5, 10, 13) and only one test where FPML is at least an order of magnitude worse (e.g. 7). There are several tests where AMVW is severely worse than FPML and Polzeros (e.g. 3, 5, 6, 8, 12). This is likely due to the different styles in which these roots are computed: Both FPML and Polzeros are based on the classic iterative methods of Laguerre and Newton, whereas AMVW is computing the eigenvalues of the companion matrix. 
+It is clear that FPML and Pzeros have comparable accuracy when solving for the roots of each of the above special polynomials. There are several tests where FPML is at least an order of magnitude better than both AMVW and Pzeros (e.g. 1, 2, 5, 10, 13) and only one test where FPML is at least an order of magnitude worse (e.g. 7). There are several tests where AMVW is severely worse than FPML and Pzeros (e.g. 3, 5, 6, 8, 12). This is likely due to the different styles in which these roots are computed: Both FPML and Pzeros are based on the classic iterative methods of Laguerre and Newton, respectively, whereas AMVW is computing the eigenvalues of the companion matrix. 
 ## References
 Below is a list of references that were used during our research.
 
@@ -76,14 +76,15 @@ Below is a list of references that were used during our research.
 3. A. M. Andrew, *Another efficient algorithm for convex hulls in two dimensions*, Info. Proc. Letters **9** (1979), no. 5, 216-219.
 4. J. L. Aurentz, T. Mach, R. Vandebril, and D. S. Watkins, *Fast and backward stable computation of roots of polynomials*, SIAM J. Matrix Anal. Appl. **36** (2015), no. 3, 942-973.
 5. D. A. Bini, *Numerical computation of polynomial zeros by means of Aberth's method*, Numer. Algorithms **13** (1996), 179-200
-6. E. Hansen, M. Patrick, and J. Rusnak, *Some modifications of Laguerre's method*, BIT **17** (1977), no. 4, 409-417.
-7. P. Lancaster, *Lambda-matrices and vibrating systems*, International Series of Monographs on Pure and Applied Mathematics, vol. 94, Pergamon, Oxford, United Kingdom, 1966.
-8. M. R. Leuze, *A hybrid Laguerre method*, BIT **23** (1983), no. 1, 132-138.
-9. A. M. Ostrowski, *Solution of Equations in Euclidean and Banach Spaces*, 3rd ed., Academic Press, New York, New York, 1973. 
-10. B. Parlett, *Laguerre's method applied to the matrix eigenvalue problem*, Math. Comp. **18** (1964), no. 87, 464-485.
-11. A. E. Pellet, *Sur un mode de separation des racines des equations et la formule de Lagrange*, Bull. Sci. Math. **5** (1881), no. 2, 393-395.
-12. M. Petkovic, L. Rancic, and D. Milosevic, *Laguerre-like methods for the simultaneous approximation of polynomial multiple zeros*, YUJOR **16** (2006), no. 1, 31-44.
-13. K. A. Redish, *On Laguerre's method*, Int J. of Math. Educ. in Sci. and Tech. **5** (1974), no. 1, 91-102.
-14. F. Tisseur, *Backward error and condition of polynomial eigenvalue problems*, Linear Algebra Appl. **309** (2000), no. 1-3, 339-361.
-15. J. L. Walsh, *On Pellet's theorem concerning the roots of a polynomial*, Ann. of Math. **26** (1924), 59-64.
-16. J. H. Wilkinson, *The algebraic eigenvalue problem*, Clarendon Press, Oxford, United Kingdom, 1965. 
+6. D. A. Bini and V. Noferini, *Solving the polynomial eigenvalue problem by means of the Ehrlich-Aberth method*, Linear Algebra Appl. **439** (2013), 1130-1149. 
+7. E. Hansen, M. Patrick, and J. Rusnak, *Some modifications of Laguerre's method*, BIT **17** (1977), no. 4, 409-417.
+8. P. Lancaster, *Lambda-matrices and vibrating systems*, International Series of Monographs on Pure and Applied Mathematics, vol. 94, Pergamon, Oxford, United Kingdom, 1966.
+9. M. R. Leuze, *A hybrid Laguerre method*, BIT **23** (1983), no. 1, 132-138.
+10. A. M. Ostrowski, *Solution of Equations in Euclidean and Banach Spaces*, 3rd ed., Academic Press, New York, New York, 1973. 
+11. B. Parlett, *Laguerre's method applied to the matrix eigenvalue problem*, Math. Comp. **18** (1964), no. 87, 464-485.
+12. A. E. Pellet, *Sur un mode de separation des racines des equations et la formule de Lagrange*, Bull. Sci. Math. **5** (1881), no. 2, 393-395.
+13. M. S. Petkovic, L. Petkovic, and D. Zivkovic *Laguerre-like methods for the simultaneous approximation of polynomial zeros*, Topics in Numerical Analysis (Vienna), Springer Vienna, 2001, pp. 189-209. 
+14. K. A. Redish, *On Laguerre's method*, Int J. of Math. Educ. in Sci. and Tech. **5** (1974), no. 1, 91-102.
+15. F. Tisseur, *Backward error and condition of polynomial eigenvalue problems*, Linear Algebra Appl. **309** (2000), no. 1-3, 339-361.
+16. J. L. Walsh, *On Pellet's theorem concerning the roots of a polynomial*, Ann. of Math. **26** (1924), 59-64.
+17. J. H. Wilkinson, *The algebraic eigenvalue problem*, Clarendon Press, Oxford, United Kingdom, 1965. 
