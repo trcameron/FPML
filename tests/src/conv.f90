@@ -109,7 +109,6 @@ contains
         do i=1,itmax
             call sort(roots, exact_roots, deg, check)
             err(i) = maxval(abs(roots-exact_roots)/abs(exact_roots))
-            if(nz==deg) return
             do j=1,deg
                 if(check(j)) then
                     z = roots(j)
@@ -121,6 +120,7 @@ contains
                             roots(j) = roots(j) - c
                         else
                             nz = nz + 1
+                            if(nz==deg) return
                         end if
                     else
                         call check_lag(p, alpha, deg, a, b, z, r, check(j), berr(j), cond(j))
@@ -129,6 +129,7 @@ contains
                             roots(j) = roots(j) - c
                         else 
                             nz = nz + 1
+                            if(nz==deg) return
                         end if
                     end if
                 end if
