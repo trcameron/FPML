@@ -12,7 +12,7 @@ program conv
     implicit none
     ! testing variables
     integer                                     :: deg, j
-    integer, parameter                          :: itmax = 10
+    integer, parameter                          :: itmax = 8
     real(kind=dp), parameter                    :: pi = 3.141592653589793D0
     real(kind=dp), dimension(:,:), allocatable  :: err
     complex(kind=dp), dimension(:), allocatable :: exact_roots
