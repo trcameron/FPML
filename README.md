@@ -13,7 +13,7 @@ First, open the make.inc file to specify the Fortran compiler and flags. The def
 
 When running the fpml\_driver, the program will expect the name of a file located in data\_files. This file is expected to store the coefficients of a polynomial as follows: The first row contains the degree, and every subsequent line contains the coefficients from constant to leading (e.g., see poly1.dat). If no data file is given, then the program will run on poly1.dat by default. Each computed root, its backward error, and condition number is recorded in the file results.dat located in data\_files. 
 ### Run Tests
-All tests that were used in the research and development of FPML are included in the tests directory, along with 3rd party software from AMVW [4] and Polzeros [5]. The software for AMVW is now maintained at https://github.com/eiscor/eiscor, and the software for Polzeros can be downloaded at https://jblevins.org/mirror/amiller/.
+All tests that were used in the research and development of FPML are included in the tests directory, along with 3rd party software from AMVW [4] and Polzeros [5]. The Fortran 90 software for AMVW is now maintained at https://github.com/eiscor/eiscor, and the Fortran90 software for Polzeros can be downloaded at https://jblevins.org/mirror/amiller/.
 
 Each test can be run individually using the executables inside the tests directory. When running tests that depend on the AMVW eiscor library, Mac users may need to set the DYLD\_LIBRARY\_PATH, see the run\_tests.sh file in the tests directory for the proper export command. Note that the tests init\_est, methods, rand\_poly, and unity take on three parameters: startDegree, endDegree, and itnum. If these parameters are not given, then each test runs on its default setting that is set in its respective source file, located in tests/src. One may also run all tests by running *make run* from the root directory of FPML, the parameters for these test runs may be set from within the make.inc file.
 
@@ -67,7 +67,7 @@ For each special polynomial, the roots are computed, and the maximum relative fo
 
 ![alt text](tests/figures/spec_poly_results.png?raw=true)
 
-It is clear that FPML and Polzeros have comparable accuracy when solving for the roots of each of the above special polynomials. There are several polynomials where FPML is at least an order of magnitude better than both AMVW and Polzeros (e.g., 1, 2, 5, 10, 13), and only one polynomial where FPML is at least an order of magnitude worse (e.g., 7). Finally, there are several polynomials where AMVW is severely worse than FPML and Polzeros (e.g., 3, 5, 6, 8, 12).
+It is clear that FPML and Polzeros have comparable accuracy when solving for the roots of each of the above special polynomials. There are several polynomials where FPML is at least an order of magnitude better than both AMVW and Polzeros (e.g., 1, 2, 5, 10, 13), and only one polynomial where FPML is at least an order of magnitude worse (e.g., 9). Finally, there are several polynomials where the accuracy of AMVW is much worse than FPML and Polzeros (e.g., 3, 5, 6, 8, 12).
 ## References
 Below is a list of references that were used during our research.
 
