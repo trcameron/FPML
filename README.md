@@ -59,7 +59,7 @@ The roots of the polynomial <img src="https://latex.codecogs.com/svg.latex?\Larg
 
 It is clear from the figure above that FPML and Polzeros are very close concerning both speed and accuracy; whereas, AMVW is both slower and less accurate in this test. 
 ### Special Polynomials
-Below is a table describing the special polynomials that we use to provide additional comparisons in the accuracy of FPML, Polzeros, and AMVW. Each of these polynomials was used for testing in [4]; originally, polynomials 1--11 were used in [8] and polynomials 12--14 were used in [6].
+Below is a table describing the special polynomials that we use to provide additional comparisons in the accuracy of FPML, Polzeros, and AMVW. Each of these polynomials was used for testing in [4]; originally, polynomials 1-11 were used in [8] and polynomials 12-14 were used in [6].
 
 ![alt text](tests/figures/spec_poly_list.png?raw=true)
 
