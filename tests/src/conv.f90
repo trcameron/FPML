@@ -97,14 +97,18 @@ contains
         logical, dimension(deg)         :: check
         real(kind=dp), dimension(deg+1) :: alpha, ralpha
         real(kind=dp)                   :: r
-        complex(kind=dp)                :: a, b, c, z
+        complex(kind=dp)                :: b, c, z
         
         ! main
-        alpha = (/ (abs(p(i)), i = 1,deg+1) /)
-        check = (/ (.true., i = 1,deg) /)
+        check = .true.
+        do i=1,deg+1
+            alpha(i) = abs(p(i))
+        end do
         call estimates(alpha, deg, roots)
-        ralpha = (/ (alpha(i)*(1.0D0*(deg+1-i)+1), i=1,deg+1)/)
-        alpha = (/ (alpha(i)*(1.0D0*(i-1)+1), i=1,deg+1)/)
+        do i=1,deg+1
+            ralpha(deg-i+2) = alpha(i)*(3.8*(deg-i+1) + 1)
+            alpha(i) = alpha(i)*(3.8*(i-1) + 1)
+        end do
         nz = 0
         do i=1,itmax
             call sort(roots, exact_roots, deg, check)
@@ -114,18 +118,18 @@ contains
                     z = roots(j)
                     r = abs(z)
                     if(r > 1) then
-                        call rcheck_lag(p, ralpha, deg, a, b, z, r, check(j), berr(j), cond(j))
+                        call rcheck_lag(p, ralpha, deg, b, c, z, r, check(j), berr(j), cond(j))
                         if(check(j)) then
-                            call rmodify_lag(p, deg, a, b, c, z, j, roots)
+                            call modify_lag(deg, b, c, z, j, roots)
                             roots(j) = roots(j) - c
                         else
                             nz = nz + 1
                             if(nz==deg) return
                         end if
                     else
-                        call check_lag(p, alpha, deg, a, b, z, r, check(j), berr(j), cond(j))
+                        call check_lag(p, alpha, deg, b, c, z, r, check(j), berr(j), cond(j))
                         if(check(j)) then
-                            call modify_lag(p, deg, a, b, c, z, j, roots)
+                            call modify_lag(deg, b, c, z, j, roots)
                             roots(j) = roots(j) - c
                         else 
                             nz = nz + 1
