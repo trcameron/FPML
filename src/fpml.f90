@@ -154,20 +154,15 @@ contains
         zz = 1/z
         rr = 1/r
         a = p(1)
-        b = a
-        c = (deg-1)*a
+        b = 0
+        c = 0
         berr = ralpha(1)
-        do k=deg,3,-1
-            a = zz*a + p(deg-k+2)
+        do k=deg,1,-1
+            c = zz*c + b
             b = zz*b + a
-            c = zz*c + (k-2)*a
+            a = zz*a + p(deg-k+2)
             berr = rr*berr + ralpha(k)
         end do
-        a = zz*a + p(deg)
-        b = zz*b + a
-        berr = rr*berr + ralpha(2)
-        a = zz*a + p(deg+1)
-        berr = rr*berr + ralpha(1)
         if(abs(a)<eps*berr) then
             cond = berr/(rr*abs(b))
             berr = abs(a)/berr
@@ -206,20 +201,15 @@ contains
         
         ! main
         a = p(deg+1)
-        b = a
-        c = (deg-1)*a
+        b = 0
+        c = 0
         berr = alpha(deg+1)
-        do k=deg,3,-1
-            a = z*a + p(k)
+        do k=deg,1,-1
+            c = z*c + b
             b = z*b + a
-            c = z*c + (k-2)*a
+            a = z*a + p(k)
             berr = r*berr + alpha(k)
-        end do
-        a = z*a + p(2)
-        b = z*b + a
-        berr = r*berr + alpha(2)
-        a = z*a + p(1)
-        berr = r*berr + alpha(1)  
+        end do 
         if(abs(a)<eps*berr) then
             cond = berr/(r*abs(b))
             berr = abs(a)/berr
