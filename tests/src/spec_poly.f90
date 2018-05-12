@@ -37,17 +37,17 @@ program spec_poly
     ! Poly 1: Wilkinson deg 10
     deg = 10
     allocate(exact_roots(deg), p(deg+1), err(deg))
-    p(1) = 3628800D0
-    p(2) = -10628640D0
-    p(3) = 12753576D0
-    p(4) = -8409500D0
-    p(5) = 3416930D0
-    p(6) = -902055D0
-    p(7) = 157773D0
-    p(8) = -18150D0
-    p(9) = 1320D0
-    p(10) = -55D0
-    p(11) = 1D0
+    p(1) = 3628800d0
+    p(2) = -10628640d0
+    p(3) = 12753576d0
+    p(4) = -8409500d0
+    p(5) = 3416930d0
+    p(6) = -902055d0
+    p(7) = 157773d0
+    p(8) = -18150d0
+    p(9) = 1320d0
+    p(10) = -55d0
+    p(11) = 1d0
     exact_roots = (/ (cmplx(j,0,kind=dp), j=1,deg)/)
     write(1, '(A)', advance='no') '1, '
     ! FPML
@@ -68,7 +68,7 @@ program spec_poly
     deallocate(zeros, radius, h)
     ! AMVW
     allocate(coeffs(deg+1), eigs(deg), residuals(deg))
-    coeffs = (/ (dble(p(deg-j+1)), j=0,deg)/)
+    coeffs = (/ (p(deg-j+1), j=0,deg)/)
     call z_poly_roots(deg, coeffs, eigs, residuals, flag)
     call sort(eigs, exact_roots, deg)
     err = (/ (abs(eigs(j)-exact_roots(j))/abs(exact_roots(j)), j=1,deg)/)
@@ -79,22 +79,22 @@ program spec_poly
     ! Poly 2: Wilkinson deg 15
     deg = 15
     allocate(exact_roots(deg), p(deg+1), err(deg))
-    p(1) = -1307674368000D0
-    p(2) = 4339163001600D0
-    p(3) = -6165817614720D0
-    p(4) = 5056995703824D0
-    p(5) = -2706813345600D0
-    p(6) = 1009672107080D0
-    p(7) = -272803210680D0
-    p(8) = 54631129553D0
-    p(9) = -8207628000D0
-    p(10) = 928095740D0
-    p(11) = -78558480D0
-    p(12) = 4899622D0
-    p(13) = -218400D0
-    p(14) = 6580D0
-    p(15) = -120D0
-    p(16) = 1D0
+    p(1) = -1307674368000d0
+    p(2) = 4339163001600d0
+    p(3) = -6165817614720d0
+    p(4) = 5056995703824d0
+    p(5) = -2706813345600d0
+    p(6) = 1009672107080d0
+    p(7) = -272803210680d0
+    p(8) = 54631129553d0
+    p(9) = -8207628000d0
+    p(10) = 928095740d0
+    p(11) = -78558480d0
+    p(12) = 4899622d0
+    p(13) = -218400d0
+    p(14) = 6580d0
+    p(15) = -120d0
+    p(16) = 1d0
     exact_roots = (/ (cmplx(j,0,kind=dp), j=1,deg)/)
     write(1, '(A)', advance='no') '2, '
     ! FPML
@@ -115,7 +115,7 @@ program spec_poly
     deallocate(zeros, radius, h)
     ! AMVW
     allocate(coeffs(deg+1), eigs(deg), residuals(deg))
-    coeffs = (/ (dble(p(deg-j+1)), j=0,deg)/)
+    coeffs = (/ (p(deg-j+1), j=0,deg)/)
     call z_poly_roots(deg, coeffs, eigs, residuals, flag)
     call sort(eigs, exact_roots, deg)
     err = (/ (abs(eigs(j)-exact_roots(j))/abs(exact_roots(j)), j=1,deg)/)
@@ -126,27 +126,27 @@ program spec_poly
     ! Poly 3: Wilkinson deg 20
     deg = 20
     allocate(exact_roots(deg), p(deg+1), err(deg))
-    p(1) = 2432902008176640000D0
-    p(2) = -8752948036761600000D0
-    p(3) = 13803759753640704000D0
-    p(4) = -12870931245150988800D0
-    p(5) = 8037811822645051776D0
-    p(6) = -3599979517947607200D0
-    p(7) = 1206647803780373360D0
-    p(8) = -311333643161390640D0
-    p(9) = 63030812099294896D0
-    p(10) = -10142299865511450D0
-    p(11) = 1307535010540395D0
-    p(12) = -135585182899530D0
-    p(13) = 11310276995381D0
-    p(14) = -756111184500D0
-    p(15) = 40171771630D0
-    p(16) = -1672280820D0
-    p(17) = 53327946D0
-    p(18) = -1256850D0
-    p(19) = 20615D0
-    p(20) = -210D0
-    p(21) = 1D0
+    p(1) = 2432902008176640000d0
+    p(2) = -8752948036761600000d0
+    p(3) = 13803759753640704000d0
+    p(4) = -12870931245150988800d0
+    p(5) = 8037811822645051776d0
+    p(6) = -3599979517947607200d0
+    p(7) = 1206647803780373360d0
+    p(8) = -311333643161390640d0
+    p(9) = 63030812099294896d0
+    p(10) = -10142299865511450d0
+    p(11) = 1307535010540395d0
+    p(12) = -135585182899530d0
+    p(13) = 11310276995381d0
+    p(14) = -756111184500d0
+    p(15) = 40171771630d0
+    p(16) = -1672280820d0
+    p(17) = 53327946d0
+    p(18) = -1256850d0
+    p(19) = 20615d0
+    p(20) = -210d0
+    p(21) = 1d0
     exact_roots = (/ (cmplx(j,0,kind=dp), j=1,deg)/)
     write(1, '(A)', advance='no') '3, '
     ! FPML
@@ -167,7 +167,7 @@ program spec_poly
     deallocate(zeros, radius, h)
     ! AMVW
     allocate(coeffs(deg+1), eigs(deg), residuals(deg))
-    coeffs = (/ (dble(p(deg-j+1)), j=0,deg)/)
+    coeffs = (/ (p(deg-j+1), j=0,deg)/)
     call z_poly_roots(deg, coeffs, eigs, residuals, flag)
     call sort(eigs, exact_roots, deg)
     err = (/ (abs(eigs(j)-exact_roots(j))/abs(exact_roots(j)), j=1,deg)/)
@@ -178,28 +178,28 @@ program spec_poly
     ! Poly 4: scaled and shifted Wilkinson deg 20
     deg = 20
     allocate(exact_roots(deg), p(deg+1), err(deg))
-    p(1) = -758069338497471D0/160000000000000000D0
-    p(2) = -1899923154129D0/400000000000000D0
-    p(3) = 2280736816325919D0/4000000000000000D0
-    p(4) = 11456073304317D0/20000000000000D0
-    p(5) = -102724049585427219D0/10000000000000000D0
-    p(6) = -65260688438889D0/6250000000000D0
-    p(7) = 163007395518693D0/2500000000000D0
-    p(8) = 4248959006581D0/62500000000D0
-    p(9) = -94957438655047D0/500000000000D0
-    p(10) = -259286608191D0/1250000000D0
-    p(11) = 141135792837D0/500000000D0
-    p(12) = 4187079039D0/12500000D0
-    p(13) = -10834566327D0/50000000D0
-    p(14) = -18824117D0/62500D0
-    p(15) = 1867909D0/25000D0
-    p(16) = 93993D0/625D0
-    p(17) = -10659D0/10000D0
-    p(18) = -969/25D0
-    p(19) = -57D0/10D0
-    p(20) = 4D0
-    p(21) = 1D0
-    exact_roots = (/ (cmplx(-2.1D0+0.2D0*(j-1),0,kind=dp), j=1,deg)/)
+    p(1) = -4.73793336560919375d-3
+    p(2) = -4.74980788532250000d-3
+    p(3) = 5.70184204081479750d-1
+    p(4) = 5.72803665215850000d-1
+    p(5) = -1.02724049585427219d+1
+    p(6) = -1.04417101502222400d+1
+    p(7) = 6.52029582074772000d+1
+    p(8) = 6.79833441052960000d+1
+    p(9) = -1.89914877310094000d+2
+    p(10) = -2.07429286552800000d+2
+    p(11) = 2.82271585674000000d+2
+    p(12) = 3.34966323120000000d+2
+    p(13) = -2.16691326540000000d+2
+    p(14) = -3.01185872000000000d+2
+    p(15) = 7.47163600000000000d+1
+    p(16) = 1.50388800000000000d+2
+    p(17) = -1.06590000000000000d0
+    p(18) = -3.87600000000000000d+1
+    p(19) = -5.70000000000000000d0
+    p(20) = 4.00000000000000000d0
+    p(21) = 1.00000000000000000d0
+    exact_roots = (/ (cmplx(dble(-21+2*(j-1))/10d0,0,kind=dp), j=1,deg)/)
     write(1, '(A)', advance='no') '4, '
     ! FPML
     allocate(roots(deg), berr(deg), cond(deg))
@@ -219,7 +219,7 @@ program spec_poly
     deallocate(zeros, radius, h)
     ! AMVW
     allocate(coeffs(deg+1), eigs(deg), residuals(deg))
-    coeffs = (/ (dble(p(deg-j+1)), j=0,deg)/)
+    coeffs = (/ (p(deg-j+1), j=0,deg)/)
     call z_poly_roots(deg, coeffs, eigs, residuals, flag)
     call sort(eigs, exact_roots, deg)
     err = (/ (abs(eigs(j)-exact_roots(j))/abs(exact_roots(j)), j=1,deg)/)
@@ -230,18 +230,18 @@ program spec_poly
     ! Poly 5: reverse Wilkinson deg 10
     deg = 10
     allocate(exact_roots(deg), p(deg+1), err(deg))
-    p(1) = 1D0/3628800D0
-    p(2) = -11D0/725760D0
-    p(3) = 11D0/30240D0
-    p(4) = -121D0/24192D0
-    p(5) = 7513D0/172800D0
-    p(6) = -8591D0/34560D0
-    p(7) = 341693D0/362880D0
-    p(8) = -84095D0/36288D0
-    p(9) = 177133D0/50400D0
-    p(10) = -7381D0/2520D0
-    p(11) = 1D0
-    exact_roots = (/ (cmplx(1.0D0/dble(deg-j+1),0,kind=dp), j=1,deg)/)
+    p(1) = 2.7557319223985890653d-7
+    p(2) = -1.5156525573192239859d-5
+    p(3) = 3.6375661375661375661d-4
+    p(4) = -5.0016534391534391534d-3
+    p(5) = 4.3478009259259259259d-2
+    p(6) = -2.4858217592592592593d-1
+    p(7) = 9.4161430776014109347d-1
+    p(8) = -2.3174327601410934744d0
+    p(9) = 3.5145436507936507937d0
+    p(10) = -2.9289682539682539683d0
+    p(11) = 1.0000000000000000000d0
+    exact_roots = (/ (cmplx(1d0/dble(j),0,kind=dp), j=1,deg)/)
     write(1, '(A)', advance='no') '5, '
     ! FPML
     allocate(roots(deg), berr(deg), cond(deg))
@@ -261,7 +261,7 @@ program spec_poly
     deallocate(zeros, radius, h)
     ! AMVW
     allocate(coeffs(deg+1), eigs(deg), residuals(deg))
-    coeffs = (/ (dble(p(deg-j+1)), j=0,deg)/)
+    coeffs = (/ (p(deg-j+1), j=0,deg)/)
     call z_poly_roots(deg, coeffs, eigs, residuals, flag)
     call sort(eigs, exact_roots, deg)
     err = (/ (abs(eigs(j)-exact_roots(j))/abs(exact_roots(j)), j=1,deg)/)
@@ -272,23 +272,23 @@ program spec_poly
     ! Poly 6: reverse Wilkinson deg 15
     deg = 15
     allocate(exact_roots(deg), p(deg+1), err(deg))
-    p(1) = -1D0/1307674368000D0
-    p(2) = 1D0/10897286400D0
-    p(3) = -47D0/9340531200D0
-    p(4) = 1D0/5987520D0
-    p(5) = -26921D0/7185024000D0
-    p(6) = 109D0/1814400D0
-    p(7) = -324509D0/457228800D0
-    p(8) = 4783D0/762048D0
-    p(9) = -54576553D0/1306368000D0
-    p(10) = 2271089D0/10886400D0
-    p(11) = -277382447D0/359251200D0
-    p(12) = 2065639D0/997920D0
-    p(13) = -35118025721D0/9081072000D0
-    p(14) = 13215487D0/2802800D0
-    p(15) = -1195757D0/360360D0
-    p(16) = 1D0
-    exact_roots = (/ (cmplx(1.0D0/dble(deg-j+1),0,kind=dp), j=1,deg)/)
+    p(1) = -7.6471637318198164759d-13
+    p(2) = 9.1765964781837797711d-11
+    p(3) = -5.0318337355374392411d-9
+    p(4) = 1.6701405590294479183d-7
+    p(5) = -3.7468211658026472841d-6
+    p(6) = 6.0074955908289241623d-5
+    p(7) = -7.0973000825844741189d-4
+    p(8) = 6.2765075165868816662d-3
+    p(9) = -4.1777319254605134235d-2
+    p(10) = 2.0861708186360964139d-1
+    p(11) = -7.7211279182922701441d-1
+    p(12) = 2.0699444845278178612d0
+    p(13) = -3.8671674138251519204d0
+    p(14) = 4.7151016840302554588d0
+    p(15) = -3.3182289932289932290d0
+    p(16) = 1.0000000000000000000d0
+    exact_roots = (/ (cmplx(1d0/dble(j),0,kind=dp), j=1,deg)/)
     write(1, '(A)', advance='no') '6, '
     ! FPML
     allocate(roots(deg), berr(deg), cond(deg))
@@ -308,7 +308,7 @@ program spec_poly
     deallocate(zeros, radius, h)
     ! AMVW
     allocate(coeffs(deg+1), eigs(deg), residuals(deg))
-    coeffs = (/ (dble(p(deg-j+1)), j=0,deg)/)
+    coeffs = (/ (p(deg-j+1), j=0,deg)/)
     call z_poly_roots(deg, coeffs, eigs, residuals, flag)
     call sort(eigs, exact_roots, deg)
     err = (/ (abs(eigs(j)-exact_roots(j))/abs(exact_roots(j)), j=1,deg)/)
@@ -319,28 +319,28 @@ program spec_poly
     ! Poly 7: reverse Wilkinson deg 20
     deg = 20
     allocate(exact_roots(deg), p(deg+1), err(deg))
-    p(1) = 1D0/2432902008176640000D0
-    p(2) = -1D0/11585247657984000D0
-    p(3) = 31D0/3658499260416000D0
-    p(4) = -1D0/1935713894400D0
-    p(5) = 3931D0/179338199040000D0
-    p(6) = -587D0/853991424000D0
-    p(7) = 12437081D0/753220435968000D0
-    p(8) = -31849D0/102478970880D0
-    p(9) = 384794917D0/82771476480000D0
-    p(10) = -7321967D0/131383296000D0
-    p(11) = 2965638101D0/5518098432000D0
-    p(12) = -109542331D0/26276659200D0
-    p(13) = 12196364570297D0/470762772480000D0
-    p(14) = -573738838201D0/4483454976000D0
-    p(15) = 6670985204447D0/13450364928000D0
-    p(16) = -6670985204447D0/13450364928000D0
-    p(17) = 52460655692911D0/15878903040000D0
-    p(18) = -13334148911D0/2520460800D0
-    p(19) = 665690574539D0/117327450240D0
-    p(20) = -55835135D0/15519504D0
-    p(21) = 1D0
-    exact_roots = (/ (cmplx(1.0D0/dble(deg-j+1),0,kind=dp), j=1,deg)/)
+    p(1) = 4.1103176233121648585d-19
+    p(2) = -8.6316670089555462028d-17
+    p(3) = 8.4734197804580278558d-15
+    p(4) = -5.1660527048598944024d-13
+    p(5) = 2.1919479625883946872d-11
+    p(6) = -6.8736053255729181655d-10
+    p(7) = 1.6511874089046065090d-8
+    p(8) = -3.1078571268337857844d-7
+    p(9) = 4.6488830858656684917d-6
+    p(10) = -5.5729816673194132685d-5
+    p(11) = 5.3743841969218428034d-4
+    p(12) = -4.1688073878128312445d-3
+    p(13) = 2.5907665778340944144d-2
+    p(14) = -1.2796801602162448034d-1
+    p(15) = 4.9597057330093876840d-1
+    p(16) = -1.4797059256182881762d0
+    p(17) = 3.3037959587484829179d0
+    p(18) = -5.2903615525383294991d0
+    p(19) = 5.6737836983356572771d0
+    p(20) = -3.5977396571436819115d0
+    p(21) = 1.0000000000000000000d0
+    exact_roots = (/ (cmplx(1d0/dble(j),0,kind=dp), j=1,deg)/)
     write(1, '(A)', advance='no') '7, '
     ! FPML
     allocate(roots(deg), berr(deg), cond(deg))
@@ -360,7 +360,7 @@ program spec_poly
     deallocate(zeros, radius, h)
     ! AMVW
     allocate(coeffs(deg+1), eigs(deg), residuals(deg))
-    coeffs = (/ (dble(p(deg-j+1)), j=0,deg)/)
+    coeffs = (/ (p(deg-j+1), j=0,deg)/)
     call z_poly_roots(deg, coeffs, eigs, residuals, flag)
     call sort(eigs, exact_roots, deg)
     err = (/ (abs(eigs(j)-exact_roots(j))/abs(exact_roots(j)), j=1,deg)/)
@@ -371,28 +371,28 @@ program spec_poly
     ! Poly 8: prescribed roots of varying scale deg 20
     deg = 20
     allocate(exact_roots(deg), p(deg+1), err(deg))
-    p(1) = 1D0/1024D0
-    p(2) = -1048575D0/524288D0
-    p(3) = 183251413675D0/134217728D0
-    p(4) = -6862582190715075D0/17179869184D0
-    p(5) = 59965700687947706355D0/1099511627776D0
-    p(6) = -126769425631762997934675D0/35184372088832D0
-    p(7) = 65934186820253621481357075D0/562949953421312D0
-    p(8) = -8505510099812717171095062675D0/4503599627370496D0
-    p(9) = 273210326382611632738979052435D0/18014398509481984D0
-    p(10) = -2189425218271613769209626653075D0/36028797018963968D0
-    p(11) = 4380990637147598617372537398675D0/36028797018963968D0
-    p(12) = -2189425218271613769209626653075D0/18014398509481984D0
-    p(13) = 273210326382611632738979052435D0/4503599627370496D0
-    p(14) = -8505510099812717171095062675D0/562949953421312D0
-    p(15) = 65934186820253621481357075D0/35184372088832D0
-    p(16) = -126769425631762997934675D0/1099511627776D0
-    p(17) = 59965700687947706355D0/17179869184D0
-    p(18) = -6862582190715075D0/134217728D0
-    p(19) = 183251413675D0/524288D0
-    p(20) = -1048575D0/1024D0
-    p(21) = 1D0
-    exact_roots = (/ (cmplx(2.0D0**(-10+(j-1)),0,kind=dp), j=1,deg)/)
+    p(1) = 9.7656250000000000000d-4
+    p(2) = -1.9999980926513671875d0
+    p(3) = 1.3653294270858168602d+3
+    p(4) = -3.9945485714794340311d+5
+    p(5) = 5.4538487063789676863d+7
+    p(6) = -3.6030037799651778964d+9
+    p(7) = 1.1712264370845137315d+11
+    p(8) = -1.8886026297987783920d+12
+    p(9) = 1.5166219745766464518d+13
+    p(10) = -6.0768757200502614680d+13
+    p(11) = 1.2159691690071246554d+14
+    p(12) = -1.2153751440100522936d+14
+    p(13) = 6.0664878983065858073d+13
+    p(14) = -1.5108821038390227136d+13
+    p(15) = 1.8739622993352219703d+12
+    p(16) = -1.1529612095888569268d+11
+    p(17) = 3.4904631720825393192d+9
+    p(18) = -5.1130221714936755598d+7
+    p(19) = 3.4952433333396911621d+5
+    p(20) = -1.0239990234375000000d+3
+    p(21) = 1.0000000000000000000d0
+    exact_roots = (/ (cmplx(2d0**(-10+(j-1)),0,kind=dp), j=1,deg)/)
     write(1, '(A)', advance='no') '8, '
     ! FPML
     allocate(roots(deg), berr(deg), cond(deg))
@@ -412,7 +412,7 @@ program spec_poly
     deallocate(zeros, radius, h)
     ! AMVW
     allocate(coeffs(deg+1), eigs(deg), residuals(deg))
-    coeffs = (/ (dble(p(deg-j+1)), j=0,deg)/)
+    coeffs = (/ (p(deg-j+1), j=0,deg)/)
     call z_poly_roots(deg, coeffs, eigs, residuals, flag)
     call sort(eigs, exact_roots, deg)
     err = (/ (abs(eigs(j)-exact_roots(j))/abs(exact_roots(j)), j=1,deg)/)
@@ -423,28 +423,28 @@ program spec_poly
     ! Poly 9: prescribed roots of varying scale -3 deg 20
     deg = 20
     allocate(exact_roots(deg), p(deg+1), err(deg))
-    p(1) = 2765140455576880316286330097421875D0/18014398509481984D0
-    p(2) = 20003336218539558834627071739613125D0/36028797018963968D0
-    p(3) = 26504589049384252861409184537893125D0/36028797018963968D0
-    p(4) = 4809495595975287378276611244229875D0/18014398509481984D0
-    p(5) = -1857674437365958001629359052983525D0/4503599627370496D0
-    p(6) = -11698953582630728570229643313343213D0/18014398509481984D0
-    p(7) = -7974397567058086827152963496557445D0/18014398509481984D0
-    p(8) = -776358156363835911942964026680595D0/4503599627370496D0
-    p(9) = -641441959755400789084497279447735D0/18014398509481984D0
-    p(10) = -27650873494903018971933761124915D0/36028797018963968D0
-    p(11) = 57063078564052886214162370894557D0/36028797018963968D0
-    p(12) = 7079170685683534011791963440605D0/18014398509481984D0
-    p(13) = 144483000592453610567900626155D0/4503599627370496D0
-    p(14) = -974289645931023019776572595D0/562949953421312D0
-    p(15) = -14061288187707477104464845D0/35184372088832D0
-    p(16) = -3248268654710998505043D0/1099511627776D0
-    p(17) = 22981827635371262835D0/17179869184D0
-    p(18) = -4536701774077635D0/134217728D0
-    p(19) = 153546333355D0/524288D0
-    p(20) = -987135D0/1024D0
-    p(21) = 1D0
-    exact_roots = (/ (cmplx(2.0D0**(-10+(j-1))-3.0D0,0,kind=dp), j=1,deg)/)
+    p(1) = 1.5349613000519736851d+17
+    p(2) = 5.5520411097852325851d+17
+    p(3) = 7.3565012552135469363d+17
+    p(4) = 2.6698063737425267052d+17
+    p(5) = -4.1248658652425396234d+17
+    p(6) = -6.4942238157287993484d+17
+    p(7) = -4.4266798932313593679d+17
+    p(8) = -1.7238614011013362591d+17
+    p(9) = -3.5607181634056450042d+16
+    p(10) = -7.6746591012597006809d+14
+    p(11) = 1.5838185919451432452d+15
+    p(12) = 3.9297291452486582463d+14
+    p(13) = 3.2081670784934426381d+13
+    p(14) = -1.7306860761064211470d+12
+    p(15) = -3.9964584708819407707d+11
+    p(16) = -2.9542831313947303943d+9
+    p(17) = 1.3377184301714449443d+9
+    p(18) = -3.3801062211972735822d+7
+    p(19) = 2.9286638899803161621d+5
+    p(20) = -9.6399902343750000000d+2
+    p(21) = 1.0000000000000000000d0
+    exact_roots = (/ (cmplx(2d0**(-10+(j-1))-3d0,0,kind=dp), j=1,deg)/)
     write(1, '(A)', advance='no') '9, '
     ! FPML
     allocate(roots(deg), berr(deg), cond(deg))
@@ -464,7 +464,7 @@ program spec_poly
     deallocate(zeros, radius, h)
     ! AMVW
     allocate(coeffs(deg+1), eigs(deg), residuals(deg))
-    coeffs = (/ (dble(p(deg-j+1)), j=0,deg)/)
+    coeffs = (/ (p(deg-j+1), j=0,deg)/)
     call z_poly_roots(deg, coeffs, eigs, residuals, flag)
     call sort(eigs, exact_roots, deg)
     err = (/ (abs(eigs(j)-exact_roots(j))/abs(exact_roots(j)), j=1,deg)/)
@@ -475,28 +475,28 @@ program spec_poly
     ! Poly 10: Chebyshev polynomial deg 20
     deg = 20
     allocate(exact_roots(deg), p(deg+1), err(deg))
-    p(1) = 1D0
-    p(2) = 0D0
-    p(3) = -200D0
-    p(4) = 0D0
-    p(5) = 6600D0
-    p(6) = 0D0
-    p(7) = -84480D0
-    p(8) = 0D0
-    p(9) = 549120D0
-    p(10) = 0D0
-    p(11) = -2050048D0
-    p(12) = 0D0
-    p(13) = 4659200D0
-    p(14) = 0D0
-    p(15) = -6553600D0
-    p(16) = 0D0
-    p(17) = 5570560D0
-    p(18) = 0D0
-    p(19) = -2621440D0
-    p(20) = 0D0
-    p(21) = 524288D0
-    exact_roots = (/ (cmplx(cos((2.0D0*j-1.0D0)*pi/40D0),0,kind=dp), j=1,deg)/)
+    p(1) = 1d0
+    p(2) = 0d0
+    p(3) = -200d0
+    p(4) = 0d0
+    p(5) = 6600d0
+    p(6) = 0d0
+    p(7) = -84480d0
+    p(8) = 0d0
+    p(9) = 549120d0
+    p(10) = 0d0
+    p(11) = -2050048d0
+    p(12) = 0d0
+    p(13) = 4659200d0
+    p(14) = 0d0
+    p(15) = -6553600d0
+    p(16) = 0d0
+    p(17) = 5570560d0
+    p(18) = 0d0
+    p(19) = -2621440d0
+    p(20) = 0d0
+    p(21) = 524288d0
+    exact_roots = (/ (cmplx(cos((2*j-1)*pi/40d0),0,kind=dp), j=1,deg)/)
     write(1, '(A)', advance='no') '10, '
     ! FPML
     allocate(roots(deg), berr(deg), cond(deg))
@@ -516,7 +516,7 @@ program spec_poly
     deallocate(zeros, radius, h)
     ! AMVW
     allocate(coeffs(deg+1), eigs(deg), residuals(deg))
-    coeffs = (/ (dble(p(deg-j+1)), j=0,deg)/)
+    coeffs = (/ (p(deg-j+1)/p(deg+1), j=0,deg)/)
     call z_poly_roots(deg, coeffs, eigs, residuals, flag)
     call sort(eigs, exact_roots, deg)
     err = (/ (abs(eigs(j)-exact_roots(j))/abs(exact_roots(j)), j=1,deg)/)
@@ -528,7 +528,7 @@ program spec_poly
     deg = 20
     allocate(exact_roots(deg), p(deg+1), err(deg))
     p = (/ (cmplx(1,0,kind=dp), j=1,deg+1)/)
-    exact_roots = (/ (cmplx(cos(2.0D0*j*pi/21.0D0),sin(2.0D0*j*pi/21.0D0),kind=dp), j=1,deg)/)
+    exact_roots = (/ (cmplx(cos(2*j*pi/21d0),sin(2*j*pi/21d0),kind=dp), j=1,deg)/)
     write(1, '(A)', advance='no') '11, '
     ! FPML
     allocate(roots(deg), berr(deg), cond(deg))
@@ -627,7 +627,7 @@ program spec_poly
     deallocate(zeros, radius, h)
     ! AMVW
     allocate(coeffs(deg+1), eigs(deg), residuals(deg))
-    coeffs = (/ (dble(p(deg-j+1)), j=0,deg)/)
+    coeffs = (/ (p(deg-j+1), j=0,deg)/)
     call z_poly_roots(deg, coeffs, eigs, residuals, flag)
     call sort(eigs, exact_roots, deg)
     err = (/ (abs(eigs(j)-exact_roots(j))/abs(exact_roots(j)), j=1,deg)/)
@@ -720,7 +720,7 @@ program spec_poly
     deallocate(zeros, radius, h)
     ! AMVW
     allocate(coeffs(deg+1), eigs(deg), residuals(deg))
-    coeffs = (/ (dble(p(deg-j+1)), j=0,deg)/)
+    coeffs = (/ (p(deg-j+1), j=0,deg)/)
     call z_poly_roots(deg, coeffs, eigs, residuals, flag)
     call sort(eigs, exact_roots, deg)
     err = (/ (abs(eigs(j)-exact_roots(j))/abs(exact_roots(j)), j=1,deg)/)
@@ -929,7 +929,7 @@ program spec_poly
     deallocate(zeros, radius, h)
     ! AMVW
     allocate(coeffs(deg+1), eigs(deg), residuals(deg))
-    coeffs = (/ (dble(p(deg-j+1)), j=0,deg)/)
+    coeffs = (/ (p(deg-j+1), j=0,deg)/)
     call z_poly_roots(deg, coeffs, eigs, residuals, flag)
     call sort(eigs, exact_roots, deg)
     err = (/ (abs(eigs(j)-exact_roots(j))/abs(exact_roots(j)), j=1,deg)/)
@@ -966,7 +966,7 @@ program spec_poly
     deallocate(zeros, radius, h)
     ! AMVW
     allocate(coeffs(deg+1), eigs(deg), residuals(deg))
-    coeffs = (/ (dble(p(deg-j+1)), j=0,deg)/)
+    coeffs = (/ (p(deg-j+1), j=0,deg)/)
     call z_poly_roots(deg, coeffs, eigs, residuals, flag)
     call sort(eigs, exact_roots, deg)
     err = (/ (abs(eigs(j)-exact_roots(j))/abs(exact_roots(j)), j=1,deg)/)
@@ -1003,7 +1003,7 @@ program spec_poly
     deallocate(zeros, radius, h)
     ! AMVW
     allocate(coeffs(deg+1), eigs(deg), residuals(deg))
-    coeffs = (/ (dble(p(deg-j+1)), j=0,deg)/)
+    coeffs = (/ (p(deg-j+1), j=0,deg)/)
     call z_poly_roots(deg, coeffs, eigs, residuals, flag)
     call sort(eigs, exact_roots, deg)
     err = (/ (abs(eigs(j)-exact_roots(j))/abs(exact_roots(j)), j=1,deg)/)
@@ -1040,7 +1040,7 @@ program spec_poly
     deallocate(zeros, radius, h)
     ! AMVW
     allocate(coeffs(deg+1), eigs(deg), residuals(deg))
-    coeffs = (/ (dble(p(deg-j+1)), j=0,deg)/)
+    coeffs = (/ (p(deg-j+1), j=0,deg)/)
     call z_poly_roots(deg, coeffs, eigs, residuals, flag)
     call sort(eigs, exact_roots, deg)
     err = (/ (abs(eigs(j)-exact_roots(j))/abs(exact_roots(j)), j=1,deg)/)
@@ -1077,7 +1077,7 @@ program spec_poly
     deallocate(zeros, radius, h)
     ! AMVW
     allocate(coeffs(deg+1), eigs(deg), residuals(deg))
-    coeffs = (/ (dble(p(deg-j+1)), j=0,deg)/)
+    coeffs = (/ (p(deg-j+1), j=0,deg)/)
     call z_poly_roots(deg, coeffs, eigs, residuals, flag)
     call sort(eigs, exact_roots, deg)
     err = (/ (abs(eigs(j)-exact_roots(j))/abs(exact_roots(j)), j=1,deg)/)
@@ -1088,17 +1088,17 @@ program spec_poly
     ! Poly 19: Jenkins Traub p3(z) deg 10
     deg = 10
     allocate(exact_roots(deg), p(deg+1), err(deg))
-    p(1) = 1d-55
-    p(2) = -1111111111d-54
-    p(3) = 11223344544332211d-52
-    p(4) = -1123457901110987543211d-49
-    p(5) = 1123570145779775409653211d-45
-    p(6) = -11235802580122097519753211d-40
-    p(7) = 1123570145779775409653211d-34
-    p(8) = -1123457901110987543211d-27
-    p(9) = 11223344544332211d-19
-    p(10) = -1111111111d-10
-    p(11) = 1d0
+    p(1) = 1.0000000000000000000d-55
+    p(2) = -1.1111111110000000000d-45
+    p(3) = 1.1223344544332211000d-36
+    p(4) = -1.1234579011109875432d-28
+    p(5) = 1.1235701457797754097d-21
+    p(6) = -1.1235802580122097520d-15
+    p(7) = 1.1235701457797754097d-10
+    p(8) = -1.1234579011109875432d-6
+    p(9) = 1.1223344544332211000d-3
+    p(10) = -1.1111111110000000000d-1
+    p(11) = 1.0000000000000000000d0
     exact_roots(1) = cmplx(1d-1,0d0,kind=dp)
     exact_roots(2) = cmplx(1d-2,0d0,kind=dp)
     exact_roots(3) = cmplx(1d-3,0d0,kind=dp)
@@ -1128,7 +1128,7 @@ program spec_poly
     deallocate(zeros, radius, h)
     ! AMVW
     allocate(coeffs(deg+1), eigs(deg), residuals(deg))
-    coeffs = (/ (dble(p(deg-j+1)), j=0,deg)/)
+    coeffs = (/ (p(deg-j+1), j=0,deg)/)
     call z_poly_roots(deg, coeffs, eigs, residuals, flag)
     call sort(eigs, exact_roots, deg)
     err = (/ (abs(eigs(j)-exact_roots(j))/abs(exact_roots(j)), j=1,deg)/)
@@ -1139,27 +1139,27 @@ program spec_poly
     ! Poly 20: Jenkins Traub p3(z) deg 20
     deg = 20
     allocate(exact_roots(deg), p(deg+1), err(deg))
-    p(1) = 1d-210
-    p(2) = -11111111111111111111d-209
-    p(3) = 1122334455667789000998877665544332211d-207
-    p(4) = -1123457913581370370246789999876419629630753087543211d-204
-    p(5) = 11235702706084312021324241064733632634892020089799126949619653211d-200
-    p(6) = -1123581506423495324728644332073563785884650208145667802719791621024940753211d-195
-    p(7) = 1123582630006124207271345179923418980659298793880675798745382220739358772778151753211d-189
-    p(8) = -11235827423643872078837659070579369730011968598105551868129620952775808467140290310261753211d-182
-    p(9) = 1123582753600102385610553324442681840837309474486349811990479159663691147141412744355631361753211d-174
-    p(10) = -1123582754722561557579514779636586067149452859794965362310958172162658840144407893352897842361753211d-165
-    p(11) = 11235827548236840055146575646122566758143126667049021003834987285778991312805712180795108852361753211d-155
-    p(12) = -1123582754722561557579514779636586067149452859794965362310958172162658840144407893352897842361753211d-144
-    p(13) = 1123582753600102385610553324442681840837309474486349811990479159663691147141412744355631361753211d-132
-    p(14) = -11235827423643872078837659070579369730011968598105551868129620952775808467140290310261753211d-119
-    p(15) = 1123582630006124207271345179923418980659298793880675798745382220739358772778151753211d-105
-    p(16) = -1123581506423495324728644332073563785884650208145667802719791621024940753211d-90
-    p(17) = 11235702706084312021324241064733632634892020089799126949619653211d-74
-    p(18) = -1123457913581370370246789999876419629630753087543211d-57
-    p(19) = 1122334455667789000998877665544332211d-39
-    p(20) = -11111111111111111111d-20
-    p(21) = 1d0
+    p(1) = 1.0000000000000000000d-210
+    p(2) = -1.1111111111111111111d-190
+    p(3) = 1.1223344556677890010d-171
+    p(4) = -1.1234579135813703702d-153
+    p(5) = 1.1235702706084312021d-136
+    p(6) = -1.1235815064234953247d-120
+    p(7) = 1.1235826300061242073d-105
+    p(8) = -1.1235827423643872079d-91
+    p(9) = 1.1235827536001023856d-78
+    p(10) = -1.1235827547225615576d-66
+    p(11) = 1.1235827548236840055d-55
+    p(12) = -1.1235827547225615576d-45
+    p(13) = 1.1235827536001023856d-36
+    p(14) = -1.1235827423643872079d-28
+    p(15) = 1.1235826300061242073d-21
+    p(16) = -1.1235815064234953247d-15
+    p(17) = 1.1235702706084312021d-10
+    p(18) = -1.1234579135813703702d-6
+    p(19) = 1.1223344556677890010d-3
+    p(20) = -1.1111111111111111111d-1
+    p(21) = 1.0000000000000000000d0
     exact_roots(1) = cmplx(1d-1,0d0,kind=dp)
     exact_roots(2) = cmplx(1d-2,0d0,kind=dp)
     exact_roots(3) = cmplx(1d-3,0d0,kind=dp)
@@ -1199,7 +1199,7 @@ program spec_poly
     deallocate(zeros, radius, h)
     ! AMVW
     allocate(coeffs(deg+1), eigs(deg), residuals(deg))
-    coeffs = (/ (dble(p(deg-j+1)), j=0,deg)/)
+    coeffs = (/ (p(deg-j+1), j=0,deg)/)
     call z_poly_roots(deg, coeffs, eigs, residuals, flag)
     call sort(eigs, exact_roots, deg)
     err = (/ (abs(eigs(j)-exact_roots(j))/abs(exact_roots(j)), j=1,deg)/)
@@ -1207,16 +1207,22 @@ program spec_poly
     deallocate(coeffs, eigs, residuals)
     ! deallocate polynomial arrays
     deallocate(exact_roots, p, err)
-    ! Poly 21: Jenkins Traub p10(z) with a=1e+4
-    deg = 3
+    ! Poly 21: Jenkins Traub p4(z)
+    deg = 6
     allocate(exact_roots(deg), p(deg+1), err(deg))
-    p(1) = -1d0
-    p(2) = 100010001d-4
-    p(3) = -100010001d-4
-    p(4) = 1d0
-    exact_roots(1) = 1d+4
-    exact_roots(2) = 1d0
-    exact_roots(3) = 1d-4
+    p(1) = 2.1d-4
+    p(2) = -7.37d-3
+    p(3) = 9.69d-2
+    p(4) = -5.86d-1
+    p(5) = 1.64d0
+    p(6) = -2.1d0
+    p(7) = 1d0
+    exact_roots(1) = 1d-1
+    exact_roots(2) = 1d-1
+    exact_roots(3) = 1d-1
+    exact_roots(4) = 5d-1
+    exact_roots(5) = 6d-1
+    exact_roots(6) = 7d-1
     write(1, '(A)', advance='no') '21, '
     ! FPML
     allocate(roots(deg), berr(deg), cond(deg))
@@ -1236,7 +1242,7 @@ program spec_poly
     deallocate(zeros, radius, h)
     ! AMVW
     allocate(coeffs(deg+1), eigs(deg), residuals(deg))
-    coeffs = (/ (dble(p(deg-j+1)), j=0,deg)/)
+    coeffs = (/ (p(deg-j+1), j=0,deg)/)
     call z_poly_roots(deg, coeffs, eigs, residuals, flag)
     call sort(eigs, exact_roots, deg)
     err = (/ (abs(eigs(j)-exact_roots(j))/abs(exact_roots(j)), j=1,deg)/)
@@ -1244,16 +1250,30 @@ program spec_poly
     deallocate(coeffs, eigs, residuals)
     ! deallocate polynomial arrays
     deallocate(exact_roots, p, err)
-    ! Poly 22: Jenkins Traub p10(z) with a=1e+7
-    deg = 3
+    ! Poly 22: Jenkins Traub p5(z)
+    deg = 10
     allocate(exact_roots(deg), p(deg+1), err(deg))
-    p(1) = -1d0
-    p(2) = 100000010000001d-7
-    p(3) = -100000010000001d-7
-    p(4) = 1d0
-    exact_roots(1) = 1d+7
-    exact_roots(2) = 1d0
-    exact_roots(3) = 1d-7
+    p(1) = 2.88d-8
+    p(2) = -1.848d-6
+    p(3) = 5.204d-5
+    p(4) = -8.458d-4
+    p(5) = 8.777d-3
+    p(6) = -6.072d-2
+    p(7) = 2.835d-1
+    p(8) = -8.820d-1
+    p(9) = 1.750d0
+    p(10) = -2d0
+    p(11) = 1d0
+    exact_roots(1) = 1d-1
+    exact_roots(2) = 1d-1
+    exact_roots(3) = 1d-1
+    exact_roots(4) = 1d-1
+    exact_roots(5) = 2d-1
+    exact_roots(6) = 2d-1
+    exact_roots(7) = 2d-1
+    exact_roots(8) = 3d-1
+    exact_roots(9) = 3d-1
+    exact_roots(10) = 4d-1
     write(1, '(A)', advance='no') '22, '
     ! FPML
     allocate(roots(deg), berr(deg), cond(deg))
@@ -1273,7 +1293,7 @@ program spec_poly
     deallocate(zeros, radius, h)
     ! AMVW
     allocate(coeffs(deg+1), eigs(deg), residuals(deg))
-    coeffs = (/ (dble(p(deg-j+1)), j=0,deg)/)
+    coeffs = (/ (p(deg-j+1), j=0,deg)/)
     call z_poly_roots(deg, coeffs, eigs, residuals, flag)
     call sort(eigs, exact_roots, deg)
     err = (/ (abs(eigs(j)-exact_roots(j))/abs(exact_roots(j)), j=1,deg)/)
@@ -1281,16 +1301,20 @@ program spec_poly
     deallocate(coeffs, eigs, residuals)
     ! deallocate polynomial arrays
     deallocate(exact_roots, p, err)
-    ! Poly 23: Jenkins Traub p10(z) with a=1e+10
-    deg = 3
+    ! Poly 23: Jenkins Traub p6(z)
+    deg = 5
     allocate(exact_roots(deg), p(deg+1), err(deg))
-    p(1) = -1d0
-    p(2) = 100000000010000000001d-10
-    p(3) = -100000000010000000001d-10
-    p(4) = 1d0
-    exact_roots(1) = 1d+10
-    exact_roots(2) = 1d0
-    exact_roots(3) = 1d-10
+    p(1) = -9.9900798978020040d-2
+    p(2) = 1.3987105877382204d0
+    p(3) = -4.5967287785602000d0
+    p(4) = 6.3969289898000000d0
+    p(5) = -4.0990100000000000d0
+    p(6) = 1.0000000000000000d0
+    exact_roots(1) = 1d-1
+    exact_roots(2) = 1001d-3
+    exact_roots(3) = 998d-3
+    exact_roots(4) = 100002d-5
+    exact_roots(5) = 99999d-5
     write(1, '(A)', advance='no') '23, '
     ! FPML
     allocate(roots(deg), berr(deg), cond(deg))
@@ -1310,7 +1334,7 @@ program spec_poly
     deallocate(zeros, radius, h)
     ! AMVW
     allocate(coeffs(deg+1), eigs(deg), residuals(deg))
-    coeffs = (/ (dble(p(deg-j+1)), j=0,deg)/)
+    coeffs = (/ (p(deg-j+1), j=0,deg)/)
     call z_poly_roots(deg, coeffs, eigs, residuals, flag)
     call sort(eigs, exact_roots, deg)
     err = (/ (abs(eigs(j)-exact_roots(j))/abs(exact_roots(j)), j=1,deg)/)
@@ -1318,73 +1342,24 @@ program spec_poly
     deallocate(coeffs, eigs, residuals)
     ! deallocate polynomial arrays
     deallocate(exact_roots, p, err)
-    ! Poly 24: Jenkins Traub p4(z)
-    deg = 6
+    ! Poly 24: Jenkins Traub p7(z) with a=0
+    deg = 7
     allocate(exact_roots(deg), p(deg+1), err(deg))
-    p(1) = 2.1d-4
-    p(2) = -7.37d-3
-    p(3) = 9.69d-2
-    p(4) = -2.93d0/5d0
-    p(5) = 41d0/25d0
-    p(6) = -2.1d0
-    p(7) = 1d0
-    exact_roots(1) = 1d-1
-    exact_roots(2) = 1d-1
-    exact_roots(3) = 1d-1
-    exact_roots(4) = 5d-1
-    exact_roots(5) = 6d-1
-    exact_roots(6) = 7d-1
-    write(1, '(A)', advance='no') '24, '
-    ! FPML
-    allocate(roots(deg), berr(deg), cond(deg))
-    call main(p, deg, roots, berr, cond)
-    call sort(roots, exact_roots, deg)
-    err = (/ (abs(roots(j)-exact_roots(j))/abs(exact_roots(j)), j=1,deg)/)
-    write(1, '(ES15.2)', advance='no') sum(err)/deg
-    write(1, '(A)', advance='no') ','
-    deallocate(roots, berr, cond)
-    ! Polzeros
-    allocate(zeros(deg), radius(deg), h(deg+1))
-    call polzeros(deg, p, eps, big, small, nitmax, zeros, radius, h, iter)
-    call sort(zeros, exact_roots, deg)
-    err = (/ (abs(zeros(j)-exact_roots(j))/abs(exact_roots(j)), j=1,deg)/)
-    write(1, '(ES15.2)', advance='no') sum(err)/deg
-    write(1, '(A)', advance='no') ','
-    deallocate(zeros, radius, h)
-    ! AMVW
-    allocate(coeffs(deg+1), eigs(deg), residuals(deg))
-    coeffs = (/ (dble(p(deg-j+1)), j=0,deg)/)
-    call z_poly_roots(deg, coeffs, eigs, residuals, flag)
-    call sort(eigs, exact_roots, deg)
-    err = (/ (abs(eigs(j)-exact_roots(j))/abs(exact_roots(j)), j=1,deg)/)
-    write(1, '(ES15.2)') sum(err)/deg
-    deallocate(coeffs, eigs, residuals)
-    ! deallocate polynomial arrays
-    deallocate(exact_roots, p, err)
-    ! Poly 25: Jenkins Traub p5(z)
-    deg = 10
-    allocate(exact_roots(deg), p(deg+1), err(deg))
-    p(1) = 9d0/3.125d+8
-    p(2) = -2.31d0/1.25d+6
-    p(3) = 1.301d0/2.5d+4
-    p(4) = -4.229d0/5d+3
-    p(5) = 8.777d0/1d+3
-    p(6) = -7.59d0/1.25d+2
-    p(7) = 5.67d0/2d+1
-    p(8) = -4.41d0/5d0
-    p(9) = 7d0/4d0
-    p(10) = -2d0
-    p(11) = 1d0
-    exact_roots(1) = 1d-1
-    exact_roots(2) = 1d-1
+    p(1) = -1.000000d-7
+    p(2) = 1.131100d-4
+    p(3) = -1.345431d-2
+    p(4) = 3.477743d-1
+    p(5) = -3.477743d0
+    p(6) = 1.345431d1
+    p(7) = -1.131100d1
+    p(8) = 1.000000d0
+    exact_roots(1) = 1d-3
+    exact_roots(2) = 1d-2
     exact_roots(3) = 1d-1
     exact_roots(4) = 1d-1
-    exact_roots(5) = 2d-1
-    exact_roots(6) = 2d-1
-    exact_roots(7) = 2d-1
-    exact_roots(8) = 3d-1
-    exact_roots(9) = 3d-1
-    exact_roots(10) = 4d-1
+    exact_roots(5) = 1d-1
+    exact_roots(6) = 1d0
+    exact_roots(7) = 1d+1
     write(1, '(A)', advance='no') '24, '
     ! FPML
     allocate(roots(deg), berr(deg), cond(deg))
@@ -1404,7 +1379,413 @@ program spec_poly
     deallocate(zeros, radius, h)
     ! AMVW
     allocate(coeffs(deg+1), eigs(deg), residuals(deg))
-    coeffs = (/ (dble(p(deg-j+1)), j=0,deg)/)
+    coeffs = (/ (p(deg-j+1), j=0,deg)/)
+    call z_poly_roots(deg, coeffs, eigs, residuals, flag)
+    call sort(eigs, exact_roots, deg)
+    err = (/ (abs(eigs(j)-exact_roots(j))/abs(exact_roots(j)), j=1,deg)/)
+    write(1, '(ES15.2)') sum(err)/deg
+    deallocate(coeffs, eigs, residuals)
+    ! deallocate polynomial arrays
+    deallocate(exact_roots, p, err)
+    ! Poly 25: Jenkins Traub p7(z) with a=10^(-10)
+    deg = 7
+    allocate(exact_roots(deg), p(deg+1), err(deg))
+    p(1) = -1.0000000000000000010d-7
+    p(2) = 1.1311000000000000011d-4
+    p(3) = -1.3454310000000000011d-2
+    p(4) = 3.4777430000000000011d-1
+    p(5) = -3.4777430000000000001d0
+    p(6) = 1.3454310000000000000d+1
+    p(7) = -1.1311000000000000000d+1
+    p(8) = 1.0000000000000000000d0
+    exact_roots(1) = 1d-3
+    exact_roots(2) = 1d-2
+    exact_roots(3) = 1d-1
+    exact_roots(4) = cmplx(1d-1,1d-10,kind=dp)
+    exact_roots(5) = cmplx(1d-1,-1d-10,kind=dp)
+    exact_roots(6) = 1d0
+    exact_roots(7) = 1d+1
+    write(1, '(A)', advance='no') '25, '
+    ! FPML
+    allocate(roots(deg), berr(deg), cond(deg))
+    call main(p, deg, roots, berr, cond)
+    call sort(roots, exact_roots, deg)
+    err = (/ (abs(roots(j)-exact_roots(j))/abs(exact_roots(j)), j=1,deg)/)
+    write(1, '(ES15.2)', advance='no') sum(err)/deg
+    write(1, '(A)', advance='no') ','
+    deallocate(roots, berr, cond)
+    ! Polzeros
+    allocate(zeros(deg), radius(deg), h(deg+1))
+    call polzeros(deg, p, eps, big, small, nitmax, zeros, radius, h, iter)
+    call sort(zeros, exact_roots, deg)
+    err = (/ (abs(zeros(j)-exact_roots(j))/abs(exact_roots(j)), j=1,deg)/)
+    write(1, '(ES15.2)', advance='no') sum(err)/deg
+    write(1, '(A)', advance='no') ','
+    deallocate(zeros, radius, h)
+    ! AMVW
+    allocate(coeffs(deg+1), eigs(deg), residuals(deg))
+    coeffs = (/ (p(deg-j+1), j=0,deg)/)
+    call z_poly_roots(deg, coeffs, eigs, residuals, flag)
+    call sort(eigs, exact_roots, deg)
+    err = (/ (abs(eigs(j)-exact_roots(j))/abs(exact_roots(j)), j=1,deg)/)
+    write(1, '(ES15.2)') sum(err)/deg
+    deallocate(coeffs, eigs, residuals)
+    ! deallocate polynomial arrays
+    deallocate(exact_roots, p, err)
+    ! Poly 26: Jenkins Traub p7(z) with a=10^(-6)
+    deg = 7
+    allocate(exact_roots(deg), p(deg+1), err(deg))
+    p(1) = -1.0000000001000000d-7
+    p(2) = 1.1311000001111100d-4
+    p(3) = -1.3454310001122211d-2
+    p(4) = 3.4777430001122211d-1
+    p(5) = -3.4777430000111110d0
+    p(6) = 1.3454310000001000d+1
+    p(7) = -1.1311000000000000d+1
+    p(8) = 1.0000000000000000d0
+    exact_roots(1) = 1d-3
+    exact_roots(2) = 1d-2
+    exact_roots(3) = 1d-1
+    exact_roots(4) = cmplx(1d-1,1d-6,kind=dp)
+    exact_roots(5) = cmplx(1d-1,-1d-6,kind=dp)
+    exact_roots(6) = 1d0
+    exact_roots(7) = 1d+1
+    write(1, '(A)', advance='no') '26, '
+    ! FPML
+    allocate(roots(deg), berr(deg), cond(deg))
+    call main(p, deg, roots, berr, cond)
+    call sort(roots, exact_roots, deg)
+    err = (/ (abs(roots(j)-exact_roots(j))/abs(exact_roots(j)), j=1,deg)/)
+    write(1, '(ES15.2)', advance='no') sum(err)/deg
+    write(1, '(A)', advance='no') ','
+    deallocate(roots, berr, cond)
+    ! Polzeros
+    allocate(zeros(deg), radius(deg), h(deg+1))
+    call polzeros(deg, p, eps, big, small, nitmax, zeros, radius, h, iter)
+    call sort(zeros, exact_roots, deg)
+    err = (/ (abs(zeros(j)-exact_roots(j))/abs(exact_roots(j)), j=1,deg)/)
+    write(1, '(ES15.2)', advance='no') sum(err)/deg
+    write(1, '(A)', advance='no') ','
+    deallocate(zeros, radius, h)
+    ! AMVW
+    allocate(coeffs(deg+1), eigs(deg), residuals(deg))
+    coeffs = (/ (p(deg-j+1), j=0,deg)/)
+    call z_poly_roots(deg, coeffs, eigs, residuals, flag)
+    call sort(eigs, exact_roots, deg)
+    err = (/ (abs(eigs(j)-exact_roots(j))/abs(exact_roots(j)), j=1,deg)/)
+    write(1, '(ES15.2)') sum(err)/deg
+    deallocate(coeffs, eigs, residuals)
+    ! deallocate polynomial arrays
+    deallocate(exact_roots, p, err)
+    ! Poly 27: Jenkins Traub p8(z)
+    deg = 5
+    allocate(exact_roots(deg), p(deg+1), err(deg))
+    p(1) = 1d0
+    p(2) = 5d0
+    p(3) = 10d0
+    p(4) = 10d0
+    p(5) = 5d0
+    p(6) = 1d0
+    exact_roots(1) = -1d0
+    exact_roots(2) = -1d0
+    exact_roots(3) = -1d0
+    exact_roots(4) = -1d0
+    exact_roots(5) = -1d0
+    write(1, '(A)', advance='no') '27, '
+    ! FPML
+    allocate(roots(deg), berr(deg), cond(deg))
+    call main(p, deg, roots, berr, cond)
+    call sort(roots, exact_roots, deg)
+    err = (/ (abs(roots(j)-exact_roots(j))/abs(exact_roots(j)), j=1,deg)/)
+    write(1, '(ES15.2)', advance='no') sum(err)/deg
+    write(1, '(A)', advance='no') ','
+    deallocate(roots, berr, cond)
+    ! Polzeros
+    allocate(zeros(deg), radius(deg), h(deg+1))
+    call polzeros(deg, p, eps, big, small, nitmax, zeros, radius, h, iter)
+    call sort(zeros, exact_roots, deg)
+    err = (/ (abs(zeros(j)-exact_roots(j))/abs(exact_roots(j)), j=1,deg)/)
+    write(1, '(ES15.2)', advance='no') sum(err)/deg
+    write(1, '(A)', advance='no') ','
+    deallocate(zeros, radius, h)
+    ! AMVW
+    allocate(coeffs(deg+1), eigs(deg), residuals(deg))
+    coeffs = (/ (p(deg-j+1), j=0,deg)/)
+    call z_poly_roots(deg, coeffs, eigs, residuals, flag)
+    call sort(eigs, exact_roots, deg)
+    err = (/ (abs(eigs(j)-exact_roots(j))/abs(exact_roots(j)), j=1,deg)/)
+    write(1, '(ES15.2)') sum(err)/deg
+    deallocate(coeffs, eigs, residuals)
+    ! deallocate polynomial arrays
+    deallocate(exact_roots, p, err)
+    ! Poly 28: Jenkins Traub p9(z)
+    deg = 20
+    allocate(exact_roots(deg), p(deg+1), err(deg))
+    p(1) = -1d0
+    p(2) = 0d0
+    p(3) = 0d0
+    p(4) = 0d0
+    p(5) = 0d0
+    p(6) = 0d0
+    p(7) = 0d0
+    p(8) = 0d0
+    p(9) = 0d0
+    p(10) = 0d0
+    p(11) = 1d+20
+    p(12) = 0d0
+    p(13) = 0d0
+    p(14) = 0d0
+    p(15) = 0d0
+    p(16) = 0d0
+    p(17) = 0d0
+    p(18) = 0d0
+    p(19) = 0d0
+    p(20) = 0d0
+    p(21) = 1d0
+    exact_roots(1) = -1d-2
+    exact_roots(2) = 1d-2
+    exact_roots(3) = cmplx(0d0,-1d+2,kind=dp)
+    exact_roots(4) = cmplx(0d0,1d+2,kind=dp)
+    exact_roots(5) = cmplx(-95.105651629515357212d0,+30.901699437494742410d0,kind=dp)
+    exact_roots(6) = cmplx(-95.105651629515357212d0,-30.901699437494742410d0,kind=dp)
+    exact_roots(7) = cmplx(-0.0080901699437494742410d0,+0.0058778525229247312917d0,kind=dp)
+    exact_roots(8) = cmplx(-0.0080901699437494742410d0,-0.0058778525229247312917d0,kind=dp)
+    exact_roots(9) = cmplx(-58.778525229247312917d0,+80.901699437494742410d0,kind=dp)
+    exact_roots(10) = cmplx(-58.778525229247312917d0,-80.901699437494742410d0,kind=dp)
+    exact_roots(11) = cmplx(-0.0030901699437494742410d0,+0.0095105651629515357212d0,kind=dp)
+    exact_roots(12) = cmplx(-0.0030901699437494742410d0,-0.0095105651629515357212d0,kind=dp)    
+    exact_roots(13) = cmplx(+95.105651629515357212d0,+30.901699437494742410d0,kind=dp)
+    exact_roots(14) = cmplx(+95.105651629515357212d0,-30.901699437494742410d0,kind=dp)
+    exact_roots(15) = cmplx(+0.0080901699437494742410d0,+0.0058778525229247312917d0,kind=dp)
+    exact_roots(16) = cmplx(+0.0080901699437494742410d0,-0.0058778525229247312917d0,kind=dp)
+    exact_roots(17) = cmplx(+58.778525229247312917d0,+80.901699437494742410d0,kind=dp)
+    exact_roots(18) = cmplx(+58.778525229247312917d0,-80.901699437494742410d0,kind=dp)
+    exact_roots(19) = cmplx(+0.0030901699437494742410d0,+0.0095105651629515357212d0,kind=dp)
+    exact_roots(20) = cmplx(+0.0030901699437494742410d0,-0.0095105651629515357212d0,kind=dp)
+    write(1, '(A)', advance='no') '28, '
+    ! FPML
+    allocate(roots(deg), berr(deg), cond(deg))
+    call main(p, deg, roots, berr, cond)
+    call sort(roots, exact_roots, deg)
+    err = (/ (abs(roots(j)-exact_roots(j))/abs(exact_roots(j)), j=1,deg)/)
+    write(1, '(ES15.2)', advance='no') sum(err)/deg
+    write(1, '(A)', advance='no') ','
+    deallocate(roots, berr, cond)
+    ! Polzeros
+    allocate(zeros(deg), radius(deg), h(deg+1))
+    call polzeros(deg, p, eps, big, small, nitmax, zeros, radius, h, iter)
+    call sort(zeros, exact_roots, deg)
+    err = (/ (abs(zeros(j)-exact_roots(j))/abs(exact_roots(j)), j=1,deg)/)
+    write(1, '(ES15.2)', advance='no') sum(err)/deg
+    write(1, '(A)', advance='no') ','
+    deallocate(zeros, radius, h)
+    ! AMVW
+    allocate(coeffs(deg+1), eigs(deg), residuals(deg))
+    coeffs = (/ (p(deg-j+1), j=0,deg)/)
+    call z_poly_roots(deg, coeffs, eigs, residuals, flag)
+    call sort(eigs, exact_roots, deg)
+    err = (/ (abs(eigs(j)-exact_roots(j))/abs(exact_roots(j)), j=1,deg)/)
+    write(1, '(ES15.2)') sum(err)/deg
+    deallocate(coeffs, eigs, residuals)
+    ! deallocate polynomial arrays
+    deallocate(exact_roots, p, err)
+    ! Poly 29: Jenkins Traub p10(z) with a=1e+3
+    deg = 3
+    allocate(exact_roots(deg), p(deg+1), err(deg))
+    p(1) = -1d0
+    p(2) = 1001001d-3
+    p(3) = -1001001d-3
+    p(4) = 1d0
+    exact_roots(1) = 1d+3
+    exact_roots(2) = 1d0
+    exact_roots(3) = 1d-3
+    write(1, '(A)', advance='no') '29, '
+    ! FPML
+    allocate(roots(deg), berr(deg), cond(deg))
+    call main(p, deg, roots, berr, cond)
+    call sort(roots, exact_roots, deg)
+    err = (/ (abs(roots(j)-exact_roots(j))/abs(exact_roots(j)), j=1,deg)/)
+    write(1, '(ES15.2)', advance='no') sum(err)/deg
+    write(1, '(A)', advance='no') ','
+    deallocate(roots, berr, cond)
+    ! Polzeros
+    allocate(zeros(deg), radius(deg), h(deg+1))
+    call polzeros(deg, p, eps, big, small, nitmax, zeros, radius, h, iter)
+    call sort(zeros, exact_roots, deg)
+    err = (/ (abs(zeros(j)-exact_roots(j))/abs(exact_roots(j)), j=1,deg)/)
+    write(1, '(ES15.2)', advance='no') sum(err)/deg
+    write(1, '(A)', advance='no') ','
+    deallocate(zeros, radius, h)
+    ! AMVW
+    allocate(coeffs(deg+1), eigs(deg), residuals(deg))
+    coeffs = (/ (p(deg-j+1), j=0,deg)/)
+    call z_poly_roots(deg, coeffs, eigs, residuals, flag)
+    call sort(eigs, exact_roots, deg)
+    err = (/ (abs(eigs(j)-exact_roots(j))/abs(exact_roots(j)), j=1,deg)/)
+    write(1, '(ES15.2)') sum(err)/deg
+    deallocate(coeffs, eigs, residuals)
+    ! deallocate polynomial arrays
+    deallocate(exact_roots, p, err)
+    ! Poly 30: Jenkins Traub p10(z) with a=1e+6
+    deg = 3
+    allocate(exact_roots(deg), p(deg+1), err(deg))
+    p(1) = -1.000000000000d0
+    p(2) = 1.000001000001d+6
+    p(3) = -1.000001000001d+6
+    p(4) = 1.000000000000d0
+    exact_roots(1) = 1d+6
+    exact_roots(2) = 1d0
+    exact_roots(3) = 1d-6
+    write(1, '(A)', advance='no') '30, '
+    ! FPML
+    allocate(roots(deg), berr(deg), cond(deg))
+    call main(p, deg, roots, berr, cond)
+    call sort(roots, exact_roots, deg)
+    err = (/ (abs(roots(j)-exact_roots(j))/abs(exact_roots(j)), j=1,deg)/)
+    write(1, '(ES15.2)', advance='no') sum(err)/deg
+    write(1, '(A)', advance='no') ','
+    deallocate(roots, berr, cond)
+    ! Polzeros
+    allocate(zeros(deg), radius(deg), h(deg+1))
+    call polzeros(deg, p, eps, big, small, nitmax, zeros, radius, h, iter)
+    call sort(zeros, exact_roots, deg)
+    err = (/ (abs(zeros(j)-exact_roots(j))/abs(exact_roots(j)), j=1,deg)/)
+    write(1, '(ES15.2)', advance='no') sum(err)/deg
+    write(1, '(A)', advance='no') ','
+    deallocate(zeros, radius, h)
+    ! AMVW
+    allocate(coeffs(deg+1), eigs(deg), residuals(deg))
+    coeffs = (/ (p(deg-j+1), j=0,deg)/)
+    call z_poly_roots(deg, coeffs, eigs, residuals, flag)
+    call sort(eigs, exact_roots, deg)
+    err = (/ (abs(eigs(j)-exact_roots(j))/abs(exact_roots(j)), j=1,deg)/)
+    write(1, '(ES15.2)') sum(err)/deg
+    deallocate(coeffs, eigs, residuals)
+    ! deallocate polynomial arrays
+    deallocate(exact_roots, p, err)
+    ! Poly 31: Jenkins Traub p10(z) with a=1e+9
+    deg = 3
+    allocate(exact_roots(deg), p(deg+1), err(deg))
+    p(1) = -1.0000000000000000000d0
+    p(2) = 1.0000000010000000010d+9
+    p(3) = -1.0000000010000000010d+9
+    p(4) = 1.0000000000000000000d0
+    exact_roots(1) = 1d+9
+    exact_roots(2) = 1d0
+    exact_roots(3) = 1d-9
+    write(1, '(A)', advance='no') '31, '
+    ! FPML
+    allocate(roots(deg), berr(deg), cond(deg))
+    call main(p, deg, roots, berr, cond)
+    call sort(roots, exact_roots, deg)
+    err = (/ (abs(roots(j)-exact_roots(j))/abs(exact_roots(j)), j=1,deg)/)
+    write(1, '(ES15.2)', advance='no') sum(err)/deg
+    write(1, '(A)', advance='no') ','
+    deallocate(roots, berr, cond)
+    ! Polzeros
+    allocate(zeros(deg), radius(deg), h(deg+1))
+    call polzeros(deg, p, eps, big, small, nitmax, zeros, radius, h, iter)
+    call sort(zeros, exact_roots, deg)
+    err = (/ (abs(zeros(j)-exact_roots(j))/abs(exact_roots(j)), j=1,deg)/)
+    write(1, '(ES15.2)', advance='no') sum(err)/deg
+    write(1, '(A)', advance='no') ','
+    deallocate(zeros, radius, h)
+    ! AMVW
+    allocate(coeffs(deg+1), eigs(deg), residuals(deg))
+    coeffs = (/ (p(deg-j+1), j=0,deg)/)
+    call z_poly_roots(deg, coeffs, eigs, residuals, flag)
+    call sort(eigs, exact_roots, deg)
+    err = (/ (abs(eigs(j)-exact_roots(j))/abs(exact_roots(j)), j=1,deg)/)
+    write(1, '(ES15.2)') sum(err)/deg
+    deallocate(coeffs, eigs, residuals)
+    ! deallocate polynomial arrays
+    deallocate(exact_roots, p, err)
+    ! Poly 32: Jenkins Traub p11(z) with m=15
+    deg = 60
+    allocate(exact_roots(deg), p(deg+1), err(deg))
+    p(1) = -3.8152042447694583163d-2
+    p(2) = -8.0887148540052125418d-2
+    p(3) = -9.0220107683123377908d-2
+    p(4) = -4.0235125451320429813d-2
+    p(5) = 2.5845151700916509572d-2
+    p(6) = 4.0152745658694939727d-2
+    p(7) = -1.6790688409145587489d-3
+    p(8) = -3.2875459849702865562d-2
+    p(9) = -1.0155780324889071950d-2
+    p(10) = 2.5561605095987437185d-2
+    p(11) = 1.6798037301080281849d-2
+    p(12) = -1.9007048663161334569d-2
+    p(13) = -2.0832027716765797753d-2
+    p(14) = 1.3155895046687615500d-2
+    p(15) = 2.3395265781752828960d-2
+    p(16) = -7.8353601563514759677d-3
+    p(17) = -2.5056734564096074679d-2
+    p(18) = 2.8801853472968465606d-3
+    p(19) = 2.6128232040856239093d-2
+    p(20) = 1.8512039186465210726d-3
+    p(21) = -2.6793049236190225849d-2
+    p(22) = -6.4816583527658610902d-3
+    p(23) = 2.7165621692351410162d-2
+    p(24) = 1.1123691653288416778d-2
+    p(25) = -2.7321995981041653082d-2
+    p(26) = -1.5887901396548015889d-2
+    p(27) = 2.7317035179607673032d-2
+    p(28) = 2.0891329194391228266d-2
+    p(29) = -2.7195541719204794286d-2
+    p(30) = -2.6266517429122325260d-2
+    p(31) = 2.7001069993212566816d-2
+    p(32) = 3.2172381167424182533d-2
+    p(33) = -2.6784990297665647405d-2
+    p(34) = -3.8808416025116894872d-2
+    p(35) = 2.6618332601639750634d-2
+    p(36) = 4.6434430044082315352d-2
+    p(37) = -2.6609931440851286731d-2
+    p(38) = -5.5399131192957917932d-2
+    p(39) = 2.6936871232203149810d-2
+    p(40) = 6.6182840596799747576d-2
+    p(41) = -2.7898545864133069018d-2
+    p(42) = -7.9462854218494678457d-2
+    p(43) = 3.0017075969927581597d-2
+    p(44) = 9.6215313344743552064d-2
+    p(45) = -3.4232473434334887985d-2
+    p(46) = -1.1787558245288097129d-1
+    p(47) = 4.2302120560173516568d-2
+    p(48) = 1.4658835591506770795d-1
+    p(49) = -5.7671852155999918437d-2
+    p(50) = -1.8557145217893998923d-1
+    p(51) = 8.7534422287935343578d-2
+    p(52) = 2.3948440491562879877d-1
+    p(53) = -1.4823921428896342370d-1
+    p(54) = -3.1375401155711093076d-1
+    p(55) = 2.8177110863403702519d-1
+    p(56) = 4.0498643371712637600d-1
+    p(57) = -6.1839390566540153111d-1
+    p(58) = -4.0626144917178036618d-1
+    p(59) = 1.7254488864788376282d0
+    p(60) = -1.9081136687728211063d0
+    p(61) = 1.0000000000000000000d0
+    exact_roots(1:29) = (/ (cmplx(cos(pi*j/30),sin(pi*j/30),kind=dp), j=-14,14)/)
+    exact_roots(30:60) = (/ (.9*cmplx(cos(pi*j/30),sin(pi*j/30),kind=dp), j=15,45)/)
+    write(1, '(A)', advance='no') '32, '
+    ! FPML
+    allocate(roots(deg), berr(deg), cond(deg))
+    call main(p, deg, roots, berr, cond)
+    call sort(roots, exact_roots, deg)
+    err = (/ (abs(roots(j)-exact_roots(j))/abs(exact_roots(j)), j=1,deg)/)
+    write(1, '(ES15.2)', advance='no') sum(err)/deg
+    write(1, '(A)', advance='no') ','
+    deallocate(roots, berr, cond)
+    ! Polzeros
+    allocate(zeros(deg), radius(deg), h(deg+1))
+    call polzeros(deg, p, eps, big, small, nitmax, zeros, radius, h, iter)
+    call sort(zeros, exact_roots, deg)
+    err = (/ (abs(zeros(j)-exact_roots(j))/abs(exact_roots(j)), j=1,deg)/)
+    write(1, '(ES15.2)', advance='no') sum(err)/deg
+    write(1, '(A)', advance='no') ','
+    deallocate(zeros, radius, h)
+    ! AMVW
+    allocate(coeffs(deg+1), eigs(deg), residuals(deg))
+    coeffs = (/ (p(deg-j+1), j=0,deg)/)
     call z_poly_roots(deg, coeffs, eigs, residuals, flag)
     call sort(eigs, exact_roots, deg)
     err = (/ (abs(eigs(j)-exact_roots(j))/abs(exact_roots(j)), j=1,deg)/)
@@ -1460,10 +1841,10 @@ contains
         
         ! main
         do i=1,deg
-            diff = abs(roots(i) - exact_roots(i))/abs(exact_roots(i))
+            diff = abs(roots(i) - exact_roots(i))
             k = i
             do j=i+1, deg
-                x = abs(roots(j) - exact_roots(i))/abs(exact_roots(i))
+                x = abs(roots(j) - exact_roots(i))
                 if(x<diff) then
                     diff = x
                     k = j

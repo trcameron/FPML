@@ -4,12 +4,12 @@
 export DYLD_LIBRARY_PATH=$PWD/AMVW/eiscor/lib:$DYLD_LIBRARY_PATH
 
 # run tests
-echo "convergence test ..."
-./conv
-echo "initial estimates test ..."
-./init_est
-echo "methods test ... "
-./methods $1 $2 $3
+#echo "convergence test ..."
+#./conv
+#echo "initial estimates test ..."
+#./init_est
+#echo "methods test ... "
+#./methods $1 $2 $3
 echo "random polynomials test ..."
 ./rand_poly $1 $2 $3
 echo "special polynomials test ..."
