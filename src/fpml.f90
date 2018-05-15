@@ -68,18 +68,18 @@ contains
     ! and the condition number of each root 
     ! approximation is stored in cond. 
     !************************************************
-    subroutine main(p, deg, roots, berr, cond)
+    subroutine main(poly, deg, roots, berr, cond)
         implicit none
         ! argument variables
         integer, intent(in)             :: deg
         real(kind=dp), intent(out)      :: berr(:), cond(:)
-        complex(kind=dp), intent(in)    :: p(:)
+        complex(kind=dp), intent(in)    :: poly(:)
         complex(kind=dp), intent(out)   :: roots(:)
         ! local variables
         integer                         :: i, j, nz
         logical, dimension(deg)         :: check
-        real(kind=dp), dimension(deg+1) :: alpha, ralpha
         real(kind=dp)                   :: r
+        real(kind=dp), dimension(deg+1) :: alpha, ralpha
         complex(kind=dp)                :: b, c, z
         integer, parameter              :: itmax = 30
         ! intrinsic functions
@@ -88,7 +88,7 @@ contains
         ! main
         check = .true.
         do i=1,deg+1
-            alpha(i) = abs(p(i))
+            alpha(i) = abs(poly(i))
         end do
         call estimates(alpha, deg, roots)
         do i=1,deg+1
@@ -102,23 +102,16 @@ contains
                     z = roots(j)
                     r = abs(z)
                     if(r > 1) then
-                        call rcheck_lag(p, ralpha, deg, b, c, z, r, check(j), berr(j), cond(j))
-                        if(check(j)) then
-                            call modify_lag(deg, b, c, z, j, roots)
-                            roots(j) = roots(j) - c
-                        else
-                            nz = nz + 1
-                            if(nz==deg) return
-                        end if
+                        call rcheck_lag(poly, ralpha, deg, b, c, z, r, check(j), berr(j), cond(j))
                     else
-                        call check_lag(p, alpha, deg, b, c, z, r, check(j), berr(j), cond(j))
-                        if(check(j)) then
-                            call modify_lag(deg, b, c, z, j, roots)
-                            roots(j) = roots(j) - c
-                        else 
-                            nz = nz + 1
-                            if(nz==deg) return
-                        end if
+                        call check_lag(poly, alpha, deg, b, c, z, r, check(j), berr(j), cond(j))
+                    end if
+                    if(check(j)) then
+                        call modify_lag(deg, b, c, z, j, roots)
+                        roots(j) = roots(j) - c
+                    else
+                        nz = nz + 1
+                        if(nz==deg) return
                     end if
                 end if
             end do
@@ -153,11 +146,11 @@ contains
         ! main
         zz = 1/z
         rr = 1/r
-        a = p(1)
-        b = 0
+        a = zz*p(1)+p(2)
+        b = p(1)
         c = 0
-        berr = ralpha(1)
-        do k=deg,1,-1
+        berr = rr*ralpha(deg+1)+ralpha(deg)
+        do k=deg-1,1,-1
             c = zz*c + b
             b = zz*b + a
             a = zz*a + p(deg-k+2)
@@ -200,11 +193,11 @@ contains
         intrinsic                       :: abs
         
         ! main
-        a = p(deg+1)
-        b = 0
+        a = z*p(deg+1)+p(deg)
+        b = p(deg+1)
         c = 0
-        berr = alpha(deg+1)
-        do k=deg,1,-1
+        berr = r*alpha(deg+1) + alpha(deg)
+        do k=deg-1,1,-1
             c = z*c + b
             b = z*b + a
             a = z*a + p(k)
