@@ -92,7 +92,7 @@ contains
         end do
         call estimates(alpha, deg, roots)
         do i=1,deg+1
-            ralpha(deg-i+2) = alpha(i)*(3.8*(deg-i+1) + 1)
+            ralpha(i) = alpha(i)*(3.8*(deg-i+1) + 1)
             alpha(i) = alpha(i)*(3.8*(i-1) + 1)
         end do
         nz = 0
@@ -149,11 +149,11 @@ contains
         a = zz*p(1)+p(2)
         b = p(1)
         c = 0
-        berr = rr*ralpha(deg+1)+ralpha(deg)
-        do k=deg-1,1,-1
+        berr = rr*ralpha(1)+ralpha(2)
+        do k=3,deg+1
             c = zz*c + b
             b = zz*b + a
-            a = zz*a + p(deg-k+2)
+            a = zz*a + p(k)
             berr = rr*berr + ralpha(k)
         end do
         if(abs(a)<eps*berr) then
@@ -281,7 +281,7 @@ contains
         real(kind=dp)                   :: ang, r, th
         integer, dimension(deg+1)       :: h
         real(kind=dp), dimension(deg+1) :: a
-        real(kind=dp), parameter        :: pi2 = 6.2831853071795865, sigma = 0.7
+        real(kind=dp), parameter        :: pi2 = 6.2831853071795865d0, sigma = 0.7d0
         ! intrinsic functions
         intrinsic                       :: log, cos, sin, cmplx
         
@@ -290,7 +290,7 @@ contains
             if(alpha(i)>0) then
                 a(i) = log(alpha(i))
             else
-                a(i) = -1D30
+                a(i) = -1d+30
             end if
         end do
         call conv_hull(deg+1, a, h, c)
@@ -298,7 +298,7 @@ contains
         th=pi2/deg
         do i=c-1,1,-1
             nzeros = h(i)-h(i+1)
-            r = (alpha(h(i+1))/alpha(h(i)))**(1D0/nzeros)
+            r = (alpha(h(i+1))/alpha(h(i)))**(1d0/nzeros)
             ang = pi2/nzeros
             DO j=1,nzeros
                 roots(k+j) = r*cmplx(cos(ang*j+th*h(i)+sigma),sin(ang*j+th*h(i)+sigma),kind=dp)
