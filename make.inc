@@ -19,6 +19,6 @@ LFLAGS := -shell-escape
 # tests run variables
 SD := 80		# start degree
 
-ED := 10240		# end degree
+ED := 20480		# end degree
 
 IT := 10		# iteration number
