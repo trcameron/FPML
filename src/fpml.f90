@@ -55,8 +55,8 @@
 !********************************************************************************
 module fpml
     implicit none
-    integer, parameter          :: dp = kind(1.0D0)
-    real(kind=dp), parameter    :: eps = epsilon(1.0D0)
+    integer, parameter          :: dp = kind(1.d0)
+    real(kind=dp), parameter    :: eps = epsilon(1.d0)
 contains
     !************************************************
     !                       main                    *

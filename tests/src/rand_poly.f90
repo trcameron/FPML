@@ -23,7 +23,7 @@ program rand_poly
     ! Polzeros variables
     integer                                     :: iter
     integer, parameter                          :: nitmax=30
-    real(kind=dp), parameter                    :: small=tiny(1.0D0), big=huge(1.0D0)
+    real(kind=dp), parameter                    :: small=tiny(1.d0), big=huge(1.d0)
     logical, dimension(:), allocatable          :: h
     real(kind=dp), dimension(:), allocatable    :: radius
     complex(kind=dp), dimension(:), allocatable :: zeros
@@ -74,7 +74,7 @@ program rand_poly
             call main(p, deg, roots, berr, cond)
             call system_clock(count=clock_stop)
             results(it,1)=dble(clock_stop-clock_start)/dble(clock_rate)
-            results(it,2)=maxval(berr*cond)
+            results(it,2)=maxval(berr)
             ! Polzeros
             call system_clock(count_rate=clock_rate)
             call system_clock(count=clock_start)
@@ -156,14 +156,14 @@ contains
         do k=1,n
             call random_number(r1)
             call random_number(r2)
-            x(k)=(-1+2*r1) + (0,1)*(-1+2*r2)
+            x(k) = cmplx(-1+2*r1,-1+2*r2,kind=dp)
         end do
     end subroutine cmplx_rand_poly
     !************************************************
     !                   error                       *
     !************************************************
-    ! Computes the relative forward error (upper bound)
-    ! for each root of the polynomial p.
+    ! Computes the relative backward error for 
+    ! each root approximation of p.
     !************************************************
     subroutine error(p, roots, err, deg)
         implicit none
@@ -174,9 +174,17 @@ contains
         ! local variables
         integer                         :: j, k
         real(kind=dp)                   :: r
-        complex(kind=dp)                :: a, b, z
+        real(kind=dp), dimension(deg+1) :: alpha, ralpha
+        complex(kind=dp)                :: a, berr, z
         
         ! main
+        do j=1,deg+1
+            alpha(j) = abs(p(j))
+        end do
+        do j=1,deg+1
+            ralpha(j) = alpha(j)*(3.8*(deg-j+1) + 1)
+            alpha(j) = alpha(j)*(3.8*(j-1) + 1)
+        end do
         do j=1,deg
             z = roots(j)
             r = abs(z)
@@ -184,22 +192,20 @@ contains
                 z = 1/z
                 r = 1/r
                 a = p(1)
-                b = deg*p(1)
-                do k=2,deg
+                berr = ralpha(1)
+                do k=2,deg+1
                     a = z*a + p(k)
-                    b = z*b + (deg-k+1)*p(k)
+                    berr = r*berr + ralpha(k)
                 end do
-                a = z*a + p(deg+1)
             else
                 a = p(deg+1)
-                b = deg*p(deg+1)
-                do k=deg,2,-1
+                berr = alpha(deg+1)
+                do k=deg,1,-1
                     a = z*a + p(k)
-                    b = z*b + (k-1)*p(k)
-                end do
-                a = z*a + p(1)
+                    berr = r*berr + alpha(k)
+                end do 
             end if
-            err(j) = abs(a)/(r*abs(b))
+            err(j) = abs(a)/berr
         end do
     end subroutine error
 end program rand_poly
