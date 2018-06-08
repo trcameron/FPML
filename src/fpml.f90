@@ -146,11 +146,11 @@ contains
         ! main
         zz = 1/z
         rr = 1/r
-        a = zz*p(1)+p(2)
-        b = p(1)
+        a = p(1)
+        b = 0
         c = 0
-        berr = rr*ralpha(1)+ralpha(2)
-        do k=3,deg+1
+        berr = ralpha(1)
+        do k=2,deg+1
             c = zz*c + b
             b = zz*b + a
             a = zz*a + p(k)
@@ -193,11 +193,11 @@ contains
         intrinsic                       :: abs
         
         ! main
-        a = z*p(deg+1)+p(deg)
-        b = p(deg+1)
+        a = p(deg+1)
+        b = 0
         c = 0
-        berr = r*alpha(deg+1) + alpha(deg)
-        do k=deg-1,1,-1
+        berr = alpha(deg+1)
+        do k=deg,1,-1
             c = z*c + b
             b = z*b + a
             a = z*a + p(k)
