@@ -156,15 +156,15 @@ contains
             a = zz*a + p(k)
             berr = rr*berr + ralpha(k)
         end do
-        if(abs(a)<eps*berr) then
-            cond = berr/(rr*abs(b))
-            berr = abs(a)/berr
-            check = .false.
-        else 
+        if(abs(a)>eps*berr) then
             b = b/a
             c = 2*(c/a)
             c = zz**2*(deg-2*zz*b+zz**2*(b**2-c))
             b = zz*(deg-zz*b)
+        else
+            cond = berr/(rr*abs(b))
+            berr = abs(a)/berr
+            check = .false.
         end if
     end subroutine rcheck_lag
     !************************************************
@@ -203,13 +203,13 @@ contains
             a = z*a + p(k)
             berr = r*berr + alpha(k)
         end do 
-        if(abs(a)<eps*berr) then
+        if(abs(a)>eps*berr) then
+            b = b/a
+            c = b**2 - 2*(c/a)
+        else
             cond = berr/(r*abs(b))
             berr = abs(a)/berr
             check = .false.
-        else
-            b = b/a
-            c = b**2 - 2*(c/a)
         end if
     end subroutine check_lag
     !************************************************
