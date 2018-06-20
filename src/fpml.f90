@@ -129,6 +129,7 @@ contains
     ! b and c, respectively. 
     !************************************************
     subroutine rcheck_lag(p, ralpha, deg, b, c, z, r, check, berr, cond)
+        implicit none
         ! argument variables
         integer, intent(in)             :: deg
         logical, intent(out)            :: check
@@ -179,6 +180,7 @@ contains
     ! b and c, respectively. 
     !************************************************
     subroutine check_lag(p, alpha, deg, b, c, z, r, check, berr, cond)
+        implicit none
         ! argument variables
         integer, intent(in)             :: deg
         logical, intent(out)            :: check
@@ -224,6 +226,7 @@ contains
     ! to return the correction term.
     !************************************************
     subroutine modify_lag(deg, b, c, z, j, roots)
+        implicit none
         ! argument variables
         integer, intent(in)             :: deg, j
         complex(kind=dp), intent(in)    :: roots(:), z

@@ -4,8 +4,8 @@
 export DYLD_LIBRARY_PATH=$PWD/AMVW/eiscor/lib:$DYLD_LIBRARY_PATH
 
 # run tests
-#echo "convergence test ..."
-#./conv
+echo "convergence test ..."
+./conv
 #echo "initial estimates test ..."
 #./init_est
 #echo "methods test ... "
