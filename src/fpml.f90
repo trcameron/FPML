@@ -163,7 +163,7 @@ contains
             c = zz**2*(deg-2*zz*b+zz**2*(b**2-c))
             b = zz*(deg-zz*b)
         else
-            cond = berr/(rr*abs(b))
+            cond = berr/abs(deg*a-zz*b)
             berr = abs(a)/berr
             check = .false.
         end if
