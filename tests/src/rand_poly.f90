@@ -173,9 +173,9 @@ contains
         complex(kind=dp), intent(in)    :: p(:), roots(:)
         ! local variables
         integer                         :: j, k
-        real(kind=dp)                   :: r
+        real(kind=dp)                   :: r, berr
         real(kind=dp), dimension(deg+1) :: alpha, ralpha
-        complex(kind=dp)                :: a, berr, z
+        complex(kind=dp)                :: a, z
         
         ! main
         do j=1,deg+1
