@@ -22,7 +22,7 @@
 \addlegendentry{Polzeros}
 \addplot table [x=Degree, y=AMVW_time, col sep=comma] {../data_files/rand_poly.dat};
 \addlegendentry{AMVW}
-\nextgroupplot[ylabel = {Error}, xmode=log,ymode=log] 
+\nextgroupplot[ylabel = {Backward Error}, xmode=log,ymode=log] 
 \addplot table [x=Degree, y=FPML_err, col sep=comma] {../data_files/rand_poly.dat};
 \addplot table [x=Degree, y=Polzeros_err, col sep=comma] {../data_files/rand_poly.dat};
 \addplot table [x=Degree, y=AMVW_err, col sep=comma] {../data_files/rand_poly.dat};

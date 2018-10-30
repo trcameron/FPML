@@ -1,7 +1,7 @@
 !********************************************************************************
 !   RAND_POLY: Compare FPML against Polzers and AMVW on random polynomials
 !   Author: Thomas R. Cameron, Davidson College
-!   Last Modified: 21 March 2018
+!   Last Modified: 30 October 2018
 !********************************************************************************
 ! The speed and accuracy of FPML is compared against Polzeros and AMVW for
 ! an array of random polynomials. 
@@ -36,19 +36,19 @@ program rand_poly
     if(flag==0) then
         read(arg, '(I10)') startDegree
     else
-        startDegree=100
+        startDegree=80
     end if
     call get_command_argument(2,arg,status=flag)
     if(flag==0) then
         read(arg, '(I10)') endDegree
     else
-        endDegree=1600
+        endDegree=2560
     end if
     call get_command_argument(3,arg,status=flag)
     if(flag==0) then
         read(arg, '(I10)') itnum
     else
-        itnum=10
+        itnum=320
     end if
     
     ! Test: random polynomials
@@ -94,6 +94,7 @@ program rand_poly
         end do
         deallocate(err, p, roots, berr, cond, zeros, radius, h, coeffs, eigs, residuals)
         deg=2*deg
+        itnum=itnum/2
         ! write results to file
         write(1,'(ES15.2)', advance='no') sum(results(:,1))/itnum
         write(1,'(A)', advance='no') ','
@@ -108,6 +109,7 @@ program rand_poly
         write(1,'(ES15.2)') sum(results(:,6))/itnum
     end do
     deallocate(results)
+    ! close file
     close(1)
 contains
     !************************************************

@@ -3,28 +3,28 @@
 #############################################
 include ../../make.inc
 
-all: conv init_est_acc init_est_time methods rand_poly spec_poly_list spec_poly_results unity clean
+all: conv nat_poly rand_poly rand_unity spec_poly_list spec_poly_results trunc_exp unity clean
 	
 conv:
 	$(LC) $(LFLAGS) conv.tex
 	
-init_est_acc:
-	$(LC) $(LFLAGS) init_est_acc.tex
-	
-init_est_time:
-	$(LC) $(LFLAGS) init_est_time.tex
-	
-methods:
-	$(LC) $(LFLAGS) methods.tex
+nat_poly:
+	$(LC) $(LFLAGS) nat_poly.tex
 	
 rand_poly:
 	$(LC) $(LFLAGS) rand_poly.tex
+	
+rand_unity:
+	$(LC) $(LFLAGS) rand_unity.tex
 	
 spec_poly_list:
 	$(LC) $(LFLAGS) spec_poly_list.tex
 	
 spec_poly_results:
 	$(LC) $(LFLAGS) spec_poly_results.tex
+	
+trunc_exp:
+	$(LC) $(LFLAGS) trunc_exp.tex
 	
 unity:
 	$(LC) $(LFLAGS) unity.tex

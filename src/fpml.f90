@@ -81,15 +81,13 @@ contains
         real(kind=dp)                   :: r
         real(kind=dp), dimension(deg+1) :: alpha, ralpha
         complex(kind=dp)                :: b, c, z
-        integer, parameter              :: itmax = 30
+        integer, parameter              :: itmax = 50
         ! intrinsic functions
         intrinsic                       :: abs
         
         ! main
         check = .true.
-        do i=1,deg+1
-            alpha(i) = abs(poly(i))
-        end do
+        alpha = abs(poly)
         call estimates(alpha, deg, roots)
         do i=1,deg+1
             ralpha(i) = alpha(i)*(3.8*(deg-i+1) + 1)

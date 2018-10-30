@@ -7,7 +7,6 @@
 # and the test variables will affect make run.
 #############################################
 
-
 # fortran compiler and flags
 FC := gfortran
 FFLAGS := -O2
@@ -15,10 +14,3 @@ FFLAGS := -O2
 # latex compiler and flags
 LC := pdflatex
 LFLAGS := -shell-escape
-
-# tests run variables
-SD := 80		# start degree
-
-ED := 20480		# end degree
-
-IT := 10		# iteration number

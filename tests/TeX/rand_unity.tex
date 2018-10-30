@@ -1,0 +1,32 @@
+\documentclass[convert={density=300,outext=.png}]{standalone}
+\usepackage{pgfplots}
+\usetikzlibrary{pgfplots.groupplots}
+
+\begin{document}
+
+\begin{tikzpicture}[scale=0.5]
+\begin{groupplot}[
+    group style={
+        group size = 1 by 2,
+        xlabels at = edge bottom,
+        xticklabels at = edge bottom,
+        vertical sep = 5pt,
+    },
+    xlabel = {Degree},
+    legend style={at={(1.2,0.1)}, anchor=north}
+]
+\nextgroupplot[ylabel = {Time (s)}, xmode=log,ymode=log] 
+\addplot table [x=Degree, y=FPML_time, col sep=comma] {../data_files/rand_unity.dat};
+\addlegendentry{FPML}
+\addplot table [x=Degree, y=Polzeros_time, col sep=comma] {../data_files/rand_unity.dat};
+\addlegendentry{Polzeros}
+\addplot table [x=Degree, y=AMVW_time, col sep=comma] {../data_files/rand_unity.dat};
+\addlegendentry{AMVW}
+\nextgroupplot[ylabel = {Forward Error}, xmode=log,ymode=log] 
+\addplot table [x=Degree, y=FPML_err, col sep=comma] {../data_files/rand_unity.dat};
+\addplot table [x=Degree, y=Polzeros_err, col sep=comma] {../data_files/rand_unity.dat};
+\addplot table [x=Degree, y=AMVW_err, col sep=comma] {../data_files/rand_unity.dat};
+\end{groupplot}
+\end{tikzpicture}
+
+\end{document}

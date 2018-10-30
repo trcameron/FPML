@@ -1,79 +1,75 @@
 !********************************************************************************
 !   CONV: Test the convergence rate of FPML
 !   Author: Thomas R. Cameron, Davidson College
-!   Last Modified: 21 March 2018
+!   Last Modified: 30 October 2018
 !********************************************************************************
-! Tests the convergence rate of FPML on three special polynomials. The first
-! polynomial is Z^5-1, the second polynomial is the 10th degree Chebyshev, and 
-! the third polynomial is 1+z+z^2+...+z^20.
+! Tests the convergence rate of FPML on polynomials with random complex roots
+! in the unit circle. 
 !********************************************************************************
 program conv
     use fpml
+    use mpmodule
     implicit none
     ! testing variables
     integer                                     :: deg, j
-    integer, parameter                          :: itmax = 8
+    integer, parameter                          :: itmax = 10
     real(kind=dp), parameter                    :: pi = 3.141592653589793D0
-    real(kind=dp), dimension(:,:), allocatable  :: err
+    real(kind=dp), dimension(:), allocatable    :: coeffs, xr, xi
+    real(kind=dp), dimension(:,:), allocatable  :: error
     complex(kind=dp), dimension(:), allocatable :: exact_roots
     ! FPML variables
     real(kind=dp), dimension(:),    allocatable :: berr, cond   
     complex(kind=dp), dimension(:), allocatable :: p, roots
     
-    ! Test: 3 special polynomials
+    call mpinit
+    
+    ! Convergence Test
+    call init_random_seed()
     open(unit=1,file="data_files/conv.dat")
-    write(1,'(A)') 'Iteration, Error-1, Error-2, Error-3'
-    allocate(err(itmax,3))
-    ! poly1: roots of unity deg 5
-    deg = 5
-    allocate(exact_roots(deg), p(deg+1), roots(deg), berr(deg), cond(deg))
-    p(1) = -1D0
-    p(2:deg) = 0D0
-    p(deg+1) = 1D0
-    exact_roots = (/ (cmplx(cos(2*pi*j/deg),sin(2*pi*j/deg),kind=dp), j=1,deg)/)
-    err(:,1) = 0D0
-    call conv_main(p, deg, roots, berr, cond, err(:,1), exact_roots)
-    deallocate(exact_roots, p, roots, berr, cond)
-    
-    ! Poly 2: Chebyshev polynomial deg 10
-    deg = 10
-    allocate(exact_roots(deg), p(deg+1), roots(deg), berr(deg), cond(deg))
-    p(1) = -1D0
-    p(2) = 0D0
-    p(3) = 50D0
-    p(4) = 0D0
-    p(5) = -400D0
-    p(6) = 0D0
-    p(7) = 1120D0
-    p(8) = 0D0
-    p(9) = -1280D0
-    p(10) = 0D0
-    p(11) = 512D0
-    exact_roots = (/ (cmplx(cos((2D0*j-1D0)*pi/(2D0*deg)),0,kind=dp), j=1,deg)/)
-    err(:,2) = 0D0
-    call conv_main(p, deg, roots, berr, cond, err(:,2), exact_roots)
-    deallocate(exact_roots, p, roots, berr, cond)
-    
-    ! Poly 3: 1+z+z^2+...+z^20
-    deg = 20
-    allocate(exact_roots(deg), p(deg+1), roots(deg), berr(deg), cond(deg))
-    p = (/ (cmplx(1,0,kind=dp), j=1,deg+1)/)
-    exact_roots = (/ (cmplx(cos(2.0D0*j*pi/21.0D0),sin(2.0D0*j*pi/21.0D0),kind=dp), j=1,deg)/)
-    err(:,3) = 0D0
-    call conv_main(p, deg, roots, berr, cond, err(:,3), exact_roots)
-    deallocate(exact_roots, p, roots, berr, cond)
+    write(1,'(A)') 'Iteration, Error-1, Error-2, Error-3, Error-4, Error-5, Error-6'
+    allocate(error(itmax,6))
+    deg = 4;
+    j=1;
+    do while(deg<=24)
+        ! allocate
+        allocate(exact_roots(deg), p(deg+1), roots(deg), berr(deg), cond(deg), xr(deg), xi(deg), coeffs(deg))
+        ! roots
+        call rand_unitcmplx(exact_roots,deg)
+        xr = dble(exact_roots)
+        xi = aimag(exact_roots)
+        ! polynomial
+        call rootstocoeffs(deg,xr,xi,coeffs)
+        p(1:deg) = (/ (cmplx(coeffs(j),0,kind=dp), j=1,deg)/)
+        p(deg+1) = cmplx(1,0,kind=dp)
+        ! error
+        error(:,j)=0d0
+        ! solve
+        call conv_main(p, deg, roots, berr, cond, error(:,j), exact_roots)
+        ! deallocate
+        deallocate(exact_roots, p, roots, berr, cond, xr, xi, coeffs)
+        ! update deg and j
+        deg = deg+4
+        j = j+1
+    end do
     
     ! write results to file
     do j=1,itmax
         write(1,'(I10)', advance='no') j
         write(1,'(A)', advance='no') ','
-        write(1,'(ES15.2)',advance='no') err(j,1)
+        write(1,'(ES15.2)',advance='no') error(j,1)
         write(1,'(A)',advance='no') ','
-        write(1,'(ES15.2)',advance='no') err(j,2)
+        write(1,'(ES15.2)',advance='no') error(j,2)
         write(1,'(A)',advance='no') ','
-        write(1,'(ES15.2)') err(j,3)
+        write(1,'(ES15.2)',advance='no') error(j,3)
+        write(1,'(A)',advance='no') ','
+        write(1,'(ES15.2)',advance='no') error(j,4)
+        write(1,'(A)',advance='no') ','
+        write(1,'(ES15.2)',advance='no') error(j,5)
+        write(1,'(A)',advance='no') ','
+        write(1,'(ES15.2)') error(j,6)
     end do
-    deallocate(err)
+    deallocate(error)
+    ! close file
     close(1)
 contains
     !************************************************
@@ -101,87 +97,116 @@ contains
         
         ! main
         check = .true.
-        do i=1,deg+1
-            alpha(i) = abs(p(i))
-        end do
+        alpha = abs(p)
         call estimates(alpha, deg, roots)
         do i=1,deg+1
-            ralpha(deg-i+2) = alpha(i)*(3.8*(deg-i+1) + 1)
+            ralpha(i) = alpha(i)*(3.8*(deg-i+1) + 1)
             alpha(i) = alpha(i)*(3.8*(i-1) + 1)
         end do
         nz = 0
         do i=1,itmax
-            call sort(roots, exact_roots, deg, check)
-            err(i) = maxval(abs(roots-exact_roots)/abs(exact_roots))
+            err(i) = maxrel_fwderr(roots, exact_roots, deg)
             do j=1,deg
                 if(check(j)) then
                     z = roots(j)
                     r = abs(z)
                     if(r > 1) then
                         call rcheck_lag(p, ralpha, deg, b, c, z, r, check(j), berr(j), cond(j))
-                        if(check(j)) then
-                            call modify_lag(deg, b, c, z, j, roots)
-                            roots(j) = roots(j) - c
-                        else
-                            nz = nz + 1
-                            if(nz==deg) return
-                        end if
                     else
                         call check_lag(p, alpha, deg, b, c, z, r, check(j), berr(j), cond(j))
-                        if(check(j)) then
-                            call modify_lag(deg, b, c, z, j, roots)
-                            roots(j) = roots(j) - c
-                        else 
-                            nz = nz + 1
-                            if(nz==deg) return
-                        end if
+                    end if
+                    if(check(j)) then
+                        call modify_lag(deg, b, c, z, j, roots)
+                        roots(j) = roots(j) - c
+                    else
+                        nz = nz + 1
+                        if(nz==deg) return
                     end if
                 end if
             end do
         end do
     end subroutine conv_main
     !************************************************
-    !                       sort                    *
+    !                   init_random_seed            *
     !************************************************
-    ! The roots and check array are sorted with 
-    ! respect to exact_roots. For each i, roots(i) 
-    ! is the root approximation that is closest to
-    ! exact_roots(i). Then check(i) is the logical
-    ! element that keeps track of the convergence of
-    ! that root.
+    ! Initiate random seed using system_clock. This
+    ! seed is then available for the random number
+    ! generator in random_number for the life of
+    ! the program.
     !************************************************
-    subroutine sort(roots, exact_roots, deg, check)
+    subroutine init_random_seed()
+        implicit none
+        ! local variables
+        integer                             :: i, n , clock
+        integer, dimension(:), allocatable  :: seed
+        ! intrinsic subroutines
+        intrinsic                           :: random_seed, system_clock
+        
+        ! main
+        call random_seed(size = n)
+        allocate(seed(n))
+        
+        call system_clock(count = clock)
+        seed = clock + 37 * (/ (i - 1, i = 1,n) /)
+        call random_seed(put = seed)
+        
+        deallocate(seed)
+    end subroutine init_random_seed
+    !************************************************
+    !                       maxrel_fwderr           *
+    !************************************************
+    ! Compute the maximum relative forward error
+    ! in the approximation roots to exact_roots.
+    !************************************************
+    function maxrel_fwderr(roots, exact_roots, deg) result(res)
         implicit none
         ! argument variables
-        logical, intent(inout)          :: check(:)
         integer, intent(in)             :: deg
         complex(kind=dp), intent(in)    :: exact_roots(:)
         complex(kind=dp), intent(inout) :: roots(:)
         ! local variables
-        logical                         :: t
         integer                         :: i, j, k
-        real(kind=dp)                   :: diff, x
-        complex(kind=dp)                :: temp
+        real(kind=dp)                   :: hd, res
         
         ! main
+        res = 0d0
         do i=1,deg
-            diff = abs(roots(i) - exact_roots(i))
-            k = i
-            do j=i+1, deg
-                x = abs(roots(j) - exact_roots(i))
-                if(x<diff) then
-                    diff = x
-                    k = j
+            hd = abs(roots(i)-exact_roots(1))
+            j = 1
+            do k = 2,deg
+                if (hd>abs(roots(i)-exact_roots(k))) then
+                    hd = abs(roots(i)-exact_roots(k))
+                    j = k
                 end if
             end do
-            if(k>i) then
-                temp = roots(i)
-                roots(i) = roots(k)
-                roots(k) = temp
-                t = check(i)
-                check(i) = check(k)
-                check(k) = t
+            if (res<hd/abs(exact_roots(j))) then
+                res = hd/abs(exact_roots(j))
             end if
         end do
-    end subroutine sort
+        return
+    end function maxrel_fwderr
+    !************************************************
+    !                       rand_unitcmplx          *
+    !************************************************
+    ! creates a random array of unitary complex numbers.
+    ! Complex numbers come in conjugate pairs, thus
+    ! array should have size divisible by 2. 
+    !************************************************
+    subroutine rand_unitcmplx(array,size)
+        implicit none
+        ! argument variables
+        integer, intent(in)             :: size
+        complex(kind=dp), intent(out)   :: array(:)
+        ! local variables
+        integer                         :: k
+        real(kind=dp)                   :: r1, r2
+        
+        ! main
+        do k=1,size,2
+            call random_number(r1)
+            call random_number(r2)
+            array(k) = cmplx(cos(2*pi*r1),sin(2*pi*r2),kind=dp)
+            array(k+1) = conjg(array(k))
+        end do
+    end subroutine rand_unitcmplx
 end program conv

@@ -1,7 +1,7 @@
 !********************************************************************************
 !   UNITY: Compare FPML against Polzers and AMVW on roots of unity
 !   Author: Thomas R. Cameron, Davidson College
-!   Last Modified: 21 March 2018
+!   Last Modified: 30 October 2018
 !********************************************************************************
 ! The speed and accuracy of FPML is compared against Polzeros and AMVW for
 ! computing the roots of unity via the polynomial z^n-1.
@@ -16,7 +16,6 @@ program unity
     ! testing variables
     integer                                     :: deg, it, j, clock_rate, clock_start, clock_stop
     real(kind=dp), parameter                    :: pi = 3.141592653589793D0
-    real(kind=dp), dimension(:), allocatable    :: err
     real(kind=dp), dimension(:,:), allocatable  :: results
     complex(kind=dp), dimension(:), allocatable :: exact_roots
     ! FPML variables
@@ -38,19 +37,19 @@ program unity
     if(flag==0) then
         read(arg, '(I10)') startDegree
     else
-        startDegree=100
+        startDegree=80
     end if
     call get_command_argument(2,arg,status=flag)
     if(flag==0) then
         read(arg, '(I10)') endDegree
     else
-        endDegree=1600
+        endDegree=2560
     end if
     call get_command_argument(3,arg,status=flag)
     if(flag==0) then
         read(arg, '(I10)') itnum
     else
-        itnum=10
+        itnum=320
     end if
     
     ! Testing: roots of unity
@@ -62,7 +61,7 @@ program unity
     do while(deg<=endDegree)
         write(1,'(I10)', advance='no') deg
         write(1,'(A)', advance='no') ','
-        allocate(err(deg), exact_roots(deg))
+        allocate(exact_roots(deg))
         allocate(p(deg+1), roots(deg), berr(deg), cond(deg))
         allocate(zeros(deg), radius(deg), h(deg+1))
         allocate(coeffs(deg+1), eigs(deg), residuals(deg))
@@ -79,30 +78,25 @@ program unity
             call main(p, deg, roots, berr, cond)
             call system_clock(count=clock_stop)
             results(it,1) = dble(clock_stop-clock_start)/dble(clock_rate)
-            call sort(roots, exact_roots, deg)
-            err = (/ (abs(roots(j)-exact_roots(j))/abs(exact_roots(j)), j=1,deg)/)
-            results(it,2) = sum(err)/deg
+            results(it,2) = maxrel_fwderr(roots, exact_roots, deg)
             ! Polzeros
             call system_clock(count_rate=clock_rate)
             call system_clock(count=clock_start)
             call polzeros(deg, p, eps, big, small, nitmax, zeros, radius, h, iter)
             call system_clock(count=clock_stop)
             results(it,3)=dble(clock_stop-clock_start)/dble(clock_rate)
-            call sort(zeros, exact_roots, deg)
-            err = (/ (abs(zeros(j)-exact_roots(j))/abs(exact_roots(j)), j=1,deg)/)
-            results(it,4) = sum(err)/deg
+            results(it,4) = maxrel_fwderr(zeros, exact_roots, deg)
             ! AMVW
             call system_clock(count_rate=clock_rate)
             call system_clock(count=clock_start)
             call z_poly_roots(deg, coeffs, eigs, residuals, flag)
             call system_clock(count=clock_stop)
             results(it,5)=dble(clock_stop-clock_start)/dble(clock_rate)
-            call sort(eigs, exact_roots, deg)
-            err = (/ (abs(eigs(j)-exact_roots(j))/abs(exact_roots(j)), j=1,deg)/)
-            results(it,6) = sum(err)/deg
+            results(it,6) = maxrel_fwderr(eigs, exact_roots, deg)
         end do
-        deallocate(err, exact_roots, p, roots, berr, cond, zeros, radius, h, coeffs, eigs, residuals)
+        deallocate(exact_roots, p, roots, berr, cond, zeros, radius, h, coeffs, eigs, residuals)
         deg=2*deg
+        itnum=itnum/2
         ! write results to file
         write(1,'(ES15.2)', advance='no') sum(results(:,1))/itnum
         write(1,'(A)', advance='no') ','
@@ -116,6 +110,9 @@ program unity
         write(1,'(A)', advance='no') ','
         write(1,'(ES15.2)') sum(results(:,6))/itnum
     end do
+    deallocate(results)
+    ! close file
+    close(1)
 contains
     !************************************************
     !                   init_random_seed            *
@@ -144,13 +141,12 @@ contains
         deallocate(seed)
     end subroutine init_random_seed
     !************************************************
-    !                       sort                    *
+    !                       maxrel_fwderr           *
     !************************************************
-    ! The roots are sorted with respect to exact_roots. 
-    ! For each i, roots(i) is the root approximation 
-    ! that is closest to exact_roots(i).
+    ! Compute the maximum relative forward error
+    ! in the approximation roots to exact_roots.
     !************************************************
-    subroutine sort(roots, exact_roots, deg)
+    function maxrel_fwderr(roots, exact_roots, deg) result(res)
         implicit none
         ! argument variables
         integer, intent(in)             :: deg
@@ -158,23 +154,23 @@ contains
         complex(kind=dp), intent(inout) :: roots(:)
         ! local variables
         integer                         :: i, j, k
-        real(kind=dp)                   :: diff, x
-        complex(kind=dp)                :: temp
+        real(kind=dp)                   :: hd, res
         
         ! main
+        res = 0d0
         do i=1,deg
-            diff = abs(roots(i) - exact_roots(i))
-            k = i
-            do j=i+1, deg
-                x = abs(roots(j) - exact_roots(i))
-                if(x<diff) then
-                    diff = x
-                    k = j
+            hd = abs(roots(i)-exact_roots(1))
+            j = 1
+            do k = 2,deg
+                if (hd>abs(roots(i)-exact_roots(k))) then
+                    hd = abs(roots(i)-exact_roots(k))
+                    j = k
                 end if
             end do
-            temp = roots(i)
-            roots(i) = roots(k)
-            roots(k) = temp
+            if (res<hd/abs(exact_roots(j))) then
+                res = hd/abs(exact_roots(j))
+            end if
         end do
-    end subroutine sort
+        return
+    end function maxrel_fwderr
 end program unity
