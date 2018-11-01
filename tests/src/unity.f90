@@ -1,7 +1,7 @@
 !********************************************************************************
 !   UNITY: Compare FPML against Polzers and AMVW on roots of unity
 !   Author: Thomas R. Cameron, Davidson College
-!   Last Modified: 30 October 2018
+!   Last Modified: 1 Novemeber 2018
 !********************************************************************************
 ! The speed and accuracy of FPML is compared against Polzeros and AMVW for
 ! computing the roots of unity via the polynomial z^n-1.
@@ -19,11 +19,12 @@ program unity
     real(kind=dp), dimension(:,:), allocatable  :: results
     complex(kind=dp), dimension(:), allocatable :: exact_roots
     ! FPML variables
-    real(kind=dp), dimension(:),    allocatable :: berr, cond   
+    integer, parameter                          :: nitmax=30
+    logical, dimension(:), allocatable          :: conv
+    real(kind=dp), dimension(:), allocatable    :: berr, cond   
     complex(kind=dp), dimension(:), allocatable :: p, roots
     ! Polzeros variables
     integer                                     :: iter
-    integer, parameter                          :: nitmax=30
     real(kind=dp), parameter                    :: small=tiny(1.0D0), big=huge(1.0D0)
     logical, dimension(:), allocatable          :: h
     real(kind=dp), dimension(:), allocatable    :: radius
@@ -43,13 +44,13 @@ program unity
     if(flag==0) then
         read(arg, '(I10)') endDegree
     else
-        endDegree=2560
+        endDegree=20480
     end if
     call get_command_argument(3,arg,status=flag)
     if(flag==0) then
         read(arg, '(I10)') itnum
     else
-        itnum=320
+        itnum=512
     end if
     
     ! Testing: roots of unity
@@ -62,7 +63,7 @@ program unity
         write(1,'(I10)', advance='no') deg
         write(1,'(A)', advance='no') ','
         allocate(exact_roots(deg))
-        allocate(p(deg+1), roots(deg), berr(deg), cond(deg))
+        allocate(p(deg+1), roots(deg), berr(deg), cond(deg), conv(deg))
         allocate(zeros(deg), radius(deg), h(deg+1))
         allocate(coeffs(deg+1), eigs(deg), residuals(deg))
         ! polynomial and roots
@@ -75,7 +76,7 @@ program unity
             ! FPML
             call system_clock(count_rate=clock_rate)
             call system_clock(count=clock_start)
-            call main(p, deg, roots, berr, cond)
+            call main(p, deg, roots, berr, cond, conv, nitmax)
             call system_clock(count=clock_stop)
             results(it,1) = dble(clock_stop-clock_start)/dble(clock_rate)
             results(it,2) = maxrel_fwderr(roots, exact_roots, deg)
@@ -94,21 +95,22 @@ program unity
             results(it,5)=dble(clock_stop-clock_start)/dble(clock_rate)
             results(it,6) = maxrel_fwderr(eigs, exact_roots, deg)
         end do
-        deallocate(exact_roots, p, roots, berr, cond, zeros, radius, h, coeffs, eigs, residuals)
+        deallocate(exact_roots, p, roots, berr, cond, conv, zeros, radius, h, coeffs, eigs, residuals)
+        ! write results to file
+        write(1,'(ES15.2)', advance='no') sum(results(1:itnum,1))/itnum
+        write(1,'(A)', advance='no') ','
+        write(1,'(ES15.2)', advance='no') sum(results(1:itnum,2))/itnum
+        write(1,'(A)', advance='no') ','
+        write(1,'(ES15.2)', advance='no') sum(results(1:itnum,3))/itnum
+        write(1,'(A)', advance='no') ','
+        write(1,'(ES15.2)', advance='no') sum(results(1:itnum,4))/itnum
+        write(1,'(A)', advance='no') ','
+        write(1,'(ES15.2)', advance='no') sum(results(1:itnum,5))/itnum
+        write(1,'(A)', advance='no') ','
+        write(1,'(ES15.2)') sum(results(1:itnum,6))/itnum
+        ! update deg and itnum
         deg=2*deg
         itnum=itnum/2
-        ! write results to file
-        write(1,'(ES15.2)', advance='no') sum(results(:,1))/itnum
-        write(1,'(A)', advance='no') ','
-        write(1,'(ES15.2)', advance='no') sum(results(:,2))/itnum
-        write(1,'(A)', advance='no') ','
-        write(1,'(ES15.2)', advance='no') sum(results(:,3))/itnum
-        write(1,'(A)', advance='no') ','
-        write(1,'(ES15.2)', advance='no') sum(results(:,4))/itnum
-        write(1,'(A)', advance='no') ','
-        write(1,'(ES15.2)', advance='no') sum(results(:,5))/itnum
-        write(1,'(A)', advance='no') ','
-        write(1,'(ES15.2)') sum(results(:,6))/itnum
     end do
     deallocate(results)
     ! close file

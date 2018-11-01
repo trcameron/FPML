@@ -1,7 +1,7 @@
 !********************************************************************************
 !   FPML_DRIVER: Driver Program for FPML
 !   Author: Thomas R. Cameron, Davidson College
-!   Last Modified: 20 March 2018
+!   Last Modified: 1 November 2018
 !********************************************************************************
 ! Loads polynomial stored in data_files and computes the roots of said polynomial
 ! and returns the results along with backward error and condtion numbers into
@@ -19,7 +19,9 @@ program fpml_driver
     ! testing variables
     integer                                     :: deg, i, clock_rate, clock_start, clock_stop
     ! method variables
-    real(kind=dp), dimension(:),    allocatable :: berr, cond   
+    integer, parameter                          :: itmax=30
+    logical, dimension(:), allocatable          :: conv
+    real(kind=dp), dimension(:), allocatable    :: berr, cond   
     complex(kind=dp), dimension(:), allocatable :: p, roots
     
     ! read in optional arguments
@@ -27,10 +29,10 @@ program fpml_driver
     if(flag==0) then
         ! load polynomial
         read(arg, '(A)') poly_file
-        write(*,*) 'Starting: running on '//poly_file
+        write(*,*) 'Starting: Running on '//poly_file
         open(unit=1,file="data_files/"//poly_file, err=10, status='OLD')
         read(1,*) deg
-        allocate(p(deg+1), roots(deg), berr(deg), cond(deg))
+        allocate(p(deg+1), roots(deg), berr(deg), cond(deg), conv(deg))
         do i=1, deg+1
             read(1,*) aux
             p(i) = aux
@@ -40,7 +42,7 @@ program fpml_driver
         write(2,'(A)') 'root_real, root_imag, berr, cond'
         call system_clock(count_rate=clock_rate)
         call system_clock(count=clock_start)
-        call main(p, deg, roots, berr, cond)
+        call main(p, deg, roots, berr, cond, conv, itmax)
         call system_clock(count=clock_stop)
         ! record time and other results
         write(*,'(A)', advance='no') 'Elapsed Time = '
@@ -54,20 +56,21 @@ program fpml_driver
             write(2,'(A)', advance='no') ','
             write(2,'(ES15.2)') cond(i)
         end do
-        deallocate(p, roots, berr, cond)
+        ! deallocate and close files
+        deallocate(p, roots, berr, cond, conv)
         close(1)
         close(2)
-        write(*,*) 'Finished: results are located in data_files/results.dat.'
+        write(*,*) 'Finished: Results are located in data_files/results.dat.'
         return
         ! statement only for poly_file open error
         10  write(*,*) 'Warning: File does not exist.'
         return
     else
         ! poly1.dat
-        write(*,*) 'Warning: no file was given, running on poly1.dat.'
+        write(*,*) 'Warning: No file was given; running on poly1.dat.'
         open(unit=1,file="data_files/poly1.dat", status='OLD')
         read(1,*) deg
-        allocate(p(deg+1), roots(deg), berr(deg), cond(deg))
+        allocate(p(deg+1), roots(deg), berr(deg), cond(deg), conv(deg))
         do i=1, deg+1
             read(1,*) aux
             p(i) = aux
@@ -77,7 +80,7 @@ program fpml_driver
         write(2,'(A)') 'root_real, root_imag, berr, cond'
         call system_clock(count_rate=clock_rate)
         call system_clock(count=clock_start)
-        call main(p, deg, roots, berr, cond)
+        call main(p, deg, roots, berr, cond, conv, itmax)
         call system_clock(count=clock_stop)
         ! record time and other results
         write(*,'(A)', advance='no') 'Elapsed Time = '
@@ -91,10 +94,11 @@ program fpml_driver
             write(2,'(A)', advance='no') ','
             write(2,'(ES15.2)') cond(i)
         end do
-        deallocate(p, roots, berr, cond)
+        ! deallocate and close files
+        deallocate(p, roots, berr, cond, conv)
         close(1)
         close(2)
-        write(*,*) 'Finished: results are located in data_files/results.dat.'
+        write(*,*) 'Finished: Results are located in data_files/results.dat.'
         return
     end if
 end program fpml_driver

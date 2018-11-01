@@ -1,7 +1,7 @@
 !********************************************************************************
 !   FPML: Fourth order Parallelizable Modification of Laguerre's method
 !   Author: Thomas R. Cameron, Davidson College
-!   Last Modified: 20 March 2018
+!   Last Modified: 1 November 2018
 !********************************************************************************
 ! MIT License
 !
@@ -68,25 +68,24 @@ contains
     ! and the condition number of each root 
     ! approximation is stored in cond. 
     !************************************************
-    subroutine main(poly, deg, roots, berr, cond)
+    subroutine main(poly, deg, roots, berr, cond, conv, itmax)
         implicit none
         ! argument variables
-        integer, intent(in)             :: deg
+        integer, intent(in)             :: deg, itmax
+        logical, intent(out)            :: conv(:)
         real(kind=dp), intent(out)      :: berr(:), cond(:)
         complex(kind=dp), intent(in)    :: poly(:)
         complex(kind=dp), intent(out)   :: roots(:)
         ! local variables
         integer                         :: i, j, nz
-        logical, dimension(deg)         :: check
         real(kind=dp)                   :: r
         real(kind=dp), dimension(deg+1) :: alpha, ralpha
         complex(kind=dp)                :: b, c, z
-        integer, parameter              :: itmax = 50
         ! intrinsic functions
         intrinsic                       :: abs
         
         ! main
-        check = .true.
+        conv = .false.
         alpha = abs(poly)
         call estimates(alpha, deg, roots)
         do i=1,deg+1
@@ -96,15 +95,15 @@ contains
         nz = 0
         do i=1,itmax
             do j=1,deg
-                if(check(j)) then
+                if(.not.conv(j)) then
                     z = roots(j)
                     r = abs(z)
                     if(r > 1) then
-                        call rcheck_lag(poly, ralpha, deg, b, c, z, r, check(j), berr(j), cond(j))
+                        call rcheck_lag(poly, ralpha, deg, b, c, z, r, conv(j), berr(j), cond(j))
                     else
-                        call check_lag(poly, alpha, deg, b, c, z, r, check(j), berr(j), cond(j))
+                        call check_lag(poly, alpha, deg, b, c, z, r, conv(j), berr(j), cond(j))
                     end if
-                    if(check(j)) then
+                    if(.not.conv(j)) then
                         call modify_lag(deg, b, c, z, j, roots)
                         roots(j) = roots(j) - c
                     else
@@ -113,6 +112,39 @@ contains
                     end if
                 end if
             end do
+        end do
+        write(*,'(A)') 'Warning: Convergence failed for at least one root approximation.'
+        write(*,'(A)') 'Check conv array and consider increasing itmax.'
+        do j=1,deg
+            if(.not.conv(j)) then
+                z = roots(j)
+                r = abs(z)
+                if(r>1) then
+                    z = 1/z
+                    r = 1/r
+                    b = poly(1)
+                    c = 0
+                    berr(j) = ralpha(1)
+                    do i=2,deg+1
+                        c = z*c + b
+                        b = z*b + poly(i)
+                        berr(j) = r*berr(j) + ralpha(i)
+                    end do
+                    cond(j) = berr(j)/abs(deg*b-z*c)
+                    berr(j) = abs(b)/berr(j)
+                else
+                    b = poly(deg+1)
+                    c = 0
+                    berr(j) = alpha(deg+1)
+                    do i=deg,1,-1
+                        c = z*c + b
+                        b = z*b + poly(i)
+                        berr(j) = r*berr(j) + alpha(i)
+                    end do
+                    cond(j) = berr(j)/(r*abs(c))
+                    berr(j) = abs(b)/berr(j)
+                end if
+            end if
         end do
     end subroutine main
     !************************************************
@@ -123,14 +155,13 @@ contains
     ! If the backward error is less than eps, then
     ! both backward error and condition number are
     ! computed. Otherwise, the Laguerre correction terms
-    ! Gj and Hj are computed and stored in variables
-    ! b and c, respectively. 
+    ! are computed and stored in variables b and c. 
     !************************************************
-    subroutine rcheck_lag(p, ralpha, deg, b, c, z, r, check, berr, cond)
+    subroutine rcheck_lag(p, ralpha, deg, b, c, z, r, conv, berr, cond)
         implicit none
         ! argument variables
         integer, intent(in)             :: deg
-        logical, intent(out)            :: check
+        logical, intent(out)            :: conv
         real(kind=dp), intent(in)       :: ralpha(:), r
         real(kind=dp), intent(out)      :: berr, cond
         complex(kind=dp), intent(in)    :: p(:), z
@@ -163,7 +194,7 @@ contains
         else
             cond = berr/abs(deg*a-zz*b)
             berr = abs(a)/berr
-            check = .false.
+            conv = .true.
         end if
     end subroutine rcheck_lag
     !************************************************
@@ -177,11 +208,11 @@ contains
     ! Gj and Hj are computed and stored in variables
     ! b and c, respectively. 
     !************************************************
-    subroutine check_lag(p, alpha, deg, b, c, z, r, check, berr, cond)
+    subroutine check_lag(p, alpha, deg, b, c, z, r, conv, berr, cond)
         implicit none
         ! argument variables
         integer, intent(in)             :: deg
-        logical, intent(out)            :: check
+        logical, intent(out)            :: conv
         real(kind=dp), intent(in)       :: alpha(:), r
         real(kind=dp), intent(out)      :: berr, cond
         complex(kind=dp), intent(in)    :: p(:), z
@@ -209,7 +240,7 @@ contains
         else
             cond = berr/(r*abs(b))
             berr = abs(a)/berr
-            check = .false.
+            conv = .true.
         end if
     end subroutine check_lag
     !************************************************

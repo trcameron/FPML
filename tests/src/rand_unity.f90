@@ -1,7 +1,7 @@
 !********************************************************************************
 !   RAND_UNITY: Compare FPML against Polzers and AMVW on roots of unity
 !   Author: Thomas R. Cameron, Davidson College
-!   Last Modified: 21 March 2018
+!   Last Modified: 1 Novemeber 2018
 !********************************************************************************
 ! The speed and accuracy of FPML is compared against Polzeros and AMVW for
 ! computing the roots of a polynomial whose roots are random in the unit circle. 
@@ -16,16 +16,17 @@ program rand_unity
     integer                                     :: flag, startDegree, endDegree, itnum
     ! testing variables
     integer                                     :: deg, it, j, clock_rate, clock_start, clock_stop
-    real(kind=dp), parameter                    :: pi = 3.141592653589793D0
+    real(kind=dp), parameter                    :: pi = 3.141592653589793d0
     real(kind=dp), dimension(:), allocatable    :: coeffs, xr, xi
     real(kind=dp), dimension(:,:), allocatable  :: results
     complex(kind=dp), dimension(:), allocatable :: exact_roots
     ! FPML variables
-    real(kind=dp), dimension(:),    allocatable :: berr, cond   
+    integer, parameter                          :: nitmax=35
+    logical, dimension(:), allocatable          :: conv
+    real(kind=dp), dimension(:), allocatable    :: berr, cond   
     complex(kind=dp), dimension(:), allocatable :: p, roots
     ! Polzeros variables
     integer                                     :: iter
-    integer, parameter                          :: nitmax=30
     real(kind=dp), parameter                    :: small=tiny(1.0D0), big=huge(1.0D0)
     logical, dimension(:), allocatable          :: h
     real(kind=dp), dimension(:), allocatable    :: radius
@@ -56,7 +57,7 @@ program rand_unity
         itnum=512
     end if
     
-    ! Testing: polynomial with random unitary complex roots
+    ! Testing: polynomial with random unitary complex roots in the unit circle
     call init_random_seed()
     open(unit=1,file="data_files/rand_unity.dat")
     write(1,'(A)') 'Degree, FPML_time, FPML_err, Polzeros_time, Polzeros_err, AMVW_time, AMVW_err'
@@ -66,7 +67,7 @@ program rand_unity
         write(1,'(I10)', advance='no') deg
         write(1,'(A)', advance='no') ','
         allocate(exact_roots(deg), coeffs(deg), xr(deg), xi(deg))
-        allocate(p(deg+1), roots(deg), berr(deg), cond(deg))
+        allocate(p(deg+1), roots(deg), berr(deg), cond(deg), conv(deg))
         allocate(zeros(deg), radius(deg), h(deg+1))
         allocate(poly(deg+1), eigs(deg), residuals(deg))
         do it=1,itnum
@@ -82,7 +83,7 @@ program rand_unity
             ! FPML
             call system_clock(count_rate=clock_rate)
             call system_clock(count=clock_start)
-            call main(p, deg, roots, berr, cond)
+            call main(p, deg, roots, berr, cond, conv, nitmax)
             call system_clock(count=clock_stop)
             results(it,1) = dble(clock_stop-clock_start)/dble(clock_rate)
             results(it,2) = maxrel_fwderr(roots, exact_roots, deg)
@@ -101,20 +102,21 @@ program rand_unity
             results(it,5)=dble(clock_stop-clock_start)/dble(clock_rate)
             results(it,6) = maxrel_fwderr(eigs, exact_roots, deg)
         end do
-        deallocate(exact_roots, coeffs, xr, xi, p, roots, berr, cond, zeros, radius, h, poly, eigs, residuals)
-        deg=deg+2
+        deallocate(exact_roots, coeffs, xr, xi, p, roots, berr, cond, conv, zeros, radius, h, poly, eigs, residuals)
         ! write results to file
-        write(1,'(ES15.2)', advance='no') sum(results(:,1))/itnum
+        write(1,'(ES15.2)', advance='no') sum(results(1:itnum,1))/itnum
         write(1,'(A)', advance='no') ','
-        write(1,'(ES15.2)', advance='no') sum(results(:,2))/itnum
+        write(1,'(ES15.2)', advance='no') sum(results(1:itnum,2))/itnum
         write(1,'(A)', advance='no') ','
-        write(1,'(ES15.2)', advance='no') sum(results(:,3))/itnum
+        write(1,'(ES15.2)', advance='no') sum(results(1:itnum,3))/itnum
         write(1,'(A)', advance='no') ','
-        write(1,'(ES15.2)', advance='no') sum(results(:,4))/itnum
+        write(1,'(ES15.2)', advance='no') sum(results(1:itnum,4))/itnum
         write(1,'(A)', advance='no') ','
-        write(1,'(ES15.2)', advance='no') sum(results(:,5))/itnum
+        write(1,'(ES15.2)', advance='no') sum(results(1:itnum,5))/itnum
         write(1,'(A)', advance='no') ','
-        write(1,'(ES15.2)') sum(results(:,6))/itnum
+        write(1,'(ES15.2)') sum(results(1:itnum,6))/itnum
+        ! update deg
+        deg=deg+2
     end do
     deallocate(results)
     ! close file
@@ -202,7 +204,7 @@ contains
             call random_number(r)
             theta1 = -1 + 2*theta1
             theta2 = -1 + 2*theta2
-            array(k) = r*cmplx(cos(theta1*pi),sin(theta2*pi))
+            array(k) = r*cmplx(cos(theta1*pi),sin(theta2*pi),kind=dp)
             array(k+1) = conjg(array(k))
         end do
     end subroutine rand_unitcmplx

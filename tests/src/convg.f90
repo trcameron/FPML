@@ -1,29 +1,30 @@
 !********************************************************************************
-!   CONV: Test the convergence rate of FPML
+!   CONVG: Test the convergence rate of FPML
 !   Author: Thomas R. Cameron, Davidson College
-!   Last Modified: 30 October 2018
+!   Last Modified: 1 November 2018
 !********************************************************************************
 ! Tests the convergence rate of FPML on polynomials with random complex roots
 ! in the unit circle. 
 !********************************************************************************
-program conv
+program convg
     use fpml
     use mpmodule
     implicit none
     ! testing variables
     integer                                     :: deg, j
     integer, parameter                          :: itmax = 10
-    real(kind=dp), parameter                    :: pi = 3.141592653589793D0
+    real(kind=dp), parameter                    :: pi = 3.141592653589793d0
     real(kind=dp), dimension(:), allocatable    :: coeffs, xr, xi
     real(kind=dp), dimension(:,:), allocatable  :: error
     complex(kind=dp), dimension(:), allocatable :: exact_roots
     ! FPML variables
-    real(kind=dp), dimension(:),    allocatable :: berr, cond   
+    logical, dimension(:), allocatable          :: conv
+    real(kind=dp), dimension(:), allocatable    :: berr, cond   
     complex(kind=dp), dimension(:), allocatable :: p, roots
     
     call mpinit
     
-    ! Convergence Test
+    ! Testing: convergence
     call init_random_seed()
     open(unit=1,file="data_files/conv.dat")
     write(1,'(A)') 'Iteration, Error-1, Error-2, Error-3, Error-4, Error-5, Error-6'
@@ -32,7 +33,7 @@ program conv
     j=1;
     do while(deg<=24)
         ! allocate
-        allocate(exact_roots(deg), p(deg+1), roots(deg), berr(deg), cond(deg), xr(deg), xi(deg), coeffs(deg))
+        allocate(exact_roots(deg), p(deg+1), roots(deg), berr(deg), cond(deg), conv(deg), xr(deg), xi(deg), coeffs(deg))
         ! roots
         call rand_unitcmplx(exact_roots,deg)
         xr = dble(exact_roots)
@@ -44,9 +45,9 @@ program conv
         ! error
         error(:,j)=0d0
         ! solve
-        call conv_main(p, deg, roots, berr, cond, error(:,j), exact_roots)
+        call conv_main(p, deg, roots, berr, cond, conv, itmax, error(:,j), exact_roots)
         ! deallocate
-        deallocate(exact_roots, p, roots, berr, cond, xr, xi, coeffs)
+        deallocate(exact_roots, p, roots, berr, cond, conv, xr, xi, coeffs)
         ! update deg and j
         deg = deg+4
         j = j+1
@@ -81,22 +82,22 @@ contains
     ! sorted with respect to exact roots. Then the 
     ! max relative forward error is stored in err.
     !************************************************
-    subroutine conv_main(p, deg, roots, berr, cond, err, exact_roots)
+    subroutine conv_main(p, deg, roots, berr, cond, conv, itmax, err, exact_roots)
         implicit none
         ! argument variables
-        integer, intent(in)             :: deg
+        integer, intent(in)             :: deg, itmax
+        logical, intent(out)            :: conv(:)
         real(kind=dp), intent(out)      :: berr(:), cond(:), err(:)
         complex(kind=dp), intent(in)    :: p(:)
         complex(kind=dp), intent(out)   :: roots(:), exact_roots(:)
         ! local variables
         integer                         :: i, j, nz
-        logical, dimension(deg)         :: check
         real(kind=dp), dimension(deg+1) :: alpha, ralpha
         real(kind=dp)                   :: r
         complex(kind=dp)                :: b, c, z
         
         ! main
-        check = .true.
+        conv = .false.
         alpha = abs(p)
         call estimates(alpha, deg, roots)
         do i=1,deg+1
@@ -107,15 +108,15 @@ contains
         do i=1,itmax
             err(i) = maxrel_fwderr(roots, exact_roots, deg)
             do j=1,deg
-                if(check(j)) then
+                if(.not.conv(j)) then
                     z = roots(j)
                     r = abs(z)
                     if(r > 1) then
-                        call rcheck_lag(p, ralpha, deg, b, c, z, r, check(j), berr(j), cond(j))
+                        call rcheck_lag(p, ralpha, deg, b, c, z, r, conv(j), berr(j), cond(j))
                     else
-                        call check_lag(p, alpha, deg, b, c, z, r, check(j), berr(j), cond(j))
+                        call check_lag(p, alpha, deg, b, c, z, r, conv(j), berr(j), cond(j))
                     end if
-                    if(check(j)) then
+                    if(.not.conv(j)) then
                         call modify_lag(deg, b, c, z, j, roots)
                         roots(j) = roots(j) - c
                     else
@@ -199,14 +200,17 @@ contains
         complex(kind=dp), intent(out)   :: array(:)
         ! local variables
         integer                         :: k
-        real(kind=dp)                   :: r1, r2
+        real(kind=dp)                   :: theta1, theta2, r
         
         ! main
         do k=1,size,2
-            call random_number(r1)
-            call random_number(r2)
-            array(k) = cmplx(cos(2*pi*r1),sin(2*pi*r2),kind=dp)
+            call random_number(theta1)
+            call random_number(theta2)
+            call random_number(r)
+            theta1 = -1 + 2*theta1
+            theta2 = -1 + 2*theta2
+            array(k) = r*cmplx(cos(theta1*pi),sin(theta2*pi),kind=dp)
             array(k+1) = conjg(array(k))
         end do
     end subroutine rand_unitcmplx
-end program conv
+end program convg

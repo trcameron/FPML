@@ -1,7 +1,7 @@
 !********************************************************************************
 !   TRUNC_EXP: Compare FPML against Polzers and AMVW on roots of unity
 !   Author: Thomas R. Cameron, Davidson College
-!   Last Modified: 30 October 2018
+!   Last Modified: 1 Novemeber 2018
 !********************************************************************************
 ! The speed and accuracy of FPML is compared against Polzeros and AMVW for
 ! computing the roots of the truncated exponential. 
@@ -18,11 +18,12 @@ program trunc_exp
     real(kind=dp), dimension(:), allocatable    :: err
     real(kind=dp), dimension(:,:), allocatable  :: results
     ! FPML variables
-    real(kind=dp), dimension(:),    allocatable :: berr, cond   
+    integer, parameter                          :: nitmax=30
+    logical, dimension(:), allocatable          :: conv
+    real(kind=dp), dimension(:), allocatable    :: berr, cond   
     complex(kind=dp), dimension(:), allocatable :: p, roots
     ! Polzeros variables
     integer                                     :: iter
-    integer, parameter                          :: nitmax=30
     real(kind=dp), parameter                    :: small=tiny(1.0D0), big=huge(1.0D0)
     logical, dimension(:), allocatable          :: h
     real(kind=dp), dimension(:), allocatable    :: radius
@@ -61,7 +62,7 @@ program trunc_exp
         write(1,'(I10)', advance='no') deg
         write(1,'(A)', advance='no') ','
         allocate(err(deg))
-        allocate(p(deg+1), roots(deg), berr(deg), cond(deg))
+        allocate(p(deg+1), roots(deg), berr(deg), cond(deg), conv(deg))
         allocate(zeros(deg), radius(deg), h(deg+1))
         allocate(poly(deg+1), eigs(deg), residuals(deg))
         ! polynomial
@@ -74,7 +75,7 @@ program trunc_exp
             ! FPML
             call system_clock(count_rate=clock_rate)
             call system_clock(count=clock_start)
-            call main(p, deg, roots, berr, cond)
+            call main(p, deg, roots, berr, cond, conv, nitmax)
             call system_clock(count=clock_stop)
             results(it,1) = dble(clock_stop-clock_start)/dble(clock_rate)
             results(it,2) = maxval(berr)
@@ -95,20 +96,21 @@ program trunc_exp
             call error(p, eigs, err, deg)
             results(it,6)=maxval(err)
         end do
-        deallocate(err, p, roots, berr, cond, zeros, radius, h, poly, eigs, residuals)
-        deg=deg+2
+        deallocate(err, p, roots, berr, cond, conv, zeros, radius, h, poly, eigs, residuals)
         ! write results to file
-        write(1,'(ES15.2)', advance='no') sum(results(:,1))/itnum
+        write(1,'(ES15.2)', advance='no') sum(results(1:itnum,1))/itnum
         write(1,'(A)', advance='no') ','
-        write(1,'(ES15.2)', advance='no') sum(results(:,2))/itnum
+        write(1,'(ES15.2)', advance='no') sum(results(1:itnum,2))/itnum
         write(1,'(A)', advance='no') ','
-        write(1,'(ES15.2)', advance='no') sum(results(:,3))/itnum
+        write(1,'(ES15.2)', advance='no') sum(results(1:itnum,3))/itnum
         write(1,'(A)', advance='no') ','
-        write(1,'(ES15.2)', advance='no') sum(results(:,4))/itnum
+        write(1,'(ES15.2)', advance='no') sum(results(1:itnum,4))/itnum
         write(1,'(A)', advance='no') ','
-        write(1,'(ES15.2)', advance='no') sum(results(:,5))/itnum
+        write(1,'(ES15.2)', advance='no') sum(results(1:itnum,5))/itnum
         write(1,'(A)', advance='no') ','
-        write(1,'(ES15.2)') sum(results(:,6))/itnum
+        write(1,'(ES15.2)') sum(results(1:itnum,6))/itnum
+        ! update deg
+        deg=deg+2
     end do
     deallocate(results)
     ! close file

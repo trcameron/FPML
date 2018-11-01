@@ -1,7 +1,7 @@
 !********************************************************************************
 !   SPEC_POLY: Compare FPML against Polzeros and AMVW for special polynomials
 !   Author: Thomas R. Cameron, Davidson College
-!   Last Modified: 30 October 2018
+!   Last Modified: 1 Novemeber 2018
 !********************************************************************************
 ! The accuracy of FPML is compared against Polzeros and AMVW on 34 special polynomials
 ! suitable for tesing convergence difficulties and other aspects of a root solver. 
@@ -17,11 +17,12 @@ program spec_poly
     real(kind=dp), dimension(:), allocatable    :: coeffs, xr, xi
     complex(kind=dp), dimension(:), allocatable :: exact_roots
     ! FPML variables
-    real(kind=dp), dimension(:),    allocatable :: berr, cond   
+    integer, parameter                          :: nitmax=30
+    logical, dimension(:), allocatable          :: conv
+    real(kind=dp), dimension(:), allocatable    :: berr, cond   
     complex(kind=dp), dimension(:), allocatable :: p, roots
     ! Polzeros variables
     integer                                     :: iter
-    integer, parameter                          :: nitmax=30
     real(kind=dp), parameter                    :: small=tiny(1.0D0), big=huge(1.0D0)
     logical, dimension(:), allocatable          :: h
     real(kind=dp), dimension(:), allocatable    :: radius
@@ -51,11 +52,11 @@ program spec_poly
     p(deg+1) = cmplx(1,0,kind=dp)
     write(1, '(A)', advance='no') '1, '
     ! FPML
-    allocate(roots(deg), berr(deg), cond(deg))
-    call main(p, deg, roots, berr, cond)
+    allocate(roots(deg), berr(deg), cond(deg), conv(deg))
+    call main(p, deg, roots, berr, cond, conv, nitmax)
     write(1, '(ES15.2)', advance='no') maxrel_fwderr(roots,exact_roots,deg)
     write(1, '(A)', advance='no') ','
-    deallocate(roots, berr, cond)
+    deallocate(roots, berr, cond, conv)
     ! Polzeros
     allocate(zeros(deg), radius(deg), h(deg+1))
     call polzeros(deg, p, eps, big, small, nitmax, zeros, radius, h, iter)
@@ -84,11 +85,11 @@ program spec_poly
     p(deg+1) = cmplx(1,0,kind=dp)
     write(1, '(A)', advance='no') '2, '
     ! FPML
-    allocate(roots(deg), berr(deg), cond(deg))
-    call main(p, deg, roots, berr, cond)
+    allocate(roots(deg), berr(deg), cond(deg), conv(deg))
+    call main(p, deg, roots, berr, cond, conv, nitmax)
     write(1, '(ES15.2)', advance='no') maxrel_fwderr(roots,exact_roots,deg)
     write(1, '(A)', advance='no') ','
-    deallocate(roots, berr, cond)
+    deallocate(roots, berr, cond, conv)
     ! Polzeros
     allocate(zeros(deg), radius(deg), h(deg+1))
     call polzeros(deg, p, eps, big, small, nitmax, zeros, radius, h, iter)
@@ -117,11 +118,11 @@ program spec_poly
     p(deg+1) = cmplx(1,0,kind=dp)
     write(1, '(A)', advance='no') '3, '
     ! FPML
-    allocate(roots(deg), berr(deg), cond(deg))
-    call main(p, deg, roots, berr, cond)
+    allocate(roots(deg), berr(deg), cond(deg), conv(deg))
+    call main(p, deg, roots, berr, cond, conv, nitmax)
     write(1, '(ES15.2)', advance='no') maxrel_fwderr(roots,exact_roots,deg)
     write(1, '(A)', advance='no') ','
-    deallocate(roots, berr, cond)
+    deallocate(roots, berr, cond, conv)
     ! Polzeros
     allocate(zeros(deg), radius(deg), h(deg+1))
     call polzeros(deg, p, eps, big, small, nitmax, zeros, radius, h, iter)
@@ -150,11 +151,11 @@ program spec_poly
     p(deg+1) = cmplx(1,0,kind=dp)
     write(1, '(A)', advance='no') '4, '
     ! FPML
-    allocate(roots(deg), berr(deg), cond(deg))
-    call main(p, deg, roots, berr, cond)
+    allocate(roots(deg), berr(deg), cond(deg), conv(deg))
+    call main(p, deg, roots, berr, cond, conv, nitmax)
     write(1, '(ES15.2)', advance='no') maxrel_fwderr(roots,exact_roots,deg)
     write(1, '(A)', advance='no') ','
-    deallocate(roots, berr, cond)
+    deallocate(roots, berr, cond, conv)
     ! Polzeros
     allocate(zeros(deg), radius(deg), h(deg+1))
     call polzeros(deg, p, eps, big, small, nitmax, zeros, radius, h, iter)
@@ -183,11 +184,11 @@ program spec_poly
     p(deg+1) = cmplx(1,0,kind=dp)
     write(1, '(A)', advance='no') '5, '
     ! FPML
-    allocate(roots(deg), berr(deg), cond(deg))
-    call main(p, deg, roots, berr, cond)
+    allocate(roots(deg), berr(deg), cond(deg), conv(deg))
+    call main(p, deg, roots, berr, cond, conv, nitmax)
     write(1, '(ES15.2)', advance='no') maxrel_fwderr(roots,exact_roots,deg)
     write(1, '(A)', advance='no') ','
-    deallocate(roots, berr, cond)
+    deallocate(roots, berr, cond, conv)
     ! Polzeros
     allocate(zeros(deg), radius(deg), h(deg+1))
     call polzeros(deg, p, eps, big, small, nitmax, zeros, radius, h, iter)
@@ -216,11 +217,11 @@ program spec_poly
     p(deg+1) = cmplx(1,0,kind=dp)
     write(1, '(A)', advance='no') '6, '
     ! FPML
-    allocate(roots(deg), berr(deg), cond(deg))
-    call main(p, deg, roots, berr, cond)
+    allocate(roots(deg), berr(deg), cond(deg), conv(deg))
+    call main(p, deg, roots, berr, cond, conv, nitmax)
     write(1, '(ES15.2)', advance='no') maxrel_fwderr(roots,exact_roots,deg)
     write(1, '(A)', advance='no') ','
-    deallocate(roots, berr, cond)
+    deallocate(roots, berr, cond, conv)
     ! Polzeros
     allocate(zeros(deg), radius(deg), h(deg+1))
     call polzeros(deg, p, eps, big, small, nitmax, zeros, radius, h, iter)
@@ -249,11 +250,11 @@ program spec_poly
     p(deg+1) = cmplx(1,0,kind=dp)
     write(1, '(A)', advance='no') '7, '
     ! FPML
-    allocate(roots(deg), berr(deg), cond(deg))
-    call main(p, deg, roots, berr, cond)
+    allocate(roots(deg), berr(deg), cond(deg), conv(deg))
+    call main(p, deg, roots, berr, cond, conv, nitmax)
     write(1, '(ES15.2)', advance='no') maxrel_fwderr(roots,exact_roots,deg)
     write(1, '(A)', advance='no') ','
-    deallocate(roots, berr, cond)
+    deallocate(roots, berr, cond, conv)
     ! Polzeros
     allocate(zeros(deg), radius(deg), h(deg+1))
     call polzeros(deg, p, eps, big, small, nitmax, zeros, radius, h, iter)
@@ -282,11 +283,11 @@ program spec_poly
     p(deg+1) = cmplx(1,0,kind=dp)
     write(1, '(A)', advance='no') '8, '
     ! FPML
-    allocate(roots(deg), berr(deg), cond(deg))
-    call main(p, deg, roots, berr, cond)
+    allocate(roots(deg), berr(deg), cond(deg), conv(deg))
+    call main(p, deg, roots, berr, cond, conv, nitmax)
     write(1, '(ES15.2)', advance='no') maxrel_fwderr(roots,exact_roots,deg)
     write(1, '(A)', advance='no') ','
-    deallocate(roots, berr, cond)
+    deallocate(roots, berr, cond, conv)
     ! Polzeros
     allocate(zeros(deg), radius(deg), h(deg+1))
     call polzeros(deg, p, eps, big, small, nitmax, zeros, radius, h, iter)
@@ -315,11 +316,11 @@ program spec_poly
     p(deg+1) = cmplx(1,0,kind=dp)
     write(1, '(A)', advance='no') '9, '
     ! FPML
-    allocate(roots(deg), berr(deg), cond(deg))
-    call main(p, deg, roots, berr, cond)
+    allocate(roots(deg), berr(deg), cond(deg), conv(deg))
+    call main(p, deg, roots, berr, cond, conv, nitmax)
     write(1, '(ES15.2)', advance='no') maxrel_fwderr(roots,exact_roots,deg)
     write(1, '(A)', advance='no') ','
-    deallocate(roots, berr, cond)
+    deallocate(roots, berr, cond, conv)
     ! Polzeros
     allocate(zeros(deg), radius(deg), h(deg+1))
     call polzeros(deg, p, eps, big, small, nitmax, zeros, radius, h, iter)
@@ -362,11 +363,11 @@ program spec_poly
     exact_roots = (/ (cmplx(cos((2*j-1)*pi/40d0),0,kind=dp), j=1,deg)/)
     write(1, '(A)', advance='no') '10, '
     ! FPML
-    allocate(roots(deg), berr(deg), cond(deg))
-    call main(p, deg, roots, berr, cond)
+    allocate(roots(deg), berr(deg), cond(deg), conv(deg))
+    call main(p, deg, roots, berr, cond, conv, nitmax)
     write(1, '(ES15.2)', advance='no') maxrel_fwderr(roots,exact_roots,deg)
     write(1, '(A)', advance='no') ','
-    deallocate(roots, berr, cond)
+    deallocate(roots, berr, cond, conv)
     ! Polzeros
     allocate(zeros(deg), radius(deg), h(deg+1))
     call polzeros(deg, p, eps, big, small, nitmax, zeros, radius, h, iter)
@@ -389,11 +390,11 @@ program spec_poly
     exact_roots = (/ (cmplx(cos(2*j*pi/21d0),sin(2*j*pi/21d0),kind=dp), j=1,deg)/)
     write(1, '(A)', advance='no') '11, '
     ! FPML
-    allocate(roots(deg), berr(deg), cond(deg))
-    call main(p, deg, roots, berr, cond)
+    allocate(roots(deg), berr(deg), cond(deg), conv(deg))
+    call main(p, deg, roots, berr, cond, conv, nitmax)
     write(1, '(ES15.2)', advance='no') maxrel_fwderr(roots,exact_roots,deg)
     write(1, '(A)', advance='no') ','
-    deallocate(roots, berr, cond)
+    deallocate(roots, berr, cond, conv)
     ! Polzeros
     allocate(zeros(deg), radius(deg), h(deg+1))
     call polzeros(deg, p, eps, big, small, nitmax, zeros, radius, h, iter)
@@ -465,11 +466,11 @@ program spec_poly
     p(25) = 1d0
     write(1, '(A)', advance='no') '12, '
     ! FPML
-    allocate(roots(deg), berr(deg), cond(deg))
-    call main(p, deg, roots, berr, cond)
+    allocate(roots(deg), berr(deg), cond(deg), conv(deg))
+    call main(p, deg, roots, berr, cond, conv, nitmax)
     write(1, '(ES15.2)', advance='no') maxrel_fwderr(roots,exact_roots,deg)
     write(1, '(A)', advance='no') ','
-    deallocate(roots, berr, cond)
+    deallocate(roots, berr, cond, conv)
     ! Polzeros
     allocate(zeros(deg), radius(deg), h(deg+1))
     call polzeros(deg, p, eps, big, small, nitmax, zeros, radius, h, iter)
@@ -555,11 +556,11 @@ program spec_poly
     p(32) = 1d0
     write(1, '(A)', advance='no') '13, '
     ! FPML
-    allocate(roots(deg), berr(deg), cond(deg))
-    call main(p, deg, roots, berr, cond)
+    allocate(roots(deg), berr(deg), cond(deg), conv(deg))
+    call main(p, deg, roots, berr, cond, conv, nitmax)
     write(1, '(ES15.2)', advance='no') maxrel_fwderr(roots,exact_roots,deg)
     write(1, '(A)', advance='no') ','
-    deallocate(roots, berr, cond)
+    deallocate(roots, berr, cond, conv)
     ! Polzeros
     allocate(zeros(deg), radius(deg), h(deg+1))
     call polzeros(deg, p, eps, big, small, nitmax, zeros, radius, h, iter)
@@ -761,11 +762,11 @@ program spec_poly
     p(64) = 1d0      
     write(1, '(A)', advance='no') '14, '
     ! FPML
-    allocate(roots(deg), berr(deg), cond(deg))
-    call main(p, deg, roots, berr, cond)
+    allocate(roots(deg), berr(deg), cond(deg), conv(deg))
+    call main(p, deg, roots, berr, cond, conv, nitmax)
     write(1, '(ES15.2)', advance='no') maxrel_fwderr(roots,exact_roots,deg)
     write(1, '(A)', advance='no') ','
-    deallocate(roots, berr, cond)
+    deallocate(roots, berr, cond, conv)
     ! Polzeros
     allocate(zeros(deg), radius(deg), h(deg+1))
     call polzeros(deg, p, eps, big, small, nitmax, zeros, radius, h, iter)
@@ -796,11 +797,11 @@ program spec_poly
     p(deg+1) = cmplx(1,0,kind=dp)
     write(1, '(A)', advance='no') '15, '
     ! FPML
-    allocate(roots(deg), berr(deg), cond(deg))
-    call main(p, deg, roots, berr, cond)
+    allocate(roots(deg), berr(deg), cond(deg), conv(deg))
+    call main(p, deg, roots, berr, cond, conv, nitmax)
     write(1, '(ES15.2)', advance='no') maxrel_fwderr(roots,exact_roots,deg)
     write(1, '(A)', advance='no') ','
-    deallocate(roots, berr, cond)
+    deallocate(roots, berr, cond, conv)
     ! Polzeros
     allocate(zeros(deg), radius(deg), h(deg+1))
     call polzeros(deg, p, eps, big, small, nitmax, zeros, radius, h, iter)
@@ -831,11 +832,11 @@ program spec_poly
     p(deg+1) = cmplx(1,0,kind=dp)
     write(1, '(A)', advance='no') '16, '
     ! FPML
-    allocate(roots(deg), berr(deg), cond(deg))
-    call main(p, deg, roots, berr, cond)
+    allocate(roots(deg), berr(deg), cond(deg), conv(deg))
+    call main(p, deg, roots, berr, cond, conv, nitmax)
     write(1, '(ES15.2)', advance='no') maxrel_fwderr(roots,exact_roots,deg)
     write(1, '(A)', advance='no') ','
-    deallocate(roots, berr, cond)
+    deallocate(roots, berr, cond, conv)
     ! Polzeros
     allocate(zeros(deg), radius(deg), h(deg+1))
     call polzeros(deg, p, eps, big, small, nitmax, zeros, radius, h, iter)
@@ -866,11 +867,11 @@ program spec_poly
     p(deg+1) = cmplx(1,0,kind=dp)
     write(1, '(A)', advance='no') '17, '
     ! FPML
-    allocate(roots(deg), berr(deg), cond(deg))
-    call main(p, deg, roots, berr, cond)
+    allocate(roots(deg), berr(deg), cond(deg), conv(deg))
+    call main(p, deg, roots, berr, cond, conv, nitmax)
     write(1, '(ES15.2)', advance='no') maxrel_fwderr(roots,exact_roots,deg)
     write(1, '(A)', advance='no') ','
-    deallocate(roots, berr, cond)
+    deallocate(roots, berr, cond, conv)
     ! Polzeros
     allocate(zeros(deg), radius(deg), h(deg+1))
     call polzeros(deg, p, eps, big, small, nitmax, zeros, radius, h, iter)
@@ -901,11 +902,11 @@ program spec_poly
     p(deg+1) = cmplx(1,0,kind=dp)
     write(1, '(A)', advance='no') '18, '
     ! FPML
-    allocate(roots(deg), berr(deg), cond(deg))
-    call main(p, deg, roots, berr, cond)
+    allocate(roots(deg), berr(deg), cond(deg), conv(deg))
+    call main(p, deg, roots, berr, cond, conv, nitmax)
     write(1, '(ES15.2)', advance='no') maxrel_fwderr(roots,exact_roots,deg)
     write(1, '(A)', advance='no') ','
-    deallocate(roots, berr, cond)
+    deallocate(roots, berr, cond, conv)
     ! Polzeros
     allocate(zeros(deg), radius(deg), h(deg+1))
     call polzeros(deg, p, eps, big, small, nitmax, zeros, radius, h, iter)
@@ -943,11 +944,11 @@ program spec_poly
     p(deg+1) = cmplx(1,0,kind=dp)
     write(1, '(A)', advance='no') '19, '
     ! FPML
-    allocate(roots(deg), berr(deg), cond(deg))
-    call main(p, deg, roots, berr, cond)
+    allocate(roots(deg), berr(deg), cond(deg), conv(deg))
+    call main(p, deg, roots, berr, cond, conv, nitmax)
     write(1, '(ES15.2)', advance='no') maxrel_fwderr(roots,exact_roots,deg)
     write(1, '(A)', advance='no') ','
-    deallocate(roots, berr, cond)
+    deallocate(roots, berr, cond, conv)
     ! Polzeros
     allocate(zeros(deg), radius(deg), h(deg+1))
     call polzeros(deg, p, eps, big, small, nitmax, zeros, radius, h, iter)
@@ -995,11 +996,11 @@ program spec_poly
     p(deg+1) = cmplx(1,0,kind=dp)
     write(1, '(A)', advance='no') '20, '
     ! FPML
-    allocate(roots(deg), berr(deg), cond(deg))
-    call main(p, deg, roots, berr, cond)
+    allocate(roots(deg), berr(deg), cond(deg), conv(deg))
+    call main(p, deg, roots, berr, cond, conv, nitmax)
     write(1, '(ES15.2)', advance='no') maxrel_fwderr(roots,exact_roots,deg)
     write(1, '(A)', advance='no') ','
-    deallocate(roots, berr, cond)
+    deallocate(roots, berr, cond, conv)
     ! Polzeros
     allocate(zeros(deg), radius(deg), h(deg+1))
     call polzeros(deg, p, eps, big, small, nitmax, zeros, radius, h, iter)
@@ -1033,11 +1034,11 @@ program spec_poly
     p(deg+1) = cmplx(1,0,kind=dp)
     write(1, '(A)', advance='no') '21, '
     ! FPML
-    allocate(roots(deg), berr(deg), cond(deg))
-    call main(p, deg, roots, berr, cond)
+    allocate(roots(deg), berr(deg), cond(deg), conv(deg))
+    call main(p, deg, roots, berr, cond, conv, nitmax)
     write(1, '(ES15.2)', advance='no') maxrel_fwderr(roots,exact_roots,deg)
     write(1, '(A)', advance='no') ','
-    deallocate(roots, berr, cond)
+    deallocate(roots, berr, cond, conv)
     ! Polzeros
     allocate(zeros(deg), radius(deg), h(deg+1))
     call polzeros(deg, p, eps, big, small, nitmax, zeros, radius, h, iter)
@@ -1075,11 +1076,11 @@ program spec_poly
     p(deg+1) = cmplx(1,0,kind=dp)
     write(1, '(A)', advance='no') '22, '
     ! FPML
-    allocate(roots(deg), berr(deg), cond(deg))
-    call main(p, deg, roots, berr, cond)
+    allocate(roots(deg), berr(deg), cond(deg), conv(deg))
+    call main(p, deg, roots, berr, cond, conv, nitmax)
     write(1, '(ES15.2)', advance='no') maxrel_fwderr(roots,exact_roots,deg)
     write(1, '(A)', advance='no') ','
-    deallocate(roots, berr, cond)
+    deallocate(roots, berr, cond, conv)
     ! Polzeros
     allocate(zeros(deg), radius(deg), h(deg+1))
     call polzeros(deg, p, eps, big, small, nitmax, zeros, radius, h, iter)
@@ -1112,11 +1113,11 @@ program spec_poly
     p(deg+1) = cmplx(1,0,kind=dp)
     write(1, '(A)', advance='no') '23, '
     ! FPML
-    allocate(roots(deg), berr(deg), cond(deg))
-    call main(p, deg, roots, berr, cond)
+    allocate(roots(deg), berr(deg), cond(deg), conv(deg))
+    call main(p, deg, roots, berr, cond, conv, nitmax)
     write(1, '(ES15.2)', advance='no') maxrel_fwderr(roots,exact_roots,deg)
     write(1, '(A)', advance='no') ','
-    deallocate(roots, berr, cond)
+    deallocate(roots, berr, cond, conv)
     ! Polzeros
     allocate(zeros(deg), radius(deg), h(deg+1))
     call polzeros(deg, p, eps, big, small, nitmax, zeros, radius, h, iter)
@@ -1151,11 +1152,11 @@ program spec_poly
     p(deg+1) = cmplx(1,0,kind=dp)
     write(1, '(A)', advance='no') '24, '
     ! FPML
-    allocate(roots(deg), berr(deg), cond(deg))
-    call main(p, deg, roots, berr, cond)
+    allocate(roots(deg), berr(deg), cond(deg), conv(deg))
+    call main(p, deg, roots, berr, cond, conv, nitmax)
     write(1, '(ES15.2)', advance='no') maxrel_fwderr(roots,exact_roots,deg)
     write(1, '(A)', advance='no') ','
-    deallocate(roots, berr, cond)
+    deallocate(roots, berr, cond, conv)
     ! Polzeros
     allocate(zeros(deg), radius(deg), h(deg+1))
     call polzeros(deg, p, eps, big, small, nitmax, zeros, radius, h, iter)
@@ -1190,11 +1191,11 @@ program spec_poly
     p(deg+1) = cmplx(1,0,kind=dp)
     write(1, '(A)', advance='no') '25, '
     ! FPML
-    allocate(roots(deg), berr(deg), cond(deg))
-    call main(p, deg, roots, berr, cond)
+    allocate(roots(deg), berr(deg), cond(deg), conv(deg))
+    call main(p, deg, roots, berr, cond, conv, nitmax)
     write(1, '(ES15.2)', advance='no') maxrel_fwderr(roots,exact_roots,deg)
     write(1, '(A)', advance='no') ','
-    deallocate(roots, berr, cond)
+    deallocate(roots, berr, cond, conv)
     ! Polzeros
     allocate(zeros(deg), radius(deg), h(deg+1))
     call polzeros(deg, p, eps, big, small, nitmax, zeros, radius, h, iter)
@@ -1229,11 +1230,11 @@ program spec_poly
     p(deg+1) = cmplx(1,0,kind=dp)
     write(1, '(A)', advance='no') '26, '
     ! FPML
-    allocate(roots(deg), berr(deg), cond(deg))
-    call main(p, deg, roots, berr, cond)
+    allocate(roots(deg), berr(deg), cond(deg), conv(deg))
+    call main(p, deg, roots, berr, cond, conv, nitmax)
     write(1, '(ES15.2)', advance='no') maxrel_fwderr(roots,exact_roots,deg)
     write(1, '(A)', advance='no') ','
-    deallocate(roots, berr, cond)
+    deallocate(roots, berr, cond, conv)
     ! Polzeros
     allocate(zeros(deg), radius(deg), h(deg+1))
     call polzeros(deg, p, eps, big, small, nitmax, zeros, radius, h, iter)
@@ -1266,11 +1267,11 @@ program spec_poly
     p(deg+1) = cmplx(1,0,kind=dp)
     write(1, '(A)', advance='no') '27, '
     ! FPML
-    allocate(roots(deg), berr(deg), cond(deg))
-    call main(p, deg, roots, berr, cond)
+    allocate(roots(deg), berr(deg), cond(deg), conv(deg))
+    call main(p, deg, roots, berr, cond, conv, nitmax)
     write(1, '(ES15.2)', advance='no') maxrel_fwderr(roots,exact_roots,deg)
     write(1, '(A)', advance='no') ','
-    deallocate(roots, berr, cond)
+    deallocate(roots, berr, cond, conv)
     ! Polzeros
     allocate(zeros(deg), radius(deg), h(deg+1))
     call polzeros(deg, p, eps, big, small, nitmax, zeros, radius, h, iter)
@@ -1318,11 +1319,11 @@ program spec_poly
     p(deg+1) = cmplx(1,0,kind=dp)
     write(1, '(A)', advance='no') '28, '
     ! FPML
-    allocate(roots(deg), berr(deg), cond(deg))
-    call main(p, deg, roots, berr, cond)
+    allocate(roots(deg), berr(deg), cond(deg), conv(deg))
+    call main(p, deg, roots, berr, cond, conv, nitmax)
     write(1, '(ES15.2)', advance='no') maxrel_fwderr(roots,exact_roots,deg)
     write(1, '(A)', advance='no') ','
-    deallocate(roots, berr, cond)
+    deallocate(roots, berr, cond, conv)
     ! Polzeros
     allocate(zeros(deg), radius(deg), h(deg+1))
     call polzeros(deg, p, eps, big, small, nitmax, zeros, radius, h, iter)
@@ -1353,11 +1354,11 @@ program spec_poly
     p(deg+1) = cmplx(1,0,kind=dp)
     write(1, '(A)', advance='no') '29, '
     ! FPML
-    allocate(roots(deg), berr(deg), cond(deg))
-    call main(p, deg, roots, berr, cond)
+    allocate(roots(deg), berr(deg), cond(deg), conv(deg))
+    call main(p, deg, roots, berr, cond, conv, nitmax)
     write(1, '(ES15.2)', advance='no') maxrel_fwderr(roots,exact_roots,deg)
     write(1, '(A)', advance='no') ','
-    deallocate(roots, berr, cond)
+    deallocate(roots, berr, cond, conv)
     ! Polzeros
     allocate(zeros(deg), radius(deg), h(deg+1))
     call polzeros(deg, p, eps, big, small, nitmax, zeros, radius, h, iter)
@@ -1388,11 +1389,11 @@ program spec_poly
     p(deg+1) = cmplx(1,0,kind=dp)
     write(1, '(A)', advance='no') '30, '
     ! FPML
-    allocate(roots(deg), berr(deg), cond(deg))
-    call main(p, deg, roots, berr, cond)
+    allocate(roots(deg), berr(deg), cond(deg), conv(deg))
+    call main(p, deg, roots, berr, cond, conv, nitmax)
     write(1, '(ES15.2)', advance='no') maxrel_fwderr(roots,exact_roots,deg)
     write(1, '(A)', advance='no') ','
-    deallocate(roots, berr, cond)
+    deallocate(roots, berr, cond, conv)
     ! Polzeros
     allocate(zeros(deg), radius(deg), h(deg+1))
     call polzeros(deg, p, eps, big, small, nitmax, zeros, radius, h, iter)
@@ -1423,11 +1424,11 @@ program spec_poly
     p(deg+1) = cmplx(1,0,kind=dp)
     write(1, '(A)', advance='no') '31, '
     ! FPML
-    allocate(roots(deg), berr(deg), cond(deg))
-    call main(p, deg, roots, berr, cond)
+    allocate(roots(deg), berr(deg), cond(deg), conv(deg))
+    call main(p, deg, roots, berr, cond, conv, nitmax)
     write(1, '(ES15.2)', advance='no') maxrel_fwderr(roots,exact_roots,deg)
     write(1, '(A)', advance='no') ','
-    deallocate(roots, berr, cond)
+    deallocate(roots, berr, cond, conv)
     ! Polzeros
     allocate(zeros(deg), radius(deg), h(deg+1))
     call polzeros(deg, p, eps, big, small, nitmax, zeros, radius, h, iter)
@@ -1467,11 +1468,11 @@ program spec_poly
     p(deg+1) = cmplx(1,0,kind=dp)
     write(1, '(A)', advance='no') '32, '
     ! FPML
-    allocate(roots(deg), berr(deg), cond(deg))
-    call main(p, deg, roots, berr, cond)
+    allocate(roots(deg), berr(deg), cond(deg), conv(deg))
+    call main(p, deg, roots, berr, cond, conv, nitmax)
     write(1, '(ES15.2)', advance='no') maxrel_fwderr(roots,exact_roots,deg)
     write(1, '(A)', advance='no') ','
-    deallocate(roots, berr, cond)
+    deallocate(roots, berr, cond, conv)
     ! Polzeros
     allocate(zeros(deg), radius(deg), h(deg+1))
     call polzeros(deg, p, eps, big, small, nitmax, zeros, radius, h, iter)
@@ -1587,11 +1588,11 @@ program spec_poly
     p(81) = 1.0000000000000000000d0
     write(1, '(A)', advance='no') '33, '
     ! FPML
-    allocate(roots(deg), berr(deg), cond(deg))
-    call main(p, deg, roots, berr, cond)
+    allocate(roots(deg), berr(deg), cond(deg), conv(deg))
+    call main(p, deg, roots, berr, cond, conv, nitmax)
     write(1, '(ES15.2)', advance='no') maxrel_fwderr(roots,exact_roots,deg)
     write(1, '(A)', advance='no') ','
-    deallocate(roots, berr, cond)
+    deallocate(roots, berr, cond, conv)
     ! Polzeros
     allocate(zeros(deg), radius(deg), h(deg+1))
     call polzeros(deg, p, eps, big, small, nitmax, zeros, radius, h, iter)
@@ -1631,11 +1632,11 @@ program spec_poly
     p(deg+1) = cmplx(1,0,kind=dp)
     write(1, '(A)', advance='no') '34, '
     ! FPML
-    allocate(roots(deg), berr(deg), cond(deg))
-    call main(p, deg, roots, berr, cond)
+    allocate(roots(deg), berr(deg), cond(deg), conv(deg))
+    call main(p, deg, roots, berr, cond, conv, nitmax)
     write(1, '(ES15.2)', advance='no') maxrel_fwderr(roots,exact_roots,deg)
     write(1, '(A)', advance='no') ','
-    deallocate(roots, berr, cond)
+    deallocate(roots, berr, cond, conv)
     ! Polzeros
     allocate(zeros(deg), radius(deg), h(deg+1))
     call polzeros(deg, p, eps, big, small, nitmax, zeros, radius, h, iter)
@@ -1680,45 +1681,6 @@ contains
         
         deallocate(seed)
     end subroutine init_random_seed
-    !************************************************
-    !                       sort_err                *
-    !************************************************
-    ! Compute the 1-norm of the difference between
-    ! roots and exact_roots. The goal is to minimize 
-    ! the result, therby giving an accurate reflection
-    ! of how close the approximation roots is to
-    ! exact_roots. 
-    !************************************************
-    function sort_err(roots, exact_roots, deg) result(res)
-        implicit none
-        ! argument variables
-        integer, intent(in)             :: deg
-        complex(kind=dp), intent(in)    :: exact_roots(:)
-        complex(kind=dp), intent(inout) :: roots(:)
-        ! local variables
-        logical, dimension(deg)         :: root_taken
-        integer                         :: i, j, k, l
-        real(kind=dp)                   :: res
-        
-        ! main
-        root_taken = .false.
-        l = 2
-        res = 0d0
-        do i=1,deg
-           j = l-1
-           do k = l,deg
-               if( (abs(roots(i)-exact_roots(k))<abs(roots(i)-exact_roots(j))) .and. (.not.root_taken(k)) ) then
-                   j = k
-               end if
-           end do
-           root_taken(j) = .true.
-           res = res+abs(roots(i)-exact_roots(j))
-           if (j==l-1) then
-              l = l + 1
-           end if
-        end do
-        return
-    end function sort_err
     !************************************************
     !                       maxrel_fwderr           *
     !************************************************
