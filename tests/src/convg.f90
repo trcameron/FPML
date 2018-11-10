@@ -92,7 +92,7 @@ contains
         complex(kind=dp), intent(out)   :: roots(:), exact_roots(:)
         ! local variables
         integer                         :: i, j, nz
-        real(kind=dp), dimension(deg+1) :: alpha, ralpha
+        real(kind=dp), dimension(deg+1) :: alpha
         real(kind=dp)                   :: r
         complex(kind=dp)                :: b, c, z
         
@@ -100,10 +100,7 @@ contains
         conv = .false.
         alpha = abs(p)
         call estimates(alpha, deg, roots)
-        do i=1,deg+1
-            ralpha(i) = alpha(i)*(3.8*(deg-i+1) + 1)
-            alpha(i) = alpha(i)*(3.8*(i-1) + 1)
-        end do
+        alpha = (/ (alpha(i)*(3.8*(i-1)+1),i=1,deg+1)/)
         nz = 0
         do i=1,itmax
             err(i) = maxrel_fwderr(roots, exact_roots, deg)
@@ -112,7 +109,7 @@ contains
                     z = roots(j)
                     r = abs(z)
                     if(r > 1) then
-                        call rcheck_lag(p, ralpha, deg, b, c, z, r, conv(j), berr(j), cond(j))
+                        call rcheck_lag(p, alpha, deg, b, c, z, r, conv(j), berr(j), cond(j))
                     else
                         call check_lag(p, alpha, deg, b, c, z, r, conv(j), berr(j), cond(j))
                     end if

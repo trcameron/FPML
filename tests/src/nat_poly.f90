@@ -1,7 +1,8 @@
 !********************************************************************************
-!   NAT_POLY: Compare FPML against Polzers and AMVW on roots of unity
+!   NAT_POLY: Compare FPML against Polzers and AMVW on polynomials whose 
+!   coefficients are natural numbers. 
 !   Author: Thomas R. Cameron, Davidson College
-!   Last Modified: 1 November 2018
+!   Last Modified: 11 November 2018
 !********************************************************************************
 ! The speed and accuracy of FPML is compared against Polzeros and AMVW for
 ! computing the roots of the polynomial sum(i+1)x^i. 
@@ -68,7 +69,7 @@ program nat_poly
         ! polynomial
         p(1) = 1d0
         do j=2,deg+1
-            p(j) = p(j-1)+1d0
+            p(j) = j
         end do
         poly = (/ (p(deg-j+1), j=0,deg)/)
         do it=1,itnum
@@ -158,17 +159,12 @@ contains
         ! local variables
         integer                         :: j, k
         real(kind=dp)                   :: r, berr
-        real(kind=dp), dimension(deg+1) :: alpha, ralpha
+        real(kind=dp), dimension(deg+1) :: alpha
         complex(kind=dp)                :: a, z
         
         ! main
-        do j=1,deg+1
-            alpha(j) = abs(p(j))
-        end do
-        do j=1,deg+1
-            ralpha(j) = alpha(j)*(3.8*(deg-j+1) + 1)
-            alpha(j) = alpha(j)*(3.8*(j-1) + 1)
-        end do
+        alpha = abs(p)
+        alpha = (/ (alpha(j)*(3.8*(j-1)+1),j=1,deg+1)/)
         do j=1,deg
             z = roots(j)
             r = abs(z)
@@ -176,10 +172,10 @@ contains
                 z = 1/z
                 r = 1/r
                 a = p(1)
-                berr = ralpha(1)
+                berr = alpha(1)
                 do k=2,deg+1
                     a = z*a + p(k)
-                    berr = r*berr + ralpha(k)
+                    berr = r*berr + alpha(k)
                 end do
             else
                 a = p(deg+1)

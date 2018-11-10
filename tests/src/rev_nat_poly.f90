@@ -1,12 +1,13 @@
 !********************************************************************************
-!   TRUNC_EXP: Compare FPML against Polzers and AMVW on the truncated exponential.
+!   REV_NAT_POLY: Compare FPML against Polzers and AMVW on polynomials whose 
+! 	coefficients are 1/n, for natural numbers n. 
 !   Author: Thomas R. Cameron, Davidson College
-!   Last Modified: 11 Novemeber 2018
+!   Last Modified: 11 November 2018
 !********************************************************************************
 ! The speed and accuracy of FPML is compared against Polzeros and AMVW for
-! computing the roots of the truncated exponential. 
+! computing the roots of the polynomial sum(1/(i+1))x^i. 
 !********************************************************************************
-program trunc_exp
+program rev_nat_poly
     use fpml
     use poly_zeroes
     implicit none
@@ -18,7 +19,7 @@ program trunc_exp
     real(kind=dp), dimension(:), allocatable    :: err
     real(kind=dp), dimension(:,:), allocatable  :: results
     ! FPML variables
-    integer, parameter                          :: nitmax=30
+    integer, parameter                          :: nitmax=60
     logical, dimension(:), allocatable          :: conv
     real(kind=dp), dimension(:), allocatable    :: berr, cond   
     complex(kind=dp), dimension(:), allocatable :: p, roots
@@ -37,13 +38,13 @@ program trunc_exp
     if(flag==0) then
         read(arg, '(I10)') startDegree
     else
-        startDegree=10
+        startDegree=80
     end if
     call get_command_argument(2,arg,status=flag)
     if(flag==0) then
         read(arg, '(I10)') endDegree
     else
-        endDegree=100
+        endDegree=10240
     end if
     call get_command_argument(3,arg,status=flag)
     if(flag==0) then
@@ -52,9 +53,9 @@ program trunc_exp
         itnum=512
     end if
     
-    ! Testing: truncated exponential
+    ! Testing: polynomial with natural number coefficients
     call init_random_seed()
-    open(unit=1,file="data_files/trunc_exp.dat")
+    open(unit=1,file="data_files/rev_nat_poly.dat")
     write(1,'(A)') 'Degree, FPML_time, FPML_err, Polzeros_time, Polzeros_err, AMVW_time, AMVW_err'
     allocate(results(itnum,6))
     deg=startDegree
@@ -68,7 +69,7 @@ program trunc_exp
         ! polynomial
         p(1) = 1d0
         do j=2,deg+1
-            p(j) = p(j-1)/dble(j-1)
+            p(j) = 1d0/dble(j)
         end do
         poly = (/ (p(deg-j+1), j=0,deg)/)
         do it=1,itnum
@@ -109,8 +110,9 @@ program trunc_exp
         write(1,'(ES15.2)', advance='no') sum(results(1:itnum,5))/itnum
         write(1,'(A)', advance='no') ','
         write(1,'(ES15.2)') sum(results(1:itnum,6))/itnum
-        ! update deg
-        deg=deg+2
+        ! update deg and itnum
+        deg=2*deg
+        itnum=itnum/2
     end do
     deallocate(results)
     ! close file
@@ -186,4 +188,4 @@ contains
             err(j) = abs(a)/berr
         end do
     end subroutine error
-end program trunc_exp
+end program rev_nat_poly

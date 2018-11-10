@@ -1,10 +1,11 @@
 !********************************************************************************
-!   RAND_UNITY: Compare FPML against Polzers and AMVW on roots of unity
+!   RAND_UNITY: Compare FPML against Polzers and AMVW on polynomials with
+!   random complex roots in the unit circle. 
 !   Author: Thomas R. Cameron, Davidson College
-!   Last Modified: 1 Novemeber 2018
+!   Last Modified: 11 Novemeber 2018
 !********************************************************************************
 ! The speed and accuracy of FPML is compared against Polzeros and AMVW for
-! computing the roots of a polynomial whose roots are random in the unit circle. 
+! computing the roots of a polynomial with random roots in the unit circle.  
 !********************************************************************************
 program rand_unity
     use fpml
@@ -17,7 +18,7 @@ program rand_unity
     ! testing variables
     integer                                     :: deg, it, j, clock_rate, clock_start, clock_stop
     real(kind=dp), parameter                    :: pi = 3.141592653589793d0
-    real(kind=dp), dimension(:), allocatable    :: coeffs, xr, xi
+    real(kind=dp), dimension(:), allocatable    :: coeffs, err, xr, xi
     real(kind=dp), dimension(:,:), allocatable  :: results
     complex(kind=dp), dimension(:), allocatable :: exact_roots
     ! FPML variables
@@ -66,7 +67,7 @@ program rand_unity
     do while(deg<=endDegree)
         write(1,'(I10)', advance='no') deg
         write(1,'(A)', advance='no') ','
-        allocate(exact_roots(deg), coeffs(deg), xr(deg), xi(deg))
+        allocate(exact_roots(deg), coeffs(deg), err(deg), xr(deg), xi(deg))
         allocate(p(deg+1), roots(deg), berr(deg), cond(deg), conv(deg))
         allocate(zeros(deg), radius(deg), h(deg+1))
         allocate(poly(deg+1), eigs(deg), residuals(deg))
@@ -86,23 +87,25 @@ program rand_unity
             call main(p, deg, roots, berr, cond, conv, nitmax)
             call system_clock(count=clock_stop)
             results(it,1) = dble(clock_stop-clock_start)/dble(clock_rate)
-            results(it,2) = maxrel_fwderr(roots, exact_roots, deg)
+            results(it,2) = maxval(berr)
             ! Polzeros
             call system_clock(count_rate=clock_rate)
             call system_clock(count=clock_start)
             call polzeros(deg, p, eps, big, small, nitmax, zeros, radius, h, iter)
             call system_clock(count=clock_stop)
             results(it,3)=dble(clock_stop-clock_start)/dble(clock_rate)
-            results(it,4) = maxrel_fwderr(zeros, exact_roots, deg)
+            call error(p, zeros, err, deg)
+            results(it,4)=maxval(err)
             ! AMVW
             call system_clock(count_rate=clock_rate)
             call system_clock(count=clock_start)
             call z_poly_roots(deg, poly, eigs, residuals, flag)
             call system_clock(count=clock_stop)
             results(it,5)=dble(clock_stop-clock_start)/dble(clock_rate)
-            results(it,6) = maxrel_fwderr(eigs, exact_roots, deg)
+            call error(p, eigs, err, deg)
+            results(it,6)=maxval(err)
         end do
-        deallocate(exact_roots, coeffs, xr, xi, p, roots, berr, cond, conv, zeros, radius, h, poly, eigs, residuals)
+        deallocate(exact_roots, coeffs, err, xr, xi, p, roots, berr, cond, conv, zeros, radius, h, poly, eigs, residuals)
         ! write results to file
         write(1,'(ES15.2)', advance='no') sum(results(1:itnum,1))/itnum
         write(1,'(A)', advance='no') ','
@@ -149,38 +152,49 @@ contains
         deallocate(seed)
     end subroutine init_random_seed
     !************************************************
-    !                       maxrel_fwderr           *
+    !                   error                       *
     !************************************************
-    ! Compute the maximum relative forward error
-    ! in the approximation roots to exact_roots.
+    ! Computes the relative backward error for 
+    ! each root approximation of p.
     !************************************************
-    function maxrel_fwderr(roots, exact_roots, deg) result(res)
+    subroutine error(p, roots, err, deg)
         implicit none
         ! argument variables
         integer, intent(in)             :: deg
-        complex(kind=dp), intent(in)    :: exact_roots(:)
-        complex(kind=dp), intent(inout) :: roots(:)
+        real(kind=dp), intent(out)      :: err(:)
+        complex(kind=dp), intent(in)    :: p(:), roots(:)
         ! local variables
-        integer                         :: i, j, k
-        real(kind=dp)                   :: hd, res
+        integer                         :: j, k
+        real(kind=dp)                   :: r, berr
+        real(kind=dp), dimension(deg+1) :: alpha
+        complex(kind=dp)                :: a, z
         
         ! main
-        res = 0d0
-        do i=1,deg
-            hd = abs(roots(i)-exact_roots(1))
-            j = 1
-            do k = 2,deg
-                if (hd>abs(roots(i)-exact_roots(k))) then
-                    hd = abs(roots(i)-exact_roots(k))
-                    j = k
-                end if
-            end do
-            if (res<hd/abs(exact_roots(j))) then
-                res = hd/abs(exact_roots(j))
+        alpha = abs(p)
+        alpha = (/ (alpha(j)*(3.8*(j-1)+1),j=1,deg+1)/)
+        do j=1,deg
+            z = roots(j)
+            r = abs(z)
+            if(r>1) then
+                z = 1/z
+                r = 1/r
+                a = p(1)
+                berr = alpha(1)
+                do k=2,deg+1
+                    a = z*a + p(k)
+                    berr = r*berr + alpha(k)
+                end do
+            else
+                a = p(deg+1)
+                berr = alpha(deg+1)
+                do k=deg,1,-1
+                    a = z*a + p(k)
+                    berr = r*berr + alpha(k)
+                end do 
             end if
+            err(j) = abs(a)/berr
         end do
-        return
-    end function maxrel_fwderr
+    end subroutine error
     !************************************************
     !                       rand_unitcmplx          *
     !************************************************

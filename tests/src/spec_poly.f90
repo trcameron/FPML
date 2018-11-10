@@ -1,7 +1,7 @@
 !********************************************************************************
-!   SPEC_POLY: Compare FPML against Polzeros and AMVW for special polynomials
+!   SPEC_POLY: Compare FPML against Polzeros and AMVW for special polynomials.
 !   Author: Thomas R. Cameron, Davidson College
-!   Last Modified: 1 Novemeber 2018
+!   Last Modified: 11 Novemeber 2018
 !********************************************************************************
 ! The accuracy of FPML is compared against Polzeros and AMVW on 34 special polynomials
 ! suitable for tesing convergence difficulties and other aspects of a root solver. 

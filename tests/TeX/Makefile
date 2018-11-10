@@ -3,7 +3,7 @@
 #############################################
 include ../../make.inc
 
-all: conv nat_poly rand_poly rand_unity spec_poly_list spec_poly_results trunc_exp unity clean
+all: conv nat_poly rand_poly rand_unity rev_nat_poly spec_poly_list spec_poly_results trunc_exp unity clean
 	
 conv:
 	$(LC) $(LFLAGS) conv.tex
@@ -16,6 +16,9 @@ rand_poly:
 	
 rand_unity:
 	$(LC) $(LFLAGS) rand_unity.tex
+
+rev_nat_poly:
+	$(LC) $(LFLAGS) rev_nat_poly.tex
 	
 spec_poly_list:
 	$(LC) $(LFLAGS) spec_poly_list.tex
@@ -33,7 +36,6 @@ clean: copy
 	@rm -r *.log
 	@rm -r *.aux
 	@rm -r *.pdf
-	@rm -r *.png
 	
 copy:
-	@cp -r *.png ../figures/
+	@cp -r *.pdf ../figures/

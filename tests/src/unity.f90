@@ -1,7 +1,7 @@
 !********************************************************************************
-!   UNITY: Compare FPML against Polzers and AMVW on roots of unity
+!   UNITY: Compare FPML against Polzers and AMVW on roots of unity.
 !   Author: Thomas R. Cameron, Davidson College
-!   Last Modified: 1 Novemeber 2018
+!   Last Modified: 11 Novemeber 2018
 !********************************************************************************
 ! The speed and accuracy of FPML is compared against Polzeros and AMVW for
 ! computing the roots of unity via the polynomial z^n-1.

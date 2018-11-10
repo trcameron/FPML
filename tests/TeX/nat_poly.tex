@@ -1,10 +1,10 @@
-\documentclass[convert={density=300,outext=.png}]{standalone}
+\documentclass{standalone}
 \usepackage{pgfplots}
 \usetikzlibrary{pgfplots.groupplots}
 
 \begin{document}
 
-\begin{tikzpicture}[scale=0.5]
+\begin{tikzpicture}[scale=0.6]
 \begin{groupplot}[
     group style={
         group size = 1 by 2,
@@ -13,9 +13,9 @@
         vertical sep = 5pt,
     },
     xlabel = {Degree},
-    legend style={at={(1.2,0.1)}, anchor=north}
+    legend pos = north west
 ]
-\nextgroupplot[ylabel = {Time (s)}, xmode=log,ymode=log] 
+\nextgroupplot[ylabel = {Time (s)}, xmode=log,ymode=log,title=Testing on $p_{1}(z)$] 
 \addplot table [x=Degree, y=FPML_time, col sep=comma] {../data_files/nat_poly.dat};
 \addlegendentry{FPML}
 \addplot table [x=Degree, y=Polzeros_time, col sep=comma] {../data_files/nat_poly.dat};

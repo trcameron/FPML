@@ -5,7 +5,7 @@ include ../make.inc ../.master.inc
 
 MPOBJS := mpfun/mpfun90.o mpfun/mpmod90.o mpfun/mpmodm90.o mpfun/mpmodx90.o
 
-install: convg eiscor mpfunsrc nat_poly rand_poly rand_unity spec_poly trunc_exp unity
+install: convg eiscor mpfunsrc nat_poly rand_poly rand_unity rev_nat_poly spec_poly trunc_exp unity
 	
 convg: mpfunsrc
 	$(FC) $(FFLAGS) -o convg ../src/fpml.f90 src/rootstocoeffs.f90 src/convg.f90 $(MPOBJS) -I mpfun
@@ -18,6 +18,9 @@ rand_poly: eiscor
 
 rand_unity: eiscor mpfunsrc
 	$(FC) $(FFLAGS) -o rand_unity ../src/fpml.f90 Polzeros/pzeros.f90 src/rootstocoeffs.f90 src/rand_unity.f90 $(MPOBJS) -I mpfun -I AMVW/include AMVW/eiscor/lib/lib$(LIBNAME).$(SLIB).$(VERSION)
+
+rev_nat_poly: eiscor
+	$(FC) $(FFLAGS) -o rev_nat_poly ../src/fpml.f90 Polzeros/pzeros.f90 src/rev_nat_poly.f90 -I AMVW/include AMVW/eiscor/lib/lib$(LIBNAME).$(SLIB).$(VERSION)
 
 spec_poly: eiscor mpfunsrc
 	$(FC) $(FFLAGS) -o spec_poly ../src/fpml.f90 Polzeros/pzeros.f90 src/rootstocoeffs.f90 src/spec_poly.f90 $(MPOBJS) -I mpfun -I AMVW/include AMVW/eiscor/lib/lib$(LIBNAME).$(SLIB).$(VERSION)
@@ -46,6 +49,7 @@ uninstall: clean
 	@rm -f nat_poly
 	@rm -f rand_poly
 	@rm -f rand_unity
+	@rm -f rev_nat_poly
 	@rm -f spec_poly
 	@rm -f trunc_exp
 	@rm -f unity

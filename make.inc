@@ -13,4 +13,4 @@ FFLAGS := -O2
 
 # latex compiler and flags
 LC := pdflatex
-LFLAGS := -shell-escape
+LFLAGS :=

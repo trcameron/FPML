@@ -79,7 +79,7 @@ contains
         ! local variables
         integer                         :: i, j, nz
         real(kind=dp)                   :: r
-        real(kind=dp), dimension(deg+1) :: alpha, ralpha
+        real(kind=dp), dimension(deg+1) :: alpha
         complex(kind=dp)                :: b, c, z
         ! intrinsic functions
         intrinsic                       :: abs
@@ -88,10 +88,7 @@ contains
         conv = .false.
         alpha = abs(poly)
         call estimates(alpha, deg, roots)
-        do i=1,deg+1
-            ralpha(i) = alpha(i)*(3.8*(deg-i+1) + 1)
-            alpha(i) = alpha(i)*(3.8*(i-1) + 1)
-        end do
+        alpha = (/ (alpha(i)*(3.8*(i-1)+1),i=1,deg+1)/)
         nz = 0
         do i=1,itmax
             do j=1,deg
@@ -99,7 +96,7 @@ contains
                     z = roots(j)
                     r = abs(z)
                     if(r > 1) then
-                        call rcheck_lag(poly, ralpha, deg, b, c, z, r, conv(j), berr(j), cond(j))
+                        call rcheck_lag(poly, alpha, deg, b, c, z, r, conv(j), berr(j), cond(j))
                     else
                         call check_lag(poly, alpha, deg, b, c, z, r, conv(j), berr(j), cond(j))
                     end if
@@ -124,11 +121,11 @@ contains
                     r = 1/r
                     b = poly(1)
                     c = 0
-                    berr(j) = ralpha(1)
+                    berr(j) = alpha(1)
                     do i=2,deg+1
                         c = z*c + b
                         b = z*b + poly(i)
-                        berr(j) = r*berr(j) + ralpha(i)
+                        berr(j) = r*berr(j) + alpha(i)
                     end do
                     cond(j) = berr(j)/abs(deg*b-z*c)
                     berr(j) = abs(b)/berr(j)
@@ -157,12 +154,12 @@ contains
     ! computed. Otherwise, the Laguerre correction terms
     ! are computed and stored in variables b and c. 
     !************************************************
-    subroutine rcheck_lag(p, ralpha, deg, b, c, z, r, conv, berr, cond)
+    subroutine rcheck_lag(p, alpha, deg, b, c, z, r, conv, berr, cond)
         implicit none
         ! argument variables
         integer, intent(in)             :: deg
         logical, intent(out)            :: conv
-        real(kind=dp), intent(in)       :: ralpha(:), r
+        real(kind=dp), intent(in)       :: alpha(:), r
         real(kind=dp), intent(out)      :: berr, cond
         complex(kind=dp), intent(in)    :: p(:), z
         complex(kind=dp), intent(out)   :: b, c
@@ -179,12 +176,12 @@ contains
         a = p(1)
         b = 0
         c = 0
-        berr = ralpha(1)
+        berr = alpha(1)
         do k=2,deg+1
             c = zz*c + b
             b = zz*b + a
             a = zz*a + p(k)
-            berr = rr*berr + ralpha(k)
+            berr = rr*berr + alpha(k)
         end do
         if(abs(a)>eps*berr) then
             b = b/a

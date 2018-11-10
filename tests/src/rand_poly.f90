@@ -1,10 +1,12 @@
 !********************************************************************************
-!   RAND_POLY: Compare FPML against Polzers and AMVW on random polynomials
+!   RAND_POLY: Compare FPML against Polzers and AMVW on polynomials with
+!   complex random coefficients. 
 !   Author: Thomas R. Cameron, Davidson College
-!   Last Modified: 1 Novemeber 2018
+!   Last Modified: 11 Novemeber 2018
 !********************************************************************************
 ! The speed and accuracy of FPML is compared against Polzeros and AMVW for
-! an array of random polynomials. 
+! polynomials with complex random coefficients whose real and imaginary parts
+! lie in the interval [-1,1]. 
 !********************************************************************************
 program rand_poly
     use fpml
@@ -178,17 +180,12 @@ contains
         ! local variables
         integer                         :: j, k
         real(kind=dp)                   :: r, berr
-        real(kind=dp), dimension(deg+1) :: alpha, ralpha
+        real(kind=dp), dimension(deg+1) :: alpha
         complex(kind=dp)                :: a, z
         
         ! main
-        do j=1,deg+1
-            alpha(j) = abs(p(j))
-        end do
-        do j=1,deg+1
-            ralpha(j) = alpha(j)*(3.8*(deg-j+1) + 1)
-            alpha(j) = alpha(j)*(3.8*(j-1) + 1)
-        end do
+        alpha = abs(p)
+        alpha = (/ (alpha(j)*(3.8*(j-1)+1),j=1,deg+1)/)
         do j=1,deg
             z = roots(j)
             r = abs(z)
@@ -196,10 +193,10 @@ contains
                 z = 1/z
                 r = 1/r
                 a = p(1)
-                berr = ralpha(1)
+                berr = alpha(1)
                 do k=2,deg+1
                     a = z*a + p(k)
-                    berr = r*berr + ralpha(k)
+                    berr = r*berr + alpha(k)
                 end do
             else
                 a = p(deg+1)

@@ -1,0 +1,32 @@
+\documentclass{standalone}
+\usepackage{pgfplots}
+\usetikzlibrary{pgfplots.groupplots}
+
+\begin{document}
+
+\begin{tikzpicture}[scale=0.6]
+\begin{groupplot}[
+    group style={
+        group size = 1 by 2,
+        xlabels at = edge bottom,
+        xticklabels at = edge bottom,
+        vertical sep = 5pt,
+    },
+    xlabel = {Degree},
+    legend pos = north west
+]
+\nextgroupplot[ylabel = {Time (s)}, xmode=log,ymode=log,title=Testing on $p_{2}(z)$] 
+\addplot table [x=Degree, y=FPML_time, col sep=comma] {../data_files/rev_nat_poly.dat};
+\addlegendentry{FPML}
+\addplot table [x=Degree, y=Polzeros_time, col sep=comma] {../data_files/rev_nat_poly.dat};
+\addlegendentry{Polzeros}
+\addplot table [x=Degree, y=AMVW_time, col sep=comma] {../data_files/rev_nat_poly.dat};
+\addlegendentry{AMVW}
+\nextgroupplot[ylabel = {Backward Error}, xmode=log,ymode=log] 
+\addplot table [x=Degree, y=FPML_err, col sep=comma] {../data_files/rev_nat_poly.dat};
+\addplot table [x=Degree, y=Polzeros_err, col sep=comma] {../data_files/rev_nat_poly.dat};
+\addplot table [x=Degree, y=AMVW_err, col sep=comma] {../data_files/rev_nat_poly.dat};
+\end{groupplot}
+\end{tikzpicture}
+
+\end{document}
