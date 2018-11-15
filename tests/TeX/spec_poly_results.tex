@@ -14,7 +14,7 @@
 \pgfplotstableread[col sep=comma]{../data_files/spec_poly.dat}\dataA
 \pgfplotstableread[col sep=comma]{../NAG_test/data_files/spec_poly_nag.dat}\dataB
 
-\pgfplotstablecreatecol[copy column from table={\dataB}{[index] 2}] {NAG} {\dataA}
+\pgfplotstablecreatecol[copy column from table={\dataB}{[index] 2}] {C02AFF} {\dataA}
 \pgfplotstabletypeset[
         every head row/.style={
         before row={\toprule}, % have a rule at top
