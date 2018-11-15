@@ -17,7 +17,6 @@ program rand_unity
     integer                                     :: flag, startDegree, endDegree, itnum
     ! testing variables
     integer                                     :: deg, it, j, clock_rate, clock_start, clock_stop
-    real(kind=dp), parameter                    :: pi = 3.141592653589793d0
     real(kind=dp), dimension(:), allocatable    :: coeffs, err, xr, xi
     real(kind=dp), dimension(:,:), allocatable  :: results
     complex(kind=dp), dimension(:), allocatable :: exact_roots
@@ -210,6 +209,7 @@ contains
         ! local variables
         integer                         :: k
         real(kind=dp)                   :: theta1, theta2, r
+        real(kind=dp), parameter        :: pi = 3.141592653589793d0
         
         ! main
         do k=1,size,2

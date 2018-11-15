@@ -1,12 +1,12 @@
 !********************************************************************************
-!   UNITY: Compare FPML against Polzers and AMVW on roots of unity
+!   UNITY_NAG: Compare FPML against NAG on roots of unity.
 !   Author: Thomas R. Cameron, Davidson College
-!   Last Modified: 21 March 2018
+!   Last Modified: 14 Novemeber 2018
 !********************************************************************************
-! The speed and accuracy of FPML is compared against Polzeros and AMVW for
+! The speed and accuracy of FPML is compared against NAG for
 ! computing the roots of unity via the polynomial z^n-1.
 !********************************************************************************
-program unity
+program unity_nag
     use fpml
     use nag_library, only: c02aff
     implicit none
@@ -20,7 +20,9 @@ program unity
     real(kind=dp), dimension(:,:), allocatable  :: results
     complex(kind=dp), dimension(:), allocatable :: exact_roots
     ! FPML variables
-    real(kind=dp), dimension(:),    allocatable :: berr, cond   
+    integer, parameter                          :: nitmax=30
+    logical, dimension(:), allocatable          :: conv
+    real(kind=dp), dimension(:), allocatable    :: berr, cond   
     complex(kind=dp), dimension(:), allocatable :: p, roots
     ! NAG variables
     logical, parameter                          :: scal = .false.
@@ -33,31 +35,31 @@ program unity
     if(flag==0) then
         read(arg, '(I10)') startDegree
     else
-        startDegree=100
+        startDegree=15
     end if
     call get_command_argument(2,arg,status=flag)
     if(flag==0) then
         read(arg, '(I10)') endDegree
     else
-        endDegree=1600
+        endDegree=480
     end if
     call get_command_argument(3,arg,status=flag)
     if(flag==0) then
         read(arg, '(I10)') itnum
     else
-        itnum=10
+        itnum=128
     end if
     
     ! Testing: roots of unity
-    open(unit=1,file="../data_files/unity_nag.dat")
+    open(unit=1,file="data_files/unity_nag.dat")
     write(1,'(A)') 'Degree, FPML_time, FPML_err, NAG_time, NAG_err'
     allocate(results(itnum,4))
     deg=startDegree
     do while(deg<=endDegree)
         write(1,'(I10)', advance='no') deg
         write(1,'(A)', advance='no') ','
-        allocate(err(deg), exact_roots(deg))
-        allocate(p(deg+1), roots(deg), berr(deg), cond(deg))
+        allocate(err(deg))
+        allocate(p(deg+1), roots(deg), berr(deg), cond(deg), conv(deg))
         allocate(a(2,0:deg),w(4*(deg+1)), z(2,deg))
         allocate(zeros(deg))
         ! polynomial and roots
@@ -70,17 +72,13 @@ program unity
         end do
         exact_roots = (/ (cmplx(cos(2*pi*j/deg),sin(2*pi*j/deg),kind=dp), j=1,deg)/)
         do it=1,itnum
-            write(*,*) deg
             ! FPML
             call system_clock(count_rate=clock_rate)
             call system_clock(count=clock_start)
-            call main(p, deg, roots, berr, cond)
+            call main(p, deg, roots, berr, cond, conv, nitmax)
             call system_clock(count=clock_stop)
-            results(it,1) = dble(clock_stop-clock_start)/dble(clock_rate)
-            call sort(roots, exact_roots, deg)
-            err = (/ (abs(roots(j)-exact_roots(j))/abs(exact_roots(j)), j=1,deg)/)
-            results(it,2) = sum(err)/deg
-            write(*,*) 'FPML finished'
+            results(it,1)=dble(clock_stop-clock_start)/dble(clock_rate)
+            results(it,2) = maxrel_fwderr(roots, exact_roots, deg)
             ! NAG
             call system_clock(count_rate=clock_rate)
             call system_clock(count=clock_start)
@@ -89,31 +87,31 @@ program unity
             call system_clock(count=clock_stop)
             results(it,3)=dble(clock_stop-clock_start)/dble(clock_rate)
             zeros = (/ (cmplx(z(1,j),z(2,j),kind=dp), j=1,deg)/)
-            call sort(zeros, exact_roots, deg)
-            err = (/ (abs(roots(j)-exact_roots(j))/abs(exact_roots(j)), j=1,deg)/)
-            results(it,4) = sum(err)/deg
-            write(*,*) 'NAG finished'
+            results(it,4) = maxrel_fwderr(roots, exact_roots, deg)
         end do
-        deallocate(err, exact_roots, p, roots, berr, cond, zeros, a, w, z)
-        deg=2*deg
+        deallocate(err, p, roots, berr, cond, conv, a, w, z, zeros)
         ! write results to file
-        write(1,'(ES15.2)', advance='no') sum(results(:,1))/itnum
+        write(1,'(ES15.2)', advance='no') sum(results(1:itnum,1))/itnum
         write(1,'(A)', advance='no') ','
-        write(1,'(ES15.2)', advance='no') sum(results(:,2))/itnum
+        write(1,'(ES15.2)', advance='no') sum(results(1:itnum,2))/itnum
         write(1,'(A)', advance='no') ','
-        write(1,'(ES15.2)', advance='no') sum(results(:,3))/itnum
+        write(1,'(ES15.2)', advance='no') sum(results(1:itnum,3))/itnum
         write(1,'(A)', advance='no') ','
-        write(1,'(ES15.2)') sum(results(:,4))/itnum
+        write(1,'(ES15.2)') sum(results(1:itnum,4))/itnum
+        ! update deg
+        deg=2*deg
     end do
+    deallocate(results)
+    ! close file
+    close(1)
 contains
     !************************************************
-    !                       sort                    *
+    !                       maxrel_fwderr           *
     !************************************************
-    ! The roots are sorted with respect to exact_roots. 
-    ! For each i, roots(i) is the root approximation 
-    ! that is closest to exact_roots(i).
+    ! Compute the maximum relative forward error
+    ! in the approximation roots to exact_roots.
     !************************************************
-    subroutine sort(roots, exact_roots, deg)
+    function maxrel_fwderr(roots, exact_roots, deg) result(res)
         implicit none
         ! argument variables
         integer, intent(in)             :: deg
@@ -121,23 +119,23 @@ contains
         complex(kind=dp), intent(inout) :: roots(:)
         ! local variables
         integer                         :: i, j, k
-        real(kind=dp)                   :: diff, x
-        complex(kind=dp)                :: temp
+        real(kind=dp)                   :: hd, res
         
         ! main
+        res = 0d0
         do i=1,deg
-            diff = abs(roots(i) - exact_roots(i))
-            k = i
-            do j=i+1, deg
-                x = abs(roots(j) - exact_roots(i))
-                if(x<diff) then
-                    diff = x
-                    k = j
+            hd = abs(roots(i)-exact_roots(1))
+            j = 1
+            do k = 2,deg
+                if (hd>abs(roots(i)-exact_roots(k))) then
+                    hd = abs(roots(i)-exact_roots(k))
+                    j = k
                 end if
             end do
-            temp = roots(i)
-            roots(i) = roots(k)
-            roots(k) = temp
+            if (res<hd/abs(exact_roots(j))) then
+                res = hd/abs(exact_roots(j))
+            end if
         end do
-    end subroutine sort
-end program unity
+        return
+    end function maxrel_fwderr
+end program unity_nag

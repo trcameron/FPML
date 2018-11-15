@@ -1,36 +1,37 @@
 !********************************************************************************
-!   TRUNC_EXP: Compare FPML against Polzers and AMVW on the truncated exponential.
+!   RAND_UNITY_NAG: Compare FPML against NAG on polynomials with
+!   random complex roots in the unit circle. 
 !   Author: Thomas R. Cameron, Davidson College
-!   Last Modified: 11 Novemeber 2018
+!   Last Modified: 15 Novemeber 2018
 !********************************************************************************
-! The speed and accuracy of FPML is compared against Polzeros and AMVW for
-! computing the roots of the truncated exponential. 
+! The speed and accuracy of FPML is compared against NAG for
+! computing the roots of a polynomial with random roots in the unit circle.  
 !********************************************************************************
-program trunc_exp
+program rand_unity_nag
     use fpml
-    use poly_zeroes
+    use nag_library, only: c02aff
+    use mpmodule
     implicit none
     ! read in variables
     character(len=32)                           :: arg
     integer                                     :: flag, startDegree, endDegree, itnum
     ! testing variables
     integer                                     :: deg, it, j, clock_rate, clock_start, clock_stop
-    real(kind=dp), dimension(:), allocatable    :: err
+    real(kind=dp), dimension(:), allocatable    :: coeffs, err, xr, xi
     real(kind=dp), dimension(:,:), allocatable  :: results
+    complex(kind=dp), dimension(:), allocatable :: exact_roots
     ! FPML variables
-    integer, parameter                          :: nitmax=30
+    integer, parameter                          :: nitmax=35
     logical, dimension(:), allocatable          :: conv
     real(kind=dp), dimension(:), allocatable    :: berr, cond   
     complex(kind=dp), dimension(:), allocatable :: p, roots
-    ! Polzeros variables
-    integer                                     :: iter
-    real(kind=dp), parameter                    :: small=tiny(1.0D0), big=huge(1.0D0)
-    logical, dimension(:), allocatable          :: h
-    real(kind=dp), dimension(:), allocatable    :: radius
-    complex(kind=dp), dimension(:), allocatable :: zeros
-    ! AMVW variables
-    real(kind=dp), dimension(:), allocatable    :: residuals
-    complex(kind=dp), dimension(:), allocatable :: poly, eigs
+    ! NAG variables
+    logical, parameter                          :: scal = .false.
+    integer                                     :: ifail
+    real(kind=dp), allocatable                  :: a(:,:), w(:), z(:,:)
+    complex(kind=dp), allocatable               :: zeros(:)
+    
+    call mpinit
     
     ! read in optional arguments
     call get_command_argument(1,arg,status=flag)
@@ -52,25 +53,32 @@ program trunc_exp
         itnum=512
     end if
     
-    ! Testing: truncated exponential
-    open(unit=1,file="data_files/trunc_exp.dat")
-    write(1,'(A)') 'Degree, FPML_time, FPML_err, Polzeros_time, Polzeros_err, AMVW_time, AMVW_err'
-    allocate(results(itnum,6))
+    ! Testing: polynomial with random unitary complex roots in the unit circle
+    call init_random_seed()
+    open(unit=1,file="data_files/rand_unity_nag.dat")
+    write(1,'(A)') 'Degree, FPML_time, FPML_err, NAG_time, NAG_err'
+    allocate(results(itnum,4))
     deg=startDegree
     do while(deg<=endDegree)
         write(1,'(I10)', advance='no') deg
         write(1,'(A)', advance='no') ','
-        allocate(err(deg))
+        allocate(exact_roots(deg), coeffs(deg), err(deg), xr(deg), xi(deg))
         allocate(p(deg+1), roots(deg), berr(deg), cond(deg), conv(deg))
-        allocate(zeros(deg), radius(deg), h(deg+1))
-        allocate(poly(deg+1), eigs(deg), residuals(deg))
-        ! polynomial
-        p(1) = 1d0
-        do j=2,deg+1
-            p(j) = p(j-1)/dble(j-1)
-        end do
-        poly = (/ (p(deg-j+1), j=0,deg)/)
+        allocate(a(2,0:deg),w(4*(deg+1)), z(2,deg))
+        allocate(zeros(deg))
         do it=1,itnum
+            ! roots
+            call rand_unitcmplx(exact_roots,deg)
+            xr = dble(exact_roots)
+            xi = aimag(exact_roots)
+            ! polynomial
+            call rootstocoeffs(deg,xr,xi,coeffs)
+            p(1:deg) = (/ (cmplx(coeffs(j),0,kind=dp), j=1,deg)/)
+            p(deg+1) = cmplx(1,0,kind=dp)
+            do j=0,deg
+                a(1,j) = dble(p(deg+1-j))
+                a(2,j) = aimag(p(deg+1-j))
+            end do
             ! FPML
             call system_clock(count_rate=clock_rate)
             call system_clock(count=clock_start)
@@ -78,24 +86,18 @@ program trunc_exp
             call system_clock(count=clock_stop)
             results(it,1) = dble(clock_stop-clock_start)/dble(clock_rate)
             results(it,2) = maxval(berr)
-            ! Polzeros
+            ! NAG
             call system_clock(count_rate=clock_rate)
             call system_clock(count=clock_start)
-            call polzeros(deg, p, eps, big, small, nitmax, zeros, radius, h, iter)
+            ifail = 0
+            call c02aff(a,deg,scal,z,w,ifail)
             call system_clock(count=clock_stop)
             results(it,3)=dble(clock_stop-clock_start)/dble(clock_rate)
+            zeros = (/ (cmplx(z(1,j),z(2,j),kind=dp), j=1,deg)/)
             call error(p, zeros, err, deg)
             results(it,4)=maxval(err)
-            ! AMVW
-            call system_clock(count_rate=clock_rate)
-            call system_clock(count=clock_start)
-            call z_poly_roots(deg, poly, eigs, residuals, flag)
-            call system_clock(count=clock_stop)
-            results(it,5)=dble(clock_stop-clock_start)/dble(clock_rate)
-            call error(p, eigs, err, deg)
-            results(it,6)=maxval(err)
         end do
-        deallocate(err, p, roots, berr, cond, conv, zeros, radius, h, poly, eigs, residuals)
+        deallocate(exact_roots, coeffs, err, xr, xi, p, roots, berr, cond, conv, a, w, z, zeros)
         ! write results to file
         write(1,'(ES15.2)', advance='no') sum(results(1:itnum,1))/itnum
         write(1,'(A)', advance='no') ','
@@ -103,11 +105,7 @@ program trunc_exp
         write(1,'(A)', advance='no') ','
         write(1,'(ES15.2)', advance='no') sum(results(1:itnum,3))/itnum
         write(1,'(A)', advance='no') ','
-        write(1,'(ES15.2)', advance='no') sum(results(1:itnum,4))/itnum
-        write(1,'(A)', advance='no') ','
-        write(1,'(ES15.2)', advance='no') sum(results(1:itnum,5))/itnum
-        write(1,'(A)', advance='no') ','
-        write(1,'(ES15.2)') sum(results(1:itnum,6))/itnum
+        write(1,'(ES15.2)') sum(results(1:itnum,4))/itnum
         ! update deg
         deg=deg+2
     end do
@@ -115,6 +113,32 @@ program trunc_exp
     ! close file
     close(1)
 contains
+    !************************************************
+    !                   init_random_seed            *
+    !************************************************
+    ! Initiate random seed using system_clock. This
+    ! seed is then available for the random number
+    ! generator in random_number for the life of
+    ! the program.
+    !************************************************
+    subroutine init_random_seed()
+        implicit none
+        ! local variables
+        integer                             :: i, n , clock
+        integer, dimension(:), allocatable  :: seed
+        ! intrinsic subroutines
+        intrinsic                           :: random_seed, system_clock
+        
+        ! main
+        call random_seed(size = n)
+        allocate(seed(n))
+        
+        call system_clock(count = clock)
+        seed = clock + 37 * (/ (i - 1, i = 1,n) /)
+        call random_seed(put = seed)
+        
+        deallocate(seed)
+    end subroutine init_random_seed
     !************************************************
     !                   error                       *
     !************************************************
@@ -159,4 +183,32 @@ contains
             err(j) = abs(a)/berr
         end do
     end subroutine error
-end program trunc_exp
+    !************************************************
+    !                       rand_unitcmplx          *
+    !************************************************
+    ! creates a random array of unitary complex numbers.
+    ! Complex numbers come in conjugate pairs, thus
+    ! array should have size divisible by 2. 
+    !************************************************
+    subroutine rand_unitcmplx(array,size)
+        implicit none
+        ! argument variables
+        integer, intent(in)             :: size
+        complex(kind=dp), intent(out)   :: array(:)
+        ! local variables
+        integer                         :: k
+        real(kind=dp)                   :: theta1, theta2, r
+        real(kind=dp), parameter        :: pi = 3.141592653589793d0
+        
+        ! main
+        do k=1,size,2
+            call random_number(theta1)
+            call random_number(theta2)
+            call random_number(r)
+            theta1 = -1 + 2*theta1
+            theta2 = -1 + 2*theta2
+            array(k) = r*cmplx(cos(theta1*pi),sin(theta2*pi),kind=dp)
+            array(k+1) = conjg(array(k))
+        end do
+    end subroutine rand_unitcmplx
+end program rand_unity_nag

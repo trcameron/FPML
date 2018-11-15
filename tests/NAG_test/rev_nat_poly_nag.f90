@@ -1,15 +1,15 @@
 !********************************************************************************
-!   NAT_POLY: Compare FPML against Polzers and AMVW on polynomials whose 
-!   coefficients are natural numbers. 
+!   REV_NAT_POLY_NAG: Compare FPML against NAG on polynomials whose 
+!   coefficients are the recipricol of natural numbers.  
 !   Author: Thomas R. Cameron, Davidson College
-!   Last Modified: 11 November 2018
+!   Last Modified: 14 November 2018
 !********************************************************************************
-! The speed and accuracy of FPML is compared against Polzeros and AMVW for
-! computing the roots of the polynomial sum(i+1)x^i. 
+! The speed and accuracy of FPML is compared against NAG for
+! computing the roots of the polynomial sum(1/(i+1))x^i. 
 !********************************************************************************
-program nat_poly
+program rev_nat_poly_nag
     use fpml
-    use poly_zeroes
+    use nag_library, only: c02aff
     implicit none
     ! read in variables
     character(len=32)                           :: arg
@@ -23,28 +23,24 @@ program nat_poly
     logical, dimension(:), allocatable          :: conv
     real(kind=dp), dimension(:), allocatable    :: berr, cond   
     complex(kind=dp), dimension(:), allocatable :: p, roots
-    ! Polzeros variables
-    integer                                     :: iter
-    real(kind=dp), parameter                    :: small=tiny(1.0D0), big=huge(1.0D0)
-    logical, dimension(:), allocatable          :: h
-    real(kind=dp), dimension(:), allocatable    :: radius
-    complex(kind=dp), dimension(:), allocatable :: zeros
-    ! AMVW variables
-    real(kind=dp), dimension(:), allocatable    :: residuals
-    complex(kind=dp), dimension(:), allocatable :: poly, eigs
+    ! NAG variables
+    logical, parameter                          :: scal = .false.
+    integer                                     :: ifail
+    real(kind=dp), allocatable                  :: a(:,:), w(:), z(:,:)
+    complex(kind=dp), allocatable               :: zeros(:)
     
     ! read in optional arguments
     call get_command_argument(1,arg,status=flag)
     if(flag==0) then
         read(arg, '(I10)') startDegree
     else
-        startDegree=80
+        startDegree=10
     end if
     call get_command_argument(2,arg,status=flag)
     if(flag==0) then
         read(arg, '(I10)') endDegree
     else
-        endDegree=10240
+        endDegree=320
     end if
     call get_command_argument(3,arg,status=flag)
     if(flag==0) then
@@ -54,49 +50,46 @@ program nat_poly
     end if
     
     ! Testing: polynomial with natural number coefficients
-    open(unit=1,file="data_files/nat_poly.dat")
-    write(1,'(A)') 'Degree, FPML_time, FPML_err, Polzeros_time, Polzeros_err, AMVW_time, AMVW_err'
-    allocate(results(itnum,6))
+    open(unit=1,file="data_files/rev_nat_poly_nag.dat")
+    write(1,'(A)') 'Degree, FPML_time, FPML_err, NAG_time, NAG_err'
+    allocate(results(itnum,4))
     deg=startDegree
     do while(deg<=endDegree)
         write(1,'(I10)', advance='no') deg
         write(1,'(A)', advance='no') ','
         allocate(err(deg))
         allocate(p(deg+1), roots(deg), berr(deg), cond(deg), conv(deg))
-        allocate(zeros(deg), radius(deg), h(deg+1))
-        allocate(poly(deg+1), eigs(deg), residuals(deg))
+        allocate(a(2,0:deg),w(4*(deg+1)), z(2,deg))
+        allocate(zeros(deg))
         ! polynomial
         p(1) = 1d0
         do j=2,deg+1
-            p(j) = j
+            p(j) = 1d0/dble(j)
         end do
-        poly = (/ (p(deg-j+1), j=0,deg)/)
+        do j=0,deg
+            a(1,j) = dble(p(deg+1-j))
+            a(2,j) = aimag(p(deg+1-j))
+        end do
         do it=1,itnum
             ! FPML
             call system_clock(count_rate=clock_rate)
             call system_clock(count=clock_start)
             call main(p, deg, roots, berr, cond, conv, nitmax)
             call system_clock(count=clock_stop)
-            results(it,1) = dble(clock_stop-clock_start)/dble(clock_rate)
-            results(it,2) = maxval(berr)
-            ! Polzeros
+            results(it,1)=dble(clock_stop-clock_start)/dble(clock_rate)
+            results(it,2)=maxval(berr)
+            ! NAG
             call system_clock(count_rate=clock_rate)
             call system_clock(count=clock_start)
-            call polzeros(deg, p, eps, big, small, nitmax, zeros, radius, h, iter)
+            ifail = 0
+            call c02aff(a,deg,scal,z,w,ifail)
             call system_clock(count=clock_stop)
             results(it,3)=dble(clock_stop-clock_start)/dble(clock_rate)
+            zeros = (/ (cmplx(z(1,j),z(2,j),kind=dp), j=1,deg)/)
             call error(p, zeros, err, deg)
             results(it,4)=maxval(err)
-            ! AMVW
-            call system_clock(count_rate=clock_rate)
-            call system_clock(count=clock_start)
-            call z_poly_roots(deg, poly, eigs, residuals, flag)
-            call system_clock(count=clock_stop)
-            results(it,5)=dble(clock_stop-clock_start)/dble(clock_rate)
-            call error(p, eigs, err, deg)
-            results(it,6)=maxval(err)
         end do
-        deallocate(err, p, roots, berr, cond, conv, zeros, radius, h, poly, eigs, residuals)
+        deallocate(err, p, roots, berr, cond, conv, a, w, z, zeros)
         ! write results to file
         write(1,'(ES15.2)', advance='no') sum(results(1:itnum,1))/itnum
         write(1,'(A)', advance='no') ','
@@ -104,11 +97,7 @@ program nat_poly
         write(1,'(A)', advance='no') ','
         write(1,'(ES15.2)', advance='no') sum(results(1:itnum,3))/itnum
         write(1,'(A)', advance='no') ','
-        write(1,'(ES15.2)', advance='no') sum(results(1:itnum,4))/itnum
-        write(1,'(A)', advance='no') ','
-        write(1,'(ES15.2)', advance='no') sum(results(1:itnum,5))/itnum
-        write(1,'(A)', advance='no') ','
-        write(1,'(ES15.2)') sum(results(1:itnum,6))/itnum
+        write(1,'(ES15.2)') sum(results(1:itnum,4))/itnum
         ! update deg and itnum
         deg=2*deg
         itnum=itnum/2
@@ -161,4 +150,4 @@ contains
             err(j) = abs(a)/berr
         end do
     end subroutine error
-end program nat_poly
+end program rev_nat_poly_nag

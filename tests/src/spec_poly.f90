@@ -35,7 +35,6 @@ program spec_poly
     call mpinit
     
     ! Testing: special polynomials
-    call init_random_seed()
     open(unit=1,file="data_files/spec_poly.dat")
     write(1,'(A)') 'Poly No., FPML, Polzeros, AMVW'
     
@@ -1655,32 +1654,6 @@ program spec_poly
     ! close file
     close(1)
 contains
-    !************************************************
-    !                   init_random_seed            *
-    !************************************************
-    ! Initiate random seed using system_clock. This
-    ! seed is then available for the random number
-    ! generator in random_number for the life of
-    ! the program.
-    !************************************************
-    subroutine init_random_seed()
-        implicit none
-        ! local variables
-        integer                             :: i, n , clock
-        integer, dimension(:), allocatable  :: seed
-        ! intrinsic subroutines
-        intrinsic                           :: random_seed, system_clock
-        
-        ! main
-        call random_seed(size = n)
-        allocate(seed(n))
-        
-        call system_clock(count = clock)
-        seed = clock + 37 * (/ (i - 1, i = 1,n) /)
-        call random_seed(put = seed)
-        
-        deallocate(seed)
-    end subroutine init_random_seed
     !************************************************
     !                       maxrel_fwderr           *
     !************************************************

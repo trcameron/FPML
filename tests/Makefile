@@ -5,7 +5,7 @@ include ../make.inc ../.master.inc
 
 MPOBJS := mpfun/mpfun90.o mpfun/mpmod90.o mpfun/mpmodm90.o mpfun/mpmodx90.o
 
-install: convg eiscor mpfunsrc nat_poly rand_poly rand_unity rev_nat_poly spec_poly trunc_exp unity
+install: convg nat_poly rand_poly rand_unity rev_nat_poly spec_poly trunc_exp unity
 	
 convg: mpfunsrc
 	$(FC) $(FFLAGS) -o convg ../src/fpml.f90 src/rootstocoeffs.f90 src/convg.f90 $(MPOBJS) -I mpfun
@@ -45,7 +45,7 @@ compile:
 	
 uninstall: clean
 	@$(MAKE) uninstall -C AMVW
-	@rm -f conv
+	@rm -f convg
 	@rm -f nat_poly
 	@rm -f rand_poly
 	@rm -f rand_unity
