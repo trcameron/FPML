@@ -12,7 +12,6 @@
 
 \begin{document}
     \pgfplotstabletypeset[
-        font=\small,
         col sep=comma, % the seperator in our .csv file
         every head row/.style={
         before row={\toprule}, % have a rule at top
@@ -20,5 +19,5 @@
     	    \midrule} % rule under units
     	},
     	every last row/.style={after row=\bottomrule}, % rule at bottom
-    ]{../data_files/conv.dat} % filename/path to file
+    ]{../data_files/convg.dat} % filename/path to file
 \end{document}

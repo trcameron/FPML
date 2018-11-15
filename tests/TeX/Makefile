@@ -3,10 +3,10 @@
 #############################################
 include ../../make.inc
 
-all: conv nat_poly rand_poly rand_unity rev_nat_poly spec_poly_list spec_poly_results trunc_exp unity clean
+all: convg nat_poly rand_poly rand_unity rev_nat_poly spec_poly_list spec_poly_results trunc_exp unity clean
 	
-conv:
-	$(LC) conv.tex
+convg:
+	$(LC) convg.tex
 	
 nat_poly:
 	$(LC) nat_poly.tex

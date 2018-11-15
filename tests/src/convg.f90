@@ -26,7 +26,7 @@ program convg
     
     ! Testing: convergence
     call init_random_seed()
-    open(unit=1,file="data_files/conv.dat")
+    open(unit=1,file="data_files/convg.dat")
     write(1,'(A)') 'Iteration, Error-1, Error-2, Error-3, Error-4, Error-5, Error-6'
     allocate(error(itmax,6))
     deg = 4;
