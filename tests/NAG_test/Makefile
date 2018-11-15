@@ -11,25 +11,25 @@ MPOBJS := mpfun/mpfun90.o mpfun/mpmod90.o mpfun/mpmodm90.o mpfun/mpmodx90.o
 install: nat_poly rand_poly rand_unity rev_nat_poly spec_poly trunc_exp unity
 
 nat_poly:
-	$(FCOMPILE) -o nat_poly_nag.exe ../../src/fpml.f90 nat_poly_nag.f90 $(FLINK)
+	$(FCOMPILE) -o nat_poly_nag.exe ../../src/fpml.f90 src/nat_poly_nag.f90 $(FLINK)
 
 rand_poly:
-	$(FCOMPILE) -o rand_poly_nag.exe ../../src/fpml.f90 rand_poly_nag.f90 $(FLINK)
+	$(FCOMPILE) -o rand_poly_nag.exe ../../src/fpml.f90 src/rand_poly_nag.f90 $(FLINK)
 
 rand_unity: mpfunsrc
-	$(FCOMPILE) -o rand_unity_nag.exe ../../src/fpml.f90 rootstocoeffs.f90 rand_unity_nag.f90 $(FLINK) $(MPOBJS) -I mpfun
+	$(FCOMPILE) -o rand_unity_nag.exe ../../src/fpml.f90 src/rootstocoeffs.f90 src/rand_unity_nag.f90 $(FLINK) $(MPOBJS) -I mpfun
 
 rev_nat_poly:
-	$(FCOMPILE) -o rev_nat_poly_nag.exe ../../src/fpml.f90 rev_nat_poly_nag.f90 $(FLINK)
+	$(FCOMPILE) -o rev_nat_poly_nag.exe ../../src/fpml.f90 src/rev_nat_poly_nag.f90 $(FLINK)
 
 spec_poly: mpfunsrc
-	$(FCOMPILE) -o spec_poly_nag.exe ../../src/fpml.f90 rootstocoeffs.f90 spec_poly_nag.f90 $(FLINK) $(MPOBJS) -I mpfun
+	$(FCOMPILE) -o spec_poly_nag.exe ../../src/fpml.f90 src/rootstocoeffs.f90 src/spec_poly_nag.f90 $(FLINK) $(MPOBJS) -I mpfun
 
 trunc_exp:
-	$(FCOMPILE) -o trunc_exp_nag.exe ../../src/fpml.f90 trunc_exp_nag.f90 $(FLINK)
+	$(FCOMPILE) -o trunc_exp_nag.exe ../../src/fpml.f90 src/trunc_exp_nag.f90 $(FLINK)
 
 unity:
-	$(FCOMPILE) -o unity_nag.exe ../../src/fpml.f90 unity_nag.f90 $(FLINK)
+	$(FCOMPILE) -o unity_nag.exe ../../src/fpml.f90 src/unity_nag.f90 $(FLINK)
 
 mpfunsrc: 
 	@$(MAKE) all -C mpfun
