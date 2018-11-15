@@ -9,7 +9,7 @@
 
 # fortran compiler and flags
 FC := gfortran
-FFLAGS := -O2 -Wall
+FFLAGS := -O2
 
 # latex compiler and flags
 LC := pdflatex

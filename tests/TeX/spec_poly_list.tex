@@ -1,5 +1,5 @@
 \documentclass{standalone}
-\usepackage{booktabs} % For \toprule, \midrule and \bottomrule
+\usepackage{booktabs} 		% For \toprule, \midrule and \bottomrule
 \usepackage{pgfplotstable} % Generates table from .csv
 \pgfplotsset{compat=1.14}
 
@@ -12,11 +12,11 @@
         columns/Description/.style={string type},
         columns/Roots/.style={string type},
         every head row/.style={
-  		before row={\toprule}, % have a rule at top
-  		after row={
-  			\midrule} % rule under units
-  			},
-  		every last row/.style={after row=\bottomrule}, % rule at bottom
+        before row={\toprule}, % have a rule at top
+    	after row={
+    	    \midrule} % rule under units
+    	},
+    	every last row/.style={after row=\bottomrule}, % rule at bottom
     ]
     {
         Poly No. & Description & Deg. & Roots \\
@@ -34,5 +34,25 @@
         12 & C. Traverso & 24 & known \\
         13 & Mandelbrot & 31 & known \\
         14 & Mandelbrot & 63 & known \\
+        15 & $p_{1}(z)$ with $a=10^{-8}$ & 3 & {$a,-a,1$} \\
+	16 & $p_{1}(z)$ with $a=10^{-15}$ & 3 & {$a,-a,1$}\\
+	17 & $p_{1}(z)$ with $a=10^{8}$ & 3 & {$a,-a,1$}\\
+	18 &  $p_{1}(z)$ with $a=10^{15}$ & 3 & {$a,-a,1$} \\
+	19 & $p_{3}(z)$ & 10 & {$10^{-1},\ldots,10^{-10}$} \\
+	20 & $p_{3}(z)$ & 20 & {$10^{-1},\ldots,10^{-20}$} \\
+	21 & $p_{4}(z)$ & 6 & {$1/10~(m.~3),5/10,6/10,7/10$} \\
+	22 & $ p_{5}(z)$ & 10 & {$1/10~(m.~4),2/10~(m.~3),3/10~(m.~2),4/10$} \\
+	23 & $p_{6}(z)$ & 5 & {$0.1,0.998,1.00002,0.99999$} \\
+	24 & $p_{7}(z)$ with $a=0$ & 7 & {$10^{-3},10^{-2},10^{-1}~(m.~2),1,10$} \\
+	25 & $p_{7}(z)$ with $a=10^{-10}$ & 7 & {$10^{-3},10^{-2},10^{-1}-\iu a,10^{-1}+\iu a,1,10$} \\
+	26 & $p_{7}(z)$ with $a=10^{-6}$ & 7 & {$10^{-3},10^{-2},10^{-1}-\iu a,10^{-1}+\iu a,1,10$} \\
+	27 & $p_{8}(z)$ & 5 & {$-1~(m.~5)$} \\
+	28 & $p_{9}(z)$ & 20 & {$10^{2}e^{\frac{2\pi\iu}{10}j},10^{-2}e^{\frac{2\pi\iu}{10}j}$} \\
+	29 & $p_{10}(z)$ with $a=10^{3}$ & 3 & {$a,1,1/a$} \\
+	30 & $p_{10}(z)$ with $a=10^{6}$ & 3 & {$a,1,1/a$} \\
+	31 & $p_{10}(z)$ with $a=10^{9}$ & 3 & {$a,1,1/a$} \\
+	32 & $p_{11}(z)$ with $m=15$ & 60 & {$e^{\frac{\pi\iu}{2m}j},0.9e^{\frac{\pi\iu}{2m}j}$} \\
+	33 & $p_{11}(z)$ with $m=20$ & 80 & {$e^{\frac{\pi\iu}{2m}j},0.9e^{\frac{\pi\iu}{2m}j}$} \\
+	34 & $p_{11}(z)$ with $m=25$ & 100 & {$e^{\frac{\pi\iu}{2m}j},0.9e^{\frac{\pi\iu}{2m}j}$} \\
     }
 \end{document}
