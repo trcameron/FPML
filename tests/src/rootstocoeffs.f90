@@ -70,7 +70,7 @@ subroutine rootstocoeffs(n,rroots,iroots,coeffs)
 
   ! convert to double precision
   do ii=1,n
-     coeffs(ii) = c(n+1-ii)
+     coeffs(ii) = c(n+1-ii)     ! note n+1-ii which orders for FPML use
   end do
 
 end subroutine rootstocoeffs
