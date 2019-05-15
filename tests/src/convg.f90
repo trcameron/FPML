@@ -18,7 +18,7 @@ program convg
     real(kind=dp), dimension(:,:), allocatable  :: error
     complex(kind=dp), dimension(:), allocatable :: exact_roots
     ! FPML variables
-    logical, dimension(:), allocatable          :: conv
+    integer, dimension(:), allocatable          :: conv
     real(kind=dp), dimension(:), allocatable    :: berr, cond   
     complex(kind=dp), dimension(:), allocatable :: p, roots
     
@@ -86,7 +86,7 @@ contains
         implicit none
         ! argument variables
         integer, intent(in)             :: deg, itmax
-        logical, intent(out)            :: conv(:)
+        integer, intent(out)            :: conv(:)
         real(kind=dp), intent(out)      :: berr(:), cond(:), err(:)
         complex(kind=dp), intent(in)    :: p(:)
         complex(kind=dp), intent(out)   :: roots(:), exact_roots(:)
@@ -97,7 +97,7 @@ contains
         complex(kind=dp)                :: b, c, z
         
         ! main
-        conv = .false.
+        conv = 0
         alpha = abs(p)
         call estimates(alpha, deg, roots)
         alpha = (/ (alpha(i)*(3.8*(i-1)+1),i=1,deg+1)/)
@@ -105,7 +105,7 @@ contains
         do i=1,itmax
             err(i) = maxrel_fwderr(roots, exact_roots, deg)
             do j=1,deg
-                if(.not.conv(j)) then
+                if(conv(j)==0) then
                     z = roots(j)
                     r = abs(z)
                     if(r > 1) then
@@ -113,7 +113,7 @@ contains
                     else
                         call check_lag(p, alpha, deg, b, c, z, r, conv(j), berr(j), cond(j))
                     end if
-                    if(.not.conv(j)) then
+                    if(conv(j)==0) then
                         call modify_lag(deg, b, c, z, j, roots)
                         roots(j) = roots(j) - c
                     else

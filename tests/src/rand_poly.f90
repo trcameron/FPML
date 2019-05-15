@@ -21,7 +21,7 @@ program rand_poly
     real(kind=dp), dimension(:,:), allocatable  :: results
     ! FPML variables
     integer, parameter                          :: nitmax=30
-    logical, dimension(:), allocatable          :: conv
+    integer, dimension(:), allocatable          :: conv
     real(kind=dp), dimension(:), allocatable    :: berr, cond   
     complex(kind=dp), dimension(:), allocatable :: p, roots
     ! Polzeros variables

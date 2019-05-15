@@ -20,7 +20,7 @@ program fpml_driver
     integer                                     :: deg, i, clock_rate, clock_start, clock_stop
     ! method variables
     integer, parameter                          :: itmax=30
-    logical, dimension(:), allocatable          :: conv
+    integer, dimension(:), allocatable          :: conv
     real(kind=dp), dimension(:), allocatable    :: berr, cond   
     complex(kind=dp), dimension(:), allocatable :: p, roots
     

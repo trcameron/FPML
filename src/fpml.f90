@@ -72,7 +72,7 @@ contains
         implicit none
         ! argument variables
         integer, intent(in)             :: deg, itmax
-        logical, intent(out)            :: conv(:)
+        integer, intent(out)            :: conv(:)
         real(kind=dp), intent(out)      :: berr(:), cond(:)
         complex(kind=dp), intent(in)    :: poly(:)
         complex(kind=dp), intent(out)   :: roots(:)
@@ -80,19 +80,32 @@ contains
         integer                         :: i, j, nz
         real(kind=dp)                   :: r
         real(kind=dp), dimension(deg+1) :: alpha
+        real(kind=dp), parameter        :: big = huge(1.0_dp)
         complex(kind=dp)                :: b, c, z
         ! intrinsic functions
         intrinsic                       :: abs
         
-        ! main
-        conv = .false.
+        ! precheck
         alpha = abs(poly)
+        if(alpha(deg+1)==0) then
+            write(*,'(A)') 'Warning: leading coefficient is zero.'
+            return
+        end if
+        if(deg==2) then
+            b = -poly(2)/(2*poly(3))
+            c = sqrt(poly(2)**2-4*poly(3)*poly(1))/(2*poly(3))
+            roots(1) = b - c
+            roots(2) = b + c
+            return
+        end if
+        ! main loop
+        conv = 0
         call estimates(alpha, deg, roots)
-        alpha = (/ (alpha(i)*(3.8*(i-1)+1),i=1,deg+1)/)
+        alpha = (/ (alpha(i)*(3.8_dp*(i-1)+1),i=1,deg+1)/)
         nz = 0
         do i=1,itmax
             do j=1,deg
-                if(.not.conv(j)) then
+                if(conv(j)==0) then
                     z = roots(j)
                     r = abs(z)
                     if(r > 1) then
@@ -100,49 +113,56 @@ contains
                     else
                         call check_lag(poly, alpha, deg, b, c, z, r, conv(j), berr(j), cond(j))
                     end if
-                    if(.not.conv(j)) then
+                    if(conv(j)==0) then
                         call modify_lag(deg, b, c, z, j, roots)
                         roots(j) = roots(j) - c
                     else
                         nz = nz + 1
-                        if(nz==deg) return
+                        if(nz==deg) go to 10
                     end if
                 end if
             end do
         end do
-        write(*,'(A)') 'Warning: Convergence failed for at least one root approximation.'
-        write(*,'(A)') 'Check conv array and consider increasing itmax.'
-        do j=1,deg
-            if(.not.conv(j)) then
-                z = roots(j)
-                r = abs(z)
-                if(r>1) then
-                    z = 1/z
-                    r = 1/r
-                    b = poly(1)
-                    c = 0
-                    berr(j) = alpha(1)
-                    do i=2,deg+1
-                        c = z*c + b
-                        b = z*b + poly(i)
-                        berr(j) = r*berr(j) + alpha(i)
-                    end do
-                    cond(j) = berr(j)/abs(deg*b-z*c)
-                    berr(j) = abs(b)/berr(j)
-                else
-                    b = poly(deg+1)
-                    c = 0
-                    berr(j) = alpha(deg+1)
-                    do i=deg,1,-1
-                        c = z*c + b
-                        b = z*b + poly(i)
-                        berr(j) = r*berr(j) + alpha(i)
-                    end do
-                    cond(j) = berr(j)/(r*abs(c))
-                    berr(j) = abs(b)/berr(j)
+        ! final check
+        10 continue
+        if(minval(conv)==0) then
+            write(*,'(A)') 'At least one root approximation did not converge; check conv array.'
+            write(*,'(A)') 'Consider scaling the polynomial and/or increasing itmax.'
+            do j=1,deg
+                if(conv(j)==0) then
+                    z = roots(j)
+                    r = abs(z)
+                    if(r>1) then
+                        z = 1/z
+                        r = 1/r
+                        c = 0
+                        b = poly(1)
+                        berr(j) = alpha(1)
+                        do i=2,deg+1
+                            c = z*c + b
+                            b = z*b + poly(i)
+                            berr(j) = r*berr(j) + alpha(i)
+                        end do
+                        cond(j) = berr(j)/abs(deg*b-z*c)
+                        berr(j) = abs(b)/berr(j)
+                    else
+                        c = 0
+                        b = poly(deg+1)
+                        berr(j) = alpha(deg+1)
+                        do i=deg,1,-1
+                            c = z*c + b
+                            b = z*b + poly(i)
+                            berr(j) = r*berr(j) + alpha(i)
+                        end do
+                        cond(j) = berr(j)/(r*abs(c))
+                        berr(j) = abs(b)/berr(j)
+                    end if
                 end if
-            end if
-        end do
+            end do
+        elseif(minval(conv)==-1) then
+            write(*,'(A)') 'At least one root approximation experienced overflow/underflow; check conv array.'
+            write(*,'(A)') 'Consider scaling the polynomial.'
+        end if
     end subroutine main
     !************************************************
     !                       rcheck_lag              *
@@ -158,7 +178,7 @@ contains
         implicit none
         ! argument variables
         integer, intent(in)             :: deg
-        logical, intent(out)            :: conv
+        integer, intent(out)            :: conv
         real(kind=dp), intent(in)       :: alpha(:), r
         real(kind=dp), intent(out)      :: berr, cond
         complex(kind=dp), intent(in)    :: p(:), z
@@ -170,7 +190,7 @@ contains
         ! intrinsic functions
         intrinsic                       :: abs
         
-        ! main
+        ! evaluate polynomial and derivatives
         zz = 1/z
         rr = 1/r
         a = p(1)
@@ -183,15 +203,17 @@ contains
             a = zz*a + p(k)
             berr = rr*berr + alpha(k)
         end do
+        ! laguerre correction/ backward error and condition
         if(abs(a)>eps*berr) then
             b = b/a
             c = 2*(c/a)
             c = zz**2*(deg-2*zz*b+zz**2*(b**2-c))
             b = zz*(deg-zz*b)
+            if(check_nan_inf(b) .or. check_nan_inf(c)) conv = -1
         else
             cond = berr/abs(deg*a-zz*b)
             berr = abs(a)/berr
-            conv = .true.
+            conv = 1
         end if
     end subroutine rcheck_lag
     !************************************************
@@ -209,7 +231,7 @@ contains
         implicit none
         ! argument variables
         integer, intent(in)             :: deg
-        logical, intent(out)            :: conv
+        integer, intent(out)            :: conv
         real(kind=dp), intent(in)       :: alpha(:), r
         real(kind=dp), intent(out)      :: berr, cond
         complex(kind=dp), intent(in)    :: p(:), z
@@ -220,7 +242,7 @@ contains
         ! intrinsic functions
         intrinsic                       :: abs
         
-        ! main
+        ! evaluate polynomial and derivatives
         a = p(deg+1)
         b = 0
         c = 0
@@ -230,14 +252,16 @@ contains
             b = z*b + a
             a = z*a + p(k)
             berr = r*berr + alpha(k)
-        end do 
+        end do
+        ! laguerre correction/ backward error and condition
         if(abs(a)>eps*berr) then
             b = b/a
             c = b**2 - 2*(c/a)
+            if(check_nan_inf(b) .or. check_nan_inf(c)) conv = -1
         else
             cond = berr/(r*abs(b))
             berr = abs(a)/berr
-            conv = .true.
+            conv = 1
         end if
     end subroutine check_lag
     !************************************************
@@ -310,7 +334,7 @@ contains
         real(kind=dp)                   :: ang, r, th
         integer, dimension(deg+1)       :: h
         real(kind=dp), dimension(deg+1) :: a
-        real(kind=dp), parameter        :: pi2 = 6.2831853071795865d0, sigma = 0.7d0
+        real(kind=dp), parameter        :: pi2 = 6.2831853071795865_dp, sigma = 0.7_dp, small = tiny(1.0_dp)
         ! intrinsic functions
         intrinsic                       :: log, cos, sin, cmplx
         
@@ -319,7 +343,7 @@ contains
             if(alpha(i)>0) then
                 a(i) = log(alpha(i))
             else
-                a(i) = -1d+30
+                a(i) = -1E+30_dp
             end if
         end do
         call conv_hull(deg+1, a, h, c)
@@ -327,11 +351,12 @@ contains
         th=pi2/deg
         do i=c-1,1,-1
             nzeros = h(i)-h(i+1)
-            r = (alpha(h(i+1))/alpha(h(i)))**(1d0/nzeros)
+            r = (alpha(h(i+1))/alpha(h(i)))**(1.0_dp/nzeros)
+            if(r .le. small) r = eps
             ang = pi2/nzeros
-            DO j=1,nzeros
+            do j=1,nzeros
                 roots(k+j) = r*cmplx(cos(ang*j+th*h(i)+sigma),sin(ang*j+th*h(i)+sigma),kind=dp)
-            ENDDO
+            end do
             k = k+nzeros
         end do
     end subroutine estimates
@@ -392,4 +417,26 @@ contains
         det = (a(i)-a(h(c-1)))*(h(c)-h(c-1)) - (a(h(c))-a(h(c-1)))*(i-h(c-1))
         return
     end function cross
+    !************************************************
+    !                       check_nan_inf           *
+    !************************************************
+    ! Check if real or imaginary part of complex
+    ! number a is either NaN or Inf.
+    !************************************************
+    function check_nan_inf(a) result(res)
+        implicit none
+        ! argument variables
+        complex(kind=dp)            :: a
+        ! local variables           
+        logical                     :: res
+        real(kind=dp)               :: re_a, im_a
+        real(kind=dp), parameter    :: big = huge(1.0_dp)
+        
+        ! main
+        re_a = real(a,kind=dp)
+        im_a = aimag(a)
+        res = isnan(re_a) .or. isnan(im_a)
+        res = res .or. (abs(re_a)>big) .or. (abs(im_a)>big)
+        return
+    end function check_nan_inf
 end module fpml

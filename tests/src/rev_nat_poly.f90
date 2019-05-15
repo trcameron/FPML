@@ -20,7 +20,7 @@ program rev_nat_poly
     real(kind=dp), dimension(:,:), allocatable  :: results
     ! FPML variables
     integer, parameter                          :: nitmax=60
-    logical, dimension(:), allocatable          :: conv
+    integer, dimension(:), allocatable          :: conv
     real(kind=dp), dimension(:), allocatable    :: berr, cond   
     complex(kind=dp), dimension(:), allocatable :: p, roots
     ! Polzeros variables
