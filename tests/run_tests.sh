@@ -6,6 +6,8 @@ export DYLD_LIBRARY_PATH=$PWD/AMVW/eiscor/lib:$DYLD_LIBRARY_PATH
 # run tests
 echo "convergence test ..."
 ./convg
+echo "nan inf test ..."
+./nan_inf
 echo "natural polynomials test ..."
 ./nat_poly
 echo "random polynomials test ..."

@@ -10,7 +10,6 @@ install:
 uninstall: clean
 	@$(MAKE) uninstall -C tests
 	@rm -f fpml_driver
-	@rm -f src/*.mod
 
 run:
 	@$(MAKE) run -C tests

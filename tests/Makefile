@@ -5,10 +5,13 @@ include ../make.inc ../.master.inc
 
 MPOBJS := mpfun/mpfun90.o mpfun/mpmod90.o mpfun/mpmodm90.o mpfun/mpmodx90.o
 
-install: convg nat_poly rand_poly rand_unity rev_nat_poly spec_poly trunc_exp unity
+install: convg nan_inf nat_poly rand_poly rand_unity rev_nat_poly spec_poly trunc_exp unity
 	
 convg: mpfunsrc
 	$(FC) $(FFLAGS) -o convg ../src/fpml.f90 src/rootstocoeffs.f90 src/convg.f90 $(MPOBJS) -I mpfun
+
+nan_inf:
+	$(FC) $(FFLAGS) -o nan_inf ../src/fpml.f90 src/nan_inf.f90
 	
 nat_poly: eiscor
 	$(FC) $(FFLAGS) -o nat_poly ../src/fpml.f90 Polzeros/pzeros.f90 src/nat_poly.f90 -I AMVW/include AMVW/eiscor/lib/lib$(LIBNAME).$(SLIB).$(VERSION)
@@ -46,6 +49,7 @@ compile:
 uninstall: clean
 	@$(MAKE) uninstall -C AMVW
 	@rm -f convg
+	@rm -f nan_inf
 	@rm -f nat_poly
 	@rm -f rand_poly
 	@rm -f rand_unity

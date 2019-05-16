@@ -128,38 +128,14 @@ contains
         end do
         ! final check
         10 continue
+        if(minval(conv)==1) return
+        ! display warrning and open error file
+        write(*,'(A)',advance='no') 'Some root approximations did not converge or experienced overflow/underflow; '
+        write(*,'(A)') 'check berr, cond, and conv arrays.'
+        ! compute backward error and condition number for roots that did not converge;
+        ! note that this may produce overflow/underflow.
         do j=1,deg
-            if(conv(j)==0) then
-                write(*,'(A,I10,A)') 'Root approximation ',j, ' did not converge.'
-                z = roots(j)
-                r = abs(z)
-                if(r>1) then
-                    z = 1/z
-                    r = 1/r
-                    c = 0
-                    b = poly(1)
-                    berr(j) = alpha(1)
-                    do i=2,deg+1
-                        c = z*c + b
-                        b = z*b + poly(i)
-                        berr(j) = r*berr(j) + alpha(i)
-                    end do
-                    cond(j) = berr(j)/abs(deg*b-z*c)
-                    berr(j) = abs(b)/berr(j)
-                else
-                    c = 0
-                    b = poly(deg+1)
-                    berr(j) = alpha(deg+1)
-                    do i=deg,1,-1
-                        c = z*c + b
-                        b = z*b + poly(i)
-                        berr(j) = r*berr(j) + alpha(i)
-                    end do
-                    cond(j) = berr(j)/(r*abs(c))
-                    berr(j) = abs(b)/berr(j)
-                end if
-            elseif(conv(j)==-1) then
-                write(*,'(A,I10,A)',advance='no') 'Root approximation ',j, ' experienced overflow/underflow.'
+            if(conv(j)==0 .or. conv(j)==-1) then
                 z = roots(j)
                 r = abs(z)
                 if(r>1) then
@@ -383,7 +359,7 @@ contains
             if(r .le. small) then
                 r = 0
                 nz = nz + nzeros
-                conv(k+1:k+nzeros) = 1
+                conv(k+1:k+nzeros) = -1
                 roots(k+1:k+nzeros) = cmplx(0,0,kind=dp)
                 berr(k+1:k+nzeros) = 1
                 cond(k+1:k+nzeros) = -1
