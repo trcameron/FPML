@@ -100,7 +100,7 @@ contains
         alpha = abs(p)
         conv = 0
         nz = 0
-        call estimates(alpha, deg, roots, conv, nz, berr, cond)
+        call estimates(alpha, deg, roots, conv, nz)
         ! main loop
         alpha = (/ (alpha(i)*(3.8*(i-1)+1),i=1,deg+1)/)
         do i=1,itmax

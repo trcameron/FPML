@@ -103,7 +103,7 @@ contains
         ! initial estimates
         conv = 0
         nz = 0
-        call estimates(alpha, deg, roots, conv, nz, berr, cond)
+        call estimates(alpha, deg, roots, conv, nz)
         ! main loop
         alpha = (/ (alpha(i)*(3.8_dp*(i-1)+1),i=1,deg+1)/)
         do i=1,itmax
@@ -325,13 +325,12 @@ contains
     ! circle of radius alpha(h(i+1))/alpha(h(i))
     ! raised to the 1/(h(i)-h(i+1)) power. 
     !************************************************
-    subroutine estimates(alpha, deg, roots, conv, nz, berr, cond)
+    subroutine estimates(alpha, deg, roots, conv, nz)
         implicit none
         ! argument variables
         integer, intent(in)             :: deg
         integer, intent(inout)          :: conv(:), nz
         real(kind=dp), intent(in)       :: alpha(:)
-        real(kind=dp), intent(out)      :: berr(:), cond(:)
         complex(kind=dp), intent(inout) :: roots(:)
         ! local variables
         integer                         :: c, i, j, k, nzeros
@@ -361,8 +360,6 @@ contains
                 nz = nz + nzeros
                 conv(k+1:k+nzeros) = -1
                 roots(k+1:k+nzeros) = cmplx(0,0,kind=dp)
-                berr(k+1:k+nzeros) = 1
-                cond(k+1:k+nzeros) = -1
             else
                 ang = pi2/nzeros
                 do j=1,nzeros
