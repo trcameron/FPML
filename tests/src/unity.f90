@@ -15,7 +15,7 @@ program unity
     integer                                     :: flag, startDegree, endDegree, itnum
     ! testing variables
     integer                                     :: deg, it, j, clock_rate, clock_start, clock_stop
-    real(kind=dp), parameter                    :: pi = 3.141592653589793D0
+    real(kind=dp), parameter                    :: pi = 3.141592653589793_dp
     real(kind=dp), dimension(:,:), allocatable  :: results
     complex(kind=dp), dimension(:), allocatable :: exact_roots
     ! FPML variables
@@ -25,7 +25,7 @@ program unity
     complex(kind=dp), dimension(:), allocatable :: p, roots
     ! Polzeros variables
     integer                                     :: iter
-    real(kind=dp), parameter                    :: small=tiny(1.0D0), big=huge(1.0D0)
+    real(kind=dp), parameter                    :: small=tiny(1.0_dp), big=huge(1.0_dp)
     logical, dimension(:), allocatable          :: h
     real(kind=dp), dimension(:), allocatable    :: radius
     complex(kind=dp), dimension(:), allocatable :: zeros
@@ -44,13 +44,13 @@ program unity
     if(flag==0) then
         read(arg, '(I10)') endDegree
     else
-        endDegree=20480
+        endDegree=5120
     end if
     call get_command_argument(3,arg,status=flag)
     if(flag==0) then
         read(arg, '(I10)') itnum
     else
-        itnum=512
+        itnum=128
     end if
     
     ! Testing: roots of unity
@@ -66,9 +66,9 @@ program unity
         allocate(zeros(deg), radius(deg), h(deg+1))
         allocate(coeffs(deg+1), eigs(deg), residuals(deg))
         ! polynomial and roots
-        p(1) = -1D0
-        p(2:deg) = 0D0
-        p(deg+1) = 1D0
+        p(1) = -1.0_dp
+        p(2:deg) = 0.0_dp
+        p(deg+1) = 1.0_dp
         coeffs = (/ (p(deg-j+1), j=0,deg)/)
         exact_roots = (/ (cmplx(cos(2*pi*j/deg),sin(2*pi*j/deg),kind=dp), j=1,deg)/)
         do it=1,itnum
@@ -132,7 +132,7 @@ contains
         real(kind=dp)                   :: hd, res
         
         ! main
-        res = 0d0
+        res = 0.0_dp
         do i=1,deg
             hd = abs(roots(i)-exact_roots(1))
             j = 1

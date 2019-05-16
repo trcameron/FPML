@@ -52,6 +52,9 @@
 !       of the convex hull of a 2D point set.
 !
 !       cross: returns 2D cross product of two vectors.
+!
+!       check_nan_inf: returns true if the real or imaginary part of a complex
+!       number is either nan or inf. 
 !********************************************************************************
 module fpml
     implicit none
@@ -80,7 +83,6 @@ contains
         integer                         :: i, j, nz
         real(kind=dp)                   :: r
         real(kind=dp), dimension(deg+1) :: alpha
-        real(kind=dp), parameter        :: big = huge(1.0_dp)
         complex(kind=dp)                :: b, c, z
         ! intrinsic functions
         intrinsic                       :: abs
@@ -98,11 +100,12 @@ contains
             roots(2) = b + c
             return
         end if
-        ! main loop
+        ! initial estimates
         conv = 0
-        call estimates(alpha, deg, roots)
-        alpha = (/ (alpha(i)*(3.8_dp*(i-1)+1),i=1,deg+1)/)
         nz = 0
+        call estimates(alpha, deg, roots, conv, nz, berr, cond)
+        ! main loop
+        alpha = (/ (alpha(i)*(3.8_dp*(i-1)+1),i=1,deg+1)/)
         do i=1,itmax
             do j=1,deg
                 if(conv(j)==0) then
@@ -125,44 +128,67 @@ contains
         end do
         ! final check
         10 continue
-        if(minval(conv)==0) then
-            write(*,'(A)') 'At least one root approximation did not converge; check conv array.'
-            write(*,'(A)') 'Consider scaling the polynomial and/or increasing itmax.'
-            do j=1,deg
-                if(conv(j)==0) then
-                    z = roots(j)
-                    r = abs(z)
-                    if(r>1) then
-                        z = 1/z
-                        r = 1/r
-                        c = 0
-                        b = poly(1)
-                        berr(j) = alpha(1)
-                        do i=2,deg+1
-                            c = z*c + b
-                            b = z*b + poly(i)
-                            berr(j) = r*berr(j) + alpha(i)
-                        end do
-                        cond(j) = berr(j)/abs(deg*b-z*c)
-                        berr(j) = abs(b)/berr(j)
-                    else
-                        c = 0
-                        b = poly(deg+1)
-                        berr(j) = alpha(deg+1)
-                        do i=deg,1,-1
-                            c = z*c + b
-                            b = z*b + poly(i)
-                            berr(j) = r*berr(j) + alpha(i)
-                        end do
-                        cond(j) = berr(j)/(r*abs(c))
-                        berr(j) = abs(b)/berr(j)
-                    end if
+        do j=1,deg
+            if(conv(j)==0) then
+                write(*,'(A,I10,A)') 'Root approximation ',j, ' did not converge.'
+                z = roots(j)
+                r = abs(z)
+                if(r>1) then
+                    z = 1/z
+                    r = 1/r
+                    c = 0
+                    b = poly(1)
+                    berr(j) = alpha(1)
+                    do i=2,deg+1
+                        c = z*c + b
+                        b = z*b + poly(i)
+                        berr(j) = r*berr(j) + alpha(i)
+                    end do
+                    cond(j) = berr(j)/abs(deg*b-z*c)
+                    berr(j) = abs(b)/berr(j)
+                else
+                    c = 0
+                    b = poly(deg+1)
+                    berr(j) = alpha(deg+1)
+                    do i=deg,1,-1
+                        c = z*c + b
+                        b = z*b + poly(i)
+                        berr(j) = r*berr(j) + alpha(i)
+                    end do
+                    cond(j) = berr(j)/(r*abs(c))
+                    berr(j) = abs(b)/berr(j)
                 end if
-            end do
-        elseif(minval(conv)==-1) then
-            write(*,'(A)') 'At least one root approximation experienced overflow/underflow; check conv array.'
-            write(*,'(A)') 'Consider scaling the polynomial.'
-        end if
+            elseif(conv(j)==-1) then
+                write(*,'(A,I10,A)',advance='no') 'Root approximation ',j, ' experienced overflow/underflow.'
+                z = roots(j)
+                r = abs(z)
+                if(r>1) then
+                    z = 1/z
+                    r = 1/r
+                    c = 0
+                    b = poly(1)
+                    berr(j) = alpha(1)
+                    do i=2,deg+1
+                        c = z*c + b
+                        b = z*b + poly(i)
+                        berr(j) = r*berr(j) + alpha(i)
+                    end do
+                    cond(j) = berr(j)/abs(deg*b-z*c)
+                    berr(j) = abs(b)/berr(j)
+                else
+                    c = 0
+                    b = poly(deg+1)
+                    berr(j) = alpha(deg+1)
+                    do i=deg,1,-1
+                        c = z*c + b
+                        b = z*b + poly(i)
+                        berr(j) = r*berr(j) + alpha(i)
+                    end do
+                    cond(j) = berr(j)/(r*abs(c))
+                    berr(j) = abs(b)/berr(j)
+                end if
+            end if
+        end do
     end subroutine main
     !************************************************
     !                       rcheck_lag              *
@@ -323,11 +349,13 @@ contains
     ! circle of radius alpha(h(i+1))/alpha(h(i))
     ! raised to the 1/(h(i)-h(i+1)) power. 
     !************************************************
-    subroutine estimates(alpha, deg, roots)
+    subroutine estimates(alpha, deg, roots, conv, nz, berr, cond)
         implicit none
         ! argument variables
         integer, intent(in)             :: deg
+        integer, intent(inout)          :: conv(:), nz
         real(kind=dp), intent(in)       :: alpha(:)
+        real(kind=dp), intent(out)      :: berr(:), cond(:)
         complex(kind=dp), intent(inout) :: roots(:)
         ! local variables
         integer                         :: c, i, j, k, nzeros
@@ -352,11 +380,19 @@ contains
         do i=c-1,1,-1
             nzeros = h(i)-h(i+1)
             r = (alpha(h(i+1))/alpha(h(i)))**(1.0_dp/nzeros)
-            if(r .le. small) r = eps
-            ang = pi2/nzeros
-            do j=1,nzeros
-                roots(k+j) = r*cmplx(cos(ang*j+th*h(i)+sigma),sin(ang*j+th*h(i)+sigma),kind=dp)
-            end do
+            if(r .le. small) then
+                r = 0
+                nz = nz + nzeros
+                conv(k+1:k+nzeros) = 1
+                roots(k+1:k+nzeros) = cmplx(0,0,kind=dp)
+                berr(k+1:k+nzeros) = 1
+                cond(k+1:k+nzeros) = -1
+            else
+                ang = pi2/nzeros
+                do j=1,nzeros
+                    roots(k+j) = r*cmplx(cos(ang*j+th*h(i)+sigma),sin(ang*j+th*h(i)+sigma),kind=dp)
+                end do
+            end if
             k = k+nzeros
         end do
     end subroutine estimates
@@ -435,8 +471,7 @@ contains
         ! main
         re_a = real(a,kind=dp)
         im_a = aimag(a)
-        res = isnan(re_a) .or. isnan(im_a)
-        res = res .or. (abs(re_a)>big) .or. (abs(im_a)>big)
+        res = isnan(re_a) .or. isnan(im_a) .or. (abs(re_a)>big) .or. (abs(im_a)>big)
         return
     end function check_nan_inf
 end module fpml

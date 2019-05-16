@@ -44,13 +44,13 @@ program nat_poly
     if(flag==0) then
         read(arg, '(I10)') endDegree
     else
-        endDegree=10240
+        endDegree=5120
     end if
     call get_command_argument(3,arg,status=flag)
     if(flag==0) then
         read(arg, '(I10)') itnum
     else
-        itnum=512
+        itnum=128
     end if
     
     ! Testing: polynomial with natural number coefficients

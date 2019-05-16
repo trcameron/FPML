@@ -96,12 +96,13 @@ contains
         real(kind=dp)                   :: r
         complex(kind=dp)                :: b, c, z
         
-        ! main
-        conv = 0
+        ! initial estimates
         alpha = abs(p)
-        call estimates(alpha, deg, roots)
-        alpha = (/ (alpha(i)*(3.8*(i-1)+1),i=1,deg+1)/)
+        conv = 0
         nz = 0
+        call estimates(alpha, deg, roots, conv, nz, berr, cond)
+        ! main loop
+        alpha = (/ (alpha(i)*(3.8*(i-1)+1),i=1,deg+1)/)
         do i=1,itmax
             err(i) = maxrel_fwderr(roots, exact_roots, deg)
             do j=1,deg
