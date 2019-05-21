@@ -4,7 +4,7 @@
 !   Last Modified: 16 May 2019
 !********************************************************************************
 ! The speed and accuracy of FPML is compared against Polzeros and AMVW for
-! computing the roots of the polynomial sum(i+1)x^i. 
+! computing the roots of the polynomial sum(i+1)x^i.
 !********************************************************************************
 program nan_inf
     use fpml
@@ -19,11 +19,11 @@ program nan_inf
     integer, allocatable                        :: conv(:)
     real(kind=dp), allocatable                  :: berr(:), cond(:)
     complex(kind=dp), allocatable               :: p(:), roots(:)
-    
+
     ! Test 1: p(z) = -a^-1 + az^deg, a = 2.0_dp**(deg)
     open(unit=1,file="data_files/nan_inf1.dat")
     write(1,'(A)') 'deg, relative forward error, backward error, condition number'
-    do deg=2,538
+    do deg=537,1021
         write(1,'(I10,A)',advance='no') deg, ', '
         ! allocate
         allocate(exact_roots(deg), conv(deg), berr(deg), cond(deg), p(deg+1), roots(deg))
@@ -43,12 +43,12 @@ program nan_inf
     end do
     ! close file
     close(1)
-    
+
     ! Test 2: p(z) = -a^-1 + az^10, a = 2.0_dp**(j), j=2,538
     open(unit=1,file="data_files/nan_inf2.dat")
     write(1,'(A)') 'power, relative forward error, backward error, condition number'
     deg = 10
-    do j=2,538
+    do j=537,1021
         write(1,'(I10,A)',advance='no') j, ', '
         ! allocate
         allocate(exact_roots(deg), conv(deg), berr(deg), cond(deg), p(deg+1), roots(deg))
@@ -69,11 +69,11 @@ program nan_inf
     ! close file
     close(1)
 contains
-    
+
     !************************************************
     !                       max_rel_err             *
     !************************************************
-    ! Compute maximum relative error between roots 
+    ! Compute maximum relative error between roots
     ! and exact roots.
     !************************************************
     function max_rel_err(roots, exact_roots, deg) result(res)
@@ -87,7 +87,7 @@ contains
         real(kind=dp)                   :: delta, err, res, relerr, rmax
         ! intrinsic procedures
         intrinsic                       :: abs, max, huge
-        
+
         ! initialize
         m = .True.
         rmax = huge(1.0_dp)

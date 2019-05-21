@@ -25,9 +25,9 @@
 ! OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 ! SOFTWARE.
 !********************************************************************************
-!   This module contains the following paramaters, functions, and 
+!   This module contains the following paramaters, functions, and
 !   subroutines:
-!       dp: integer paramater for machine-compiler specific double 
+!       dp: integer paramater for machine-compiler specific double
 !       precision.
 !
 !       eps: machine-compiler specific double precision unit roundoff.
@@ -54,7 +54,7 @@
 !       cross: returns 2D cross product of two vectors.
 !
 !       check_nan_inf: returns true if the real or imaginary part of a complex
-!       number is either nan or inf. 
+!       number is either nan or inf.
 !********************************************************************************
 module fpml
     implicit none
@@ -64,12 +64,12 @@ contains
     !************************************************
     !                       main                    *
     !************************************************
-    ! Computes the roots of a polynomial of degree 
+    ! Computes the roots of a polynomial of degree
     ! deg whose coefficients are stored in p. The
     ! root approximations are stored in roots, the
     ! backward error in each approximation in berr,
-    ! and the condition number of each root 
-    ! approximation is stored in cond. 
+    ! and the condition number of each root
+    ! approximation is stored in cond.
     !************************************************
     subroutine main(poly, deg, roots, berr, cond, conv, itmax)
         implicit none
@@ -86,7 +86,7 @@ contains
         complex(kind=dp)                :: b, c, z
         ! intrinsic functions
         intrinsic                       :: abs
-        
+
         ! precheck
         alpha = abs(poly)
         if(alpha(deg+1)==0) then
@@ -170,11 +170,11 @@ contains
     !                       rcheck_lag              *
     !************************************************
     ! Computes backward error of root approximation
-    ! with moduli greater than 1. 
+    ! with moduli greater than 1.
     ! If the backward error is less than eps, then
     ! both backward error and condition number are
     ! computed. Otherwise, the Laguerre correction terms
-    ! are computed and stored in variables b and c. 
+    ! are computed and stored in variables b and c.
     !************************************************
     subroutine rcheck_lag(p, alpha, deg, b, c, z, r, conv, berr, cond)
         implicit none
@@ -191,7 +191,7 @@ contains
         complex(kind=dp)                :: a, zz
         ! intrinsic functions
         intrinsic                       :: abs
-        
+
         ! evaluate polynomial and derivatives
         zz = 1/z
         rr = 1/r
@@ -222,12 +222,12 @@ contains
     !                       check_lag               *
     !************************************************
     ! Computes backward error of root approximation
-    ! with moduli less than or equal to 1. 
+    ! with moduli less than or equal to 1.
     ! If the backward error is less than eps, then
     ! both backward error and condition number are
     ! computed. Otherwise, the Laguerre correction terms
     ! Gj and Hj are computed and stored in variables
-    ! b and c, respectively. 
+    ! b and c, respectively.
     !************************************************
     subroutine check_lag(p, alpha, deg, b, c, z, r, conv, berr, cond)
         implicit none
@@ -243,7 +243,7 @@ contains
         complex(kind=dp)                :: a
         ! intrinsic functions
         intrinsic                       :: abs
-        
+
         ! evaluate polynomial and derivatives
         a = p(deg+1)
         b = 0
@@ -271,10 +271,10 @@ contains
     !************************************************
     ! Computes modified Laguerre correction term of
     ! the jth rooot approximation.
-    ! The coefficients of the polynomial of degree 
-    ! deg are stored in p, all root approximations 
+    ! The coefficients of the polynomial of degree
+    ! deg are stored in p, all root approximations
     ! are stored in roots. The values b, and c come
-    ! from rcheck_lag or check_lag, c will be used 
+    ! from rcheck_lag or check_lag, c will be used
     ! to return the correction term.
     !************************************************
     subroutine modify_lag(deg, b, c, z, j, roots)
@@ -288,7 +288,7 @@ contains
         complex(kind=dp)                :: t
         ! intrinsic functions
         intrinsic                       :: abs, sqrt
-        
+
         ! main
         do k=1,j-1
             t = 1/(z - roots(k))
@@ -312,18 +312,18 @@ contains
     !************************************************
     !                       estimates               *
     !************************************************
-    ! Computes initial estimates for the roots of an 
-    ! univariate polynomial of degree deg, whose 
-    ! coefficients moduli are stored in alpha. The 
+    ! Computes initial estimates for the roots of an
+    ! univariate polynomial of degree deg, whose
+    ! coefficients moduli are stored in alpha. The
     ! estimates are returned in the array roots.
     ! The computation is performed as follows: First
     ! the set (i,log(alpha(i))) is formed and the
     ! upper envelope of the convex hull of this set
     ! is computed, its indices are returned in the
     ! array h (in descending order). For i=c-1,1,-1
-    ! there are h(i) - h(i+1) zeros placed on a 
+    ! there are h(i) - h(i+1) zeros placed on a
     ! circle of radius alpha(h(i+1))/alpha(h(i))
-    ! raised to the 1/(h(i)-h(i+1)) power. 
+    ! raised to the 1/(h(i)-h(i+1)) power.
     !************************************************
     subroutine estimates(alpha, deg, roots, conv, nz)
         implicit none
@@ -334,13 +334,13 @@ contains
         complex(kind=dp), intent(inout) :: roots(:)
         ! local variables
         integer                         :: c, i, j, k, nzeros
-        real(kind=dp)                   :: ang, r, th
+        real(kind=dp)                   :: a1, a2, ang, r, th
         integer, dimension(deg+1)       :: h
         real(kind=dp), dimension(deg+1) :: a
         real(kind=dp), parameter        :: pi2 = 6.2831853071795865_dp, sigma = 0.7_dp, small = tiny(1.0_dp)
         ! intrinsic functions
         intrinsic                       :: log, cos, sin, cmplx
-        
+
         ! main
         do i=1,deg+1
             if(alpha(i)>0) then
@@ -354,7 +354,10 @@ contains
         th=pi2/deg
         do i=c-1,1,-1
             nzeros = h(i)-h(i+1)
-            r = (alpha(h(i+1))/alpha(h(i)))**(1.0_dp/nzeros)
+!           r = (alpha(h(i+1))/alpha(h(i)))**(1.0_dp/nzeros)
+            a1 = alpha(h(i+1))**(1.0_dp/nzeros)
+            a2 = alpha(h(i))**(1.0_dp/nzeros)
+            r = a1/a2
             if(r .le. small) then
                 r = 0
                 nz = nz + nzeros
@@ -372,16 +375,16 @@ contains
     !************************************************
     !                       conv_hull               *
     !************************************************
-    ! Computex upper envelope of the convex hull of 
+    ! Computex upper envelope of the convex hull of
     ! the points in the array a, which has size n.
-    ! The number of vertices in the hull is equal to 
-    ! c, and they are returned in the first c entries 
-    ! of the array h. 
+    ! The number of vertices in the hull is equal to
+    ! c, and they are returned in the first c entries
+    ! of the array h.
     ! The computation follows Andrew's monotone chain
     ! algorithm: Each consecutive three pairs are
     ! tested via cross to determine if they form
     ! a clockwise angle, if so that current point
-    ! is rejected from the returned set. 
+    ! is rejected from the returned set.
     !************************************************
     subroutine conv_hull(n, a, h, c)
         implicit none
@@ -392,7 +395,7 @@ contains
         real(kind=dp), intent(in)   :: a(:)
         ! local variables
         integer                     :: i
-        
+
         ! main
         c=0
         do i=n,1,-1
@@ -406,7 +409,7 @@ contains
     !************************************************
     !                       cross                   *
     !************************************************
-    ! Returns 2D cross product of OA and OB vectors, 
+    ! Returns 2D cross product of OA and OB vectors,
     ! where
     ! O=(h(c-1),a(h(c-1))),
     ! A=(h(c),a(h(c))),
@@ -421,7 +424,7 @@ contains
         real(kind=dp), intent(in)   :: a(:)
         ! local variables
         real(kind=dp)               :: det
-        
+
         ! main
         det = (a(i)-a(h(c-1)))*(h(c)-h(c-1)) - (a(h(c))-a(h(c-1)))*(i-h(c-1))
         return
@@ -436,11 +439,11 @@ contains
         implicit none
         ! argument variables
         complex(kind=dp)            :: a
-        ! local variables           
+        ! local variables
         logical                     :: res
         real(kind=dp)               :: re_a, im_a
         real(kind=dp), parameter    :: big = huge(1.0_dp)
-        
+
         ! main
         re_a = real(a,kind=dp)
         im_a = aimag(a)
