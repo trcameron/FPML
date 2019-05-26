@@ -57,9 +57,9 @@
 !       number is either nan or inf.
 !********************************************************************************
 module fpml
+    use eft
     implicit none
-    integer, parameter          :: dp = kind(1.d0)
-    real(kind=dp), parameter    :: eps = epsilon(1.d0)
+
 contains
     !************************************************
     !                       main                    *
@@ -129,9 +129,8 @@ contains
         ! final check
         10 continue
         if(minval(conv)==1) return
-        ! display warrning and open error file
-        write(*,'(A)',advance='no') 'Some root approximations did not converge or experienced overflow/underflow; '
-        write(*,'(A)') 'check berr, cond, and conv arrays.'
+        ! display warrning
+        write(*,'(A)') 'Some root approximations did not converge or experienced overflow/underflow.'
         ! compute backward error and condition number for roots that did not converge;
         ! note that this may produce overflow/underflow.
         do j=1,deg
@@ -289,7 +288,7 @@ contains
         ! intrinsic functions
         intrinsic                       :: abs, sqrt
 
-        ! main
+        ! Aberth correction terms
         do k=1,j-1
             t = 1/(z - roots(k))
             b = b - t
@@ -300,6 +299,7 @@ contains
             b = b - t
             c = c - t**2
         end do
+        ! Laguerre correction
         t = sqrt((deg-1)*(deg*c-b**2))
         c = b + t
         b = b - t
@@ -341,7 +341,7 @@ contains
         ! intrinsic functions
         intrinsic                       :: log, cos, sin, cmplx
 
-        ! main
+        ! Log of absolute value of coefficients
         do i=1,deg+1
             if(alpha(i)>0) then
                 a(i) = log(alpha(i))
@@ -352,9 +352,9 @@ contains
         call conv_hull(deg+1, a, h, c)
         k=0
         th=pi2/deg
+        ! Initial Estiamtes
         do i=c-1,1,-1
             nzeros = h(i)-h(i+1)
-!           r = (alpha(h(i+1))/alpha(h(i)))**(1.0_dp/nzeros)
             a1 = alpha(h(i+1))**(1.0_dp/nzeros)
             a2 = alpha(h(i))**(1.0_dp/nzeros)
             r = a1/a2
@@ -396,7 +396,7 @@ contains
         ! local variables
         integer                     :: i
 
-        ! main
+        ! covex hull 
         c=0
         do i=n,1,-1
             do while(c>=2 .and. cross(h, a, c, i)<eps)
@@ -425,7 +425,7 @@ contains
         ! local variables
         real(kind=dp)               :: det
 
-        ! main
+        ! determinant
         det = (a(i)-a(h(c-1)))*(h(c)-h(c-1)) - (a(h(c))-a(h(c-1)))*(i-h(c-1))
         return
     end function cross
@@ -444,7 +444,7 @@ contains
         real(kind=dp)               :: re_a, im_a
         real(kind=dp), parameter    :: big = huge(1.0_dp)
 
-        ! main
+        ! check for nan and inf
         re_a = real(a,kind=dp)
         im_a = aimag(a)
         res = isnan(re_a) .or. isnan(im_a) .or. (abs(re_a)>big) .or. (abs(im_a)>big)
