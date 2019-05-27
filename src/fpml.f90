@@ -57,9 +57,9 @@
 !       number is either nan or inf.
 !********************************************************************************
 module fpml
-    use eft
     implicit none
-
+    integer, parameter                          :: dp = kind(1.d0)
+    real(kind=dp), parameter                    :: eps = 2.0_dp**(-52)
 contains
     !************************************************
     !                       main                    *
