@@ -26,7 +26,6 @@ program rand_poly
     complex(kind=dp), dimension(:), allocatable :: p, roots
     ! Polzeros variables
     integer                                     :: iter
-    real(kind=dp), parameter                    :: small=tiny(1.d0), big=huge(1.d0)
     logical, dimension(:), allocatable          :: h
     real(kind=dp), dimension(:), allocatable    :: radius
     complex(kind=dp), dimension(:), allocatable :: zeros

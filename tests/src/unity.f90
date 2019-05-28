@@ -25,7 +25,6 @@ program unity
     complex(kind=dp), dimension(:), allocatable :: p, roots
     ! Polzeros variables
     integer                                     :: iter
-    real(kind=dp), parameter                    :: small=tiny(1.0_dp), big=huge(1.0_dp)
     logical, dimension(:), allocatable          :: h
     real(kind=dp), dimension(:), allocatable    :: radius
     complex(kind=dp), dimension(:), allocatable :: zeros

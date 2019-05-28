@@ -59,7 +59,7 @@
 module fpml
     implicit none
     integer, parameter                          :: dp = kind(1.d0)
-    real(kind=dp), parameter                    :: eps = epsilon(1.0_dp)
+    real(kind=dp), parameter                    :: eps = epsilon(1.0_dp), big = huge(1.0_dp), small = tiny(1.0_dp)
 contains
     !************************************************
     !                       main                    *
@@ -85,7 +85,7 @@ contains
         real(kind=dp), dimension(deg+1) :: alpha
         complex(kind=dp)                :: b, c, z
         ! intrinsic functions
-        intrinsic                       :: abs
+        intrinsic                       :: abs, sqrt
 
         ! precheck
         alpha = abs(poly)
@@ -101,7 +101,7 @@ contains
             return
         end if
         ! initial estimates
-        conv = 0
+        conv = (/ (0, i=1,deg)/)
         nz = 0
         call estimates(alpha, deg, roots, conv, nz)
         ! main loop
@@ -128,42 +128,45 @@ contains
         end do
         ! final check
         10 continue
-        if(minval(conv)==1) return
-        ! display warrning
-        write(*,'(A)') 'Some root approximations did not converge or experienced overflow/underflow.'
-        ! compute backward error and condition number for roots that did not converge;
-        ! note that this may produce overflow/underflow.
-        do j=1,deg
-            if(conv(j)==0 .or. conv(j)==-1) then
-                z = roots(j)
-                r = abs(z)
-                if(r>1) then
-                    z = 1/z
-                    r = 1/r
-                    c = 0
-                    b = poly(1)
-                    berr(j) = alpha(1)
-                    do i=2,deg+1
-                        c = z*c + b
-                        b = z*b + poly(i)
-                        berr(j) = r*berr(j) + alpha(i)
-                    end do
-                    cond(j) = berr(j)/abs(deg*b-z*c)
-                    berr(j) = abs(b)/berr(j)
-                else
-                    c = 0
-                    b = poly(deg+1)
-                    berr(j) = alpha(deg+1)
-                    do i=deg,1,-1
-                        c = z*c + b
-                        b = z*b + poly(i)
-                        berr(j) = r*berr(j) + alpha(i)
-                    end do
-                    cond(j) = berr(j)/(r*abs(c))
-                    berr(j) = abs(b)/berr(j)
+        if(minval(conv)==1) then
+            return
+        else
+            ! display warrning
+            write(*,'(A)') 'Some root approximations did not converge or experienced overflow/underflow.'
+            ! compute backward error and condition number for roots that did not converge;
+            ! note that this may produce overflow/underflow.
+            do j=1,deg
+                if(conv(j) .ne. 1) then
+                    z = roots(j)
+                    r = abs(z)
+                    if(r>1) then
+                        z = 1/z
+                        r = 1/r
+                        c = 0
+                        b = poly(1)
+                        berr(j) = alpha(1)
+                        do i=2,deg+1
+                            c = z*c + b
+                            b = z*b + poly(i)
+                            berr(j) = r*berr(j) + alpha(i)
+                        end do
+                        cond(j) = berr(j)/abs(deg*b-z*c)
+                        berr(j) = abs(b)/berr(j)
+                    else
+                        c = 0
+                        b = poly(deg+1)
+                        berr(j) = alpha(deg+1)
+                        do i=deg,1,-1
+                            c = z*c + b
+                            b = z*b + poly(i)
+                            berr(j) = r*berr(j) + alpha(i)
+                        end do
+                        cond(j) = berr(j)/(r*abs(c))
+                        berr(j) = abs(b)/berr(j)
+                    end if
                 end if
-            end if
-        end do
+            end do
+        end if
     end subroutine main
     !************************************************
     !                       rcheck_lag              *
@@ -337,7 +340,7 @@ contains
         real(kind=dp)                   :: a1, a2, ang, r, th
         integer, dimension(deg+1)       :: h
         real(kind=dp), dimension(deg+1) :: a
-        real(kind=dp), parameter        :: pi2 = 6.2831853071795865_dp, sigma = 0.7_dp, small = tiny(1.0_dp)
+        real(kind=dp), parameter        :: pi2 = 6.2831853071795865_dp, sigma = 0.7_dp
         ! intrinsic functions
         intrinsic                       :: log, cos, sin, cmplx
 
@@ -357,13 +360,24 @@ contains
             nzeros = h(i)-h(i+1)
             a1 = alpha(h(i+1))**(1.0_dp/nzeros)
             a2 = alpha(h(i))**(1.0_dp/nzeros)
-            r = a1/a2
-            if(r .le. small) then
-                r = 0
+            if(a1 .le. a2*small) then
+                ! r is too small
+                r = 0.0_dp
                 nz = nz + nzeros
                 conv(k+1:k+nzeros) = -1
                 roots(k+1:k+nzeros) = cmplx(0,0,kind=dp)
+            else if(a1 .ge. a2*big) then
+                ! r is too big
+                r = big
+                nz = nz+nzeros
+                conv(k+1:k+nzeros) = -1
+                ang = pi2/nzeros
+                do j=1,nzeros
+                    roots(k+j) = r*cmplx(cos(ang*j+th*h(i)+sigma),sin(ang*j+th*h(i)+sigma),kind=dp)
+                end do
             else
+                ! r is just right
+                r = a1/a2
                 ang = pi2/nzeros
                 do j=1,nzeros
                     roots(k+j) = r*cmplx(cos(ang*j+th*h(i)+sigma),sin(ang*j+th*h(i)+sigma),kind=dp)
@@ -442,7 +456,8 @@ contains
         ! local variables
         logical                     :: res
         real(kind=dp)               :: re_a, im_a
-        real(kind=dp), parameter    :: big = huge(1.0_dp)
+        ! intrinsic functions
+        intrinsic                   :: abs
 
         ! check for nan and inf
         re_a = real(a,kind=dp)
