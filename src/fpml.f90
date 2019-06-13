@@ -92,8 +92,10 @@ contains
         if(alpha(deg+1)==0) then
             write(*,'(A)') 'Warning: leading coefficient is zero.'
             return
-        end if
-        if(deg==2) then
+        elseif(deg==1) then
+            roots(1) = -poly(1)/poly(2)
+            return
+        elseif(deg==2) then
             b = -poly(2)/(2*poly(3))
             c = sqrt(poly(2)**2-4*poly(3)*poly(1))/(2*poly(3))
             roots(1) = b - c
