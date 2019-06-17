@@ -89,8 +89,8 @@ contains
 
         ! precheck
         alpha = abs(poly)
-        if(alpha(deg+1)==0.0_dp) then
-            write(*,'(A)') 'Warning: leading coefficient is zero.'
+        if(alpha(deg+1)<small) then
+            write(*,'(A)') 'Warning: leading coefficient too small.'
             return
         elseif(deg==1) then
             roots(1) = -poly(1)/poly(2)
