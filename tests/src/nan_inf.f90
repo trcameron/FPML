@@ -47,7 +47,7 @@ program nan_inf
     ! Test 2: p(z) = 0 + 0z + ... + -a^(-1)z^10 + az^11, a = 2.0_dp**(j)
     open(unit=1,file="data_files/nan_inf2.dat")
     write(1,'(A)') 'power, relative forward error, backward error, condition number'
-    deg = 10
+    deg = 11
     do j=537,1023
         write(1,'(I10,A)',advance='no') j, ', '
         ! allocate
