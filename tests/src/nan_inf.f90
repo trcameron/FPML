@@ -21,9 +21,10 @@ program nan_inf
     complex(kind=dp), allocatable               :: p(:), roots(:)
 
     ! Test 1: p(z) = -a^-1 + az^deg, a = 2.0_dp**(deg)
+	write(*,'(A)') 'Test 1: '
     open(unit=1,file="data_files/nan_inf1.dat")
     write(1,'(A)') 'deg, relative forward error, backward error, condition number'
-    do deg=1021,1023
+    do deg=1012,1013
         write(1,'(I10,A)',advance='no') deg, ', '
         ! allocate
         allocate(exact_roots(deg), conv(deg), berr(deg), cond(deg), p(deg+1), roots(deg))
@@ -45,10 +46,11 @@ program nan_inf
     close(1)
 
     ! Test 2: p(z) = 0 + 0z + ... + -a^(-1)z^10 + az^11, a = 2.0_dp**(j)
+	write(*,'(A)') 'Test 2: '
     open(unit=1,file="data_files/nan_inf2.dat")
     write(1,'(A)') 'power, relative forward error, backward error, condition number'
     deg = 11
-    do j=537,1023
+    do j=1012,1013
         write(1,'(I10,A)',advance='no') j, ', '
         ! allocate
         allocate(exact_roots(deg), conv(deg), berr(deg), cond(deg), p(deg+1), roots(deg))
@@ -71,9 +73,10 @@ program nan_inf
     close(1)
     
     ! Test 3: p(z) = -a+a^(-1)z^deg, a = 2.0_dp**(deg)
+	write(*,'(A)') 'Test 3: '
     open(unit=1,file="data_files/nan_inf3.dat")
     write(1,'(A)') 'deg, relative forward error, backward error, condition number'
-    do deg=537,1023
+    do deg=1012,1013
         write(1,'(I10,A)',advance='no') deg, ', '
         ! allocate
         allocate(exact_roots(deg), conv(deg), berr(deg), cond(deg), p(deg+1), roots(deg))
@@ -95,10 +98,11 @@ program nan_inf
     close(1)
     
     ! Test 4: p(z) = 0 + 0z + ... + -az^10 + a^(-1)z^11, a = 2.0_dp**(j)
+	write(*,'(A)') 'Test 4: '
     open(unit=1,file="data_files/nan_inf4.dat")
     write(1,'(A)') 'power, relative forward error, backward error, condition number'
     deg = 11
-    do j=537,1023
+    do j=1012,1013
         write(1,'(I10,A)',advance='no') j, ', '
         ! allocate
         allocate(exact_roots(deg), conv(deg), berr(deg), cond(deg), p(deg+1), roots(deg))
@@ -121,10 +125,11 @@ program nan_inf
     close(1)
     
     ! Test 5: 0 + 1z + ... + 9z^9 - a^(-1)z^10 + az^11, a = 2.0_dp**(j)
+	write(*,'(A)') 'Test 5: '
     open(unit=1,file="data_files/nan_inf5.dat")
     write(1,'(A)') 'power, backward error, condition number'
     deg = 11
-    do j=537,1023
+    do j=1012,1013
         write(1,'(I10,A)',advance='no') j, ', '
         ! allocate
         allocate(conv(deg), berr(deg), cond(deg), p(deg+1), roots(deg))
@@ -144,10 +149,11 @@ program nan_inf
     close(1)
     
     ! Test 6: 0 + 1z + ... + 9z^9 - az^10 + a(-1)z^11, a = 2.0_dp**(j)
+	write(*,'(A)') 'Test 6: '
     open(unit=1,file="data_files/nan_inf6.dat")
     write(1,'(A)') 'power, backward error, condition number'
     deg = 11
-    do j=537,1023
+    do j=1012,1013
         write(1,'(I10,A)',advance='no') j, ', '
         ! allocate
         allocate(conv(deg), berr(deg), cond(deg), p(deg+1), roots(deg))

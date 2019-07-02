@@ -1,4 +1,3 @@
 deg, relative forward error, backward error, condition number
-      1021,        1.55E-03       0.00E+00       Infinity
-      1022,        8.64E-04       0.00E+00       Infinity
-      1023,        1.79E-04       0.00E+00       Infinity
+      1012,        1.03E-15       1.82E-17       3.80E+00
+      1013,        8.88E-04       0.00E+00       Infinity
